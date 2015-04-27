@@ -47,15 +47,8 @@ if ( ! class_exists( 'WP_Directory_Size_Dashboard_Widget' ) ) {
 
 		private function display_sizes_table() {
 
-			// TODO get via filters
-			$uploads_dir = wp_upload_dir()['basedir'];
-			$size = apply_filters( 'wp-directory-size-get', 0, $uploads_dir );
 
-			$directories = array(
-				array( 'name' => 'nginx cache', 'path' => '/var/run/nginx-cache/', 'size' => apply_filters( 'wp-directory-size-get', 0, '/var/run/nginx-cache/'  ) ),
-				array( 'name' => 'wp-uploads', 'path' => $uploads_dir, 'size' => $size ),
-				array( 'name' => 'plugins', 'path' => WP_PLUGIN_DIR , 'size' => $size = apply_filters( 'wp-directory-size-get', 0, WP_PLUGIN_DIR  ) ),
-			);
+			$directories = apply_filters( WP_Directory_Size_Common::$plugin_name . '-get-directories', array() );
 
 			?>
 				<table class="wp-directory-size-table">

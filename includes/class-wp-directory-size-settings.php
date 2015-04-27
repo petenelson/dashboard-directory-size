@@ -77,34 +77,31 @@ if ( ! class_exists( 'WP_Directory_Size_Settings' ) ) {
 
 			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
 
-			add_settings_field( 'number_of_revisions', __( 'Default number of revisions to display', 'wp-directory-size' ), array( $this, 'settings_input' ), $key, $section,
-				array( 'key' => $key, 'name' => 'number_of_revisions', 'size' => 2, 'maxlength' => 2, 'min' => 0, 'max' => 99, 'type' => 'number', 'after' => __( 'Users can chose their own setting in Screen Options', 'wp-directory-size' ) ) );
 
-			add_settings_field( 'prefix', __( 'Prefix title with', 'wp-directory-size' ), array( $this, 'settings_input' ), $key, $section,
-				array( 'key' => $key, 'name' => 'prefix', 'size' => 2, 'maxlength' => 20 ) );
+			// TODO refactor this, don't need to store the path in the settings
 
-			add_settings_field( 'suffix', __( 'Suffix title with', 'wp-directory-size' ), array( $this, 'settings_input' ), $key, $section,
-				array( 'key' => $key, 'name' => 'suffix', 'size' => 10, 'maxlength' => 20 ) );
-
-			$items = array();
-			foreach( get_post_types( array(), 'objects' ) as $post_type => $data ) {
-				if ( post_type_supports( $post_type, 'revisions' ) ) {
-					$items[ $post_type ] = $data->labels->name . ' (' . $post_type . ')';
-				}
+			$common_directories = array();
+			$upload_dir = wp_upload_dir();
+			if ( ! empty( $upload_dir ) ) {
+				$common_directories[ $upload_dir['basename'] ]  = 'uploads';
 			}
 
+			$common_directories[ WP_PLUGIN_DIR ] = 'plugins';
+			$common_directories[ WPMU_PLUGIN_DIR  ] = 'mu-plugins';
 
-			add_settings_field( 'post_types', __( 'Post Types', 'wp-directory-size' ), array( $this, 'settings_checkbox_list' ), $key, $section,
-				array( 'key' => $key, 'name' => 'post_types', 'items' => $items, 'legend' => __( 'Post Types', 'wp-directory-size' ) ) );
+
+			add_settings_field( 'common-directories', __( 'Common Directories', 'wp-directory-size' ), array( $this, 'settings_checkbox_list' ), $key, $section,
+				array( 'key' => $key, 'name' => 'common-directories', 'items' => $common_directories, 'legend' => __( 'Post Types', 'wp-directory-size' ) ) );
+
+			add_settings_field( 'custom-directories', __( 'Custom Directories', 'wp-directory-size' ), array( $this, 'settings_textarea' ), $key, $section,
+				array( 'key' => $key, 'name' => 'custom-directories', 'rows' => 10, 'cols' => 40, 'after' => __( 'A list of names and paths separated by pipe, ex: (nginx cache|/var/run/nginx-cache)', 'wp-directory-size' ) ) );
+
 		}
 
 
 		public function sanitize_general_settings( $settings ) {
 
-			$settings['number_of_revisions'] = intval( $settings['number_of_revisions'] );
-			if ( $settings['number_of_revisions'] < 0 ) {
-				$settings['number_of_revisions'] = 0;
-			}
+			// TODO
 
 			return $settings;
 		}
