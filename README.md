@@ -1,2 +1,2 @@
-# wp-nginx-cache-size
-WordPress dashboard widget to display nginx cache size
+# wp-directory-size-size
+WordPress dashboard widget to display directory sizes
