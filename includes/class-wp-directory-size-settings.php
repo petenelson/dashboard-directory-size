@@ -6,9 +6,9 @@ if ( ! class_exists( 'WP_Directory_Size_Settings' ) ) {
 
 	class WP_Directory_Size_Settings {
 
-		private $settings_page         = 'wp-revision-list-settings';
-		private $settings_key_general  = 'wp-revision-list-settings-general';
-		private $settings_key_help     = 'wp-revision-list-settings-help';
+		private $settings_page         = 'wp-directory-size-settings';
+		private $settings_key_general  = 'wp-directory-size-settings-general';
+		private $settings_key_help     = 'wp-directory-size-settings-help';
 		private $plugin_settings_tabs  = array();
 
 
@@ -18,12 +18,16 @@ if ( ! class_exists( 'WP_Directory_Size_Settings' ) ) {
 			add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 			add_action( 'admin_notices', array( $this, 'activation_admin_notice' ) );
 
-			add_filter( WP_Revision_List_Core::$plugin_name . '-setting-is-enabled', array( $this, 'setting_is_enabled' ), 10, 3 );
-			add_filter( WP_Revision_List_Core::$plugin_name . '-setting-get', array( $this, 'setting_get' ), 10, 3 );
+			add_filter( WP_Directory_Size_Common::$plugin_name . '-setting-is-enabled', array( $this, 'setting_is_enabled' ), 10, 3 );
+			add_filter( WP_Directory_Size_Common::$plugin_name . '-setting-get', array( $this, 'setting_get' ), 10, 3 );
 		}
 
 
 		public function activation_hook() {
+
+			return;
+
+			// TODO update this
 
 			// create default settings
 			add_option( $this->settings_key_general, array(
@@ -34,20 +38,20 @@ if ( ! class_exists( 'WP_Directory_Size_Settings' ) ) {
 				), '', $autoload = 'no' );
 
 			// add an option so we can show the activated admin notice
-			add_option( WP_Revision_List_Core::$plugin_name . '-plugin-activated', '1' );
+			add_option( WP_Directory_Size_Common::$plugin_name . '-plugin-activated', '1' );
 
 		}
 
 
 		public function activation_admin_notice() {
-			if ( '1' === get_option( WP_Revision_List_Core::$plugin_name . '-plugin-activated' ) ) { ?>
+			if ( '1' === get_option( WP_Directory_Size_Common::$plugin_name . '-plugin-activated' ) ) { ?>
 					<div class="updated">
 						<p><?php
-				echo sprintf( __( '<strong>Revision List activated!</strong> Please <a href="%s">visit the Settings page</a> to customize your revision list.', 'wp-revision-list' ), admin_url( 'options-general.php?page=wp-revision-list-settings' ) );
+				echo sprintf( __( '<strong>WP Directory Size activated!</strong> Please <a href="%s">visit the Settings page</a> to customize the settings.', 'wp-directory-size' ), admin_url( 'options-general.php?page=wp-directory-size-settings' ) );
 				?></p>
 					</div>
 				<?php
-				delete_option( WP_Revision_List_Core::$plugin_name . '-plugin-activated' );
+				delete_option( WP_Directory_Size_Common::$plugin_name . '-plugin-activated' );
 			}
 		}
 
@@ -65,7 +69,7 @@ if ( ! class_exists( 'WP_Directory_Size_Settings' ) ) {
 
 		private function register_general_settings() {
 			$key = $this->settings_key_general;
-			$this->plugin_settings_tabs[$key] = __( 'General', 'wp-revision-list' );
+			$this->plugin_settings_tabs[$key] = __( 'General', 'wp-directory-size' );
 
 			register_setting( $key, $key, array( $this, 'sanitize_general_settings') );
 
@@ -73,13 +77,13 @@ if ( ! class_exists( 'WP_Directory_Size_Settings' ) ) {
 
 			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
 
-			add_settings_field( 'number_of_revisions', __( 'Default number of revisions to display', 'wp-revision-list' ), array( $this, 'settings_input' ), $key, $section,
-				array( 'key' => $key, 'name' => 'number_of_revisions', 'size' => 2, 'maxlength' => 2, 'min' => 0, 'max' => 99, 'type' => 'number', 'after' => __( 'Users can chose their own setting in Screen Options', 'wp-revision-list' ) ) );
+			add_settings_field( 'number_of_revisions', __( 'Default number of revisions to display', 'wp-directory-size' ), array( $this, 'settings_input' ), $key, $section,
+				array( 'key' => $key, 'name' => 'number_of_revisions', 'size' => 2, 'maxlength' => 2, 'min' => 0, 'max' => 99, 'type' => 'number', 'after' => __( 'Users can chose their own setting in Screen Options', 'wp-directory-size' ) ) );
 
-			add_settings_field( 'prefix', __( 'Prefix title with', 'wp-revision-list' ), array( $this, 'settings_input' ), $key, $section,
+			add_settings_field( 'prefix', __( 'Prefix title with', 'wp-directory-size' ), array( $this, 'settings_input' ), $key, $section,
 				array( 'key' => $key, 'name' => 'prefix', 'size' => 2, 'maxlength' => 20 ) );
 
-			add_settings_field( 'suffix', __( 'Suffix title with', 'wp-revision-list' ), array( $this, 'settings_input' ), $key, $section,
+			add_settings_field( 'suffix', __( 'Suffix title with', 'wp-directory-size' ), array( $this, 'settings_input' ), $key, $section,
 				array( 'key' => $key, 'name' => 'suffix', 'size' => 10, 'maxlength' => 20 ) );
 
 			$items = array();
@@ -90,8 +94,8 @@ if ( ! class_exists( 'WP_Directory_Size_Settings' ) ) {
 			}
 
 
-			add_settings_field( 'post_types', __( 'Post Types', 'wp-revision-list' ), array( $this, 'settings_checkbox_list' ), $key, $section,
-				array( 'key' => $key, 'name' => 'post_types', 'items' => $items, 'legend' => __( 'Post Types', 'wp-revision-list' ) ) );
+			add_settings_field( 'post_types', __( 'Post Types', 'wp-directory-size' ), array( $this, 'settings_checkbox_list' ), $key, $section,
+				array( 'key' => $key, 'name' => 'post_types', 'items' => $items, 'legend' => __( 'Post Types', 'wp-directory-size' ) ) );
 		}
 
 
@@ -248,8 +252,8 @@ if ( ! class_exists( 'WP_Directory_Size_Settings' ) ) {
 			}
 
 			echo '<div>';
-			echo "<label><input id='{$name}_1' name='{$key}[{$name}]'  type='radio' value='1' " . ( '1' === $value ? " checked=\"checked\"" : "" ) . "/>" . __( 'Yes', 'wp-revision-list' ) . "</label> ";
-			echo "<label><input id='{$name}_0' name='{$key}[{$name}]'  type='radio' value='0' " . ( '0' === $value ? " checked=\"checked\"" : "" ) . "/>" . __( 'No', 'wp-revision-list' ) . "</label> ";
+			echo "<label><input id='{$name}_1' name='{$key}[{$name}]'  type='radio' value='1' " . ( '1' === $value ? " checked=\"checked\"" : "" ) . "/>" . __( 'Yes', 'wp-directory-size' ) . "</label> ";
+			echo "<label><input id='{$name}_0' name='{$key}[{$name}]'  type='radio' value='0' " . ( '0' === $value ? " checked=\"checked\"" : "" ) . "/>" . __( 'No', 'wp-directory-size' ) . "</label> ";
 			echo '</div>';
 
 			$this->output_after( $after );
@@ -265,7 +269,7 @@ if ( ! class_exists( 'WP_Directory_Size_Settings' ) ) {
 
 
 		public function admin_menu() {
-			add_options_page( __( 'WP Revision List Settings', 'wp-revision-list' ), __( 'WP Revision List', 'wp-revision-list' ), 'manage_options', $this->settings_page, array( $this, 'options_page' ), 30 );
+			add_options_page( __( 'WP Directory Size Settings', 'wp-directory-size' ), __( 'WP Directory Size', 'wp-directory-size' ), 'manage_options', $this->settings_page, array( $this, 'options_page' ), 30 );
 		}
 
 
@@ -279,7 +283,7 @@ if ( ! class_exists( 'WP_Directory_Size_Settings' ) ) {
 					<?php do_settings_sections( $tab ); ?>
 					<?php
 						if ( $this->settings_key_help !== $tab ) {
-							submit_button( __( 'Save Settings', 'wp-revision-list' ), 'primary', 'submit', true );
+							submit_button( __( 'Save Settings', 'wp-directory-size' ), 'primary', 'submit', true );
 						}
 					?>
 				</form>
@@ -302,7 +306,7 @@ if ( ! class_exists( 'WP_Directory_Size_Settings' ) ) {
 
 		private function plugin_options_tabs() {
 			$current_tab = $this->current_tab();
-			echo '<h2>' . __( 'WP Revision List Settings', 'wp-revision-list' ) . '</h2><h2 class="nav-tab-wrapper">';
+			echo '<h2>' . __( 'WP Directory Size Settings', 'wp-directory-size' ) . '</h2><h2 class="nav-tab-wrapper">';
 			foreach ( $this->plugin_settings_tabs as $tab_key => $tab_caption ) {
 				$active = $current_tab == $tab_key ? 'nav-tab-active' : '';
 				echo '<a class="nav-tab ' . $active . '" href="?page=' . $this->settings_page . '&tab=' . $tab_key . '">' . $tab_caption . '</a>';
