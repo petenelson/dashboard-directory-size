@@ -89,9 +89,16 @@ if ( ! class_exists( 'WP_Directory_Size_Dashboard_Widget' ) ) {
 
 
 		private function output_trimmed_path( $path ) {
-			$trim_size = 30;
+			$trim_size = 25;
 			$trimmed = false;
 			$full_path = $path;
+
+			// if this is part of the install, remove the start to show relative path
+			if ( stripos( $path , ABSPATH ) !== false ) {
+				$path = substr( $path, strlen( ABSPATH ) );
+			}
+
+			// trim directory name
 			if ( ! empty( $path ) && strlen( $path ) > $trim_size ) {
 				$path = substr( $path, 0, $trim_size );
 				$trimmed = true;
