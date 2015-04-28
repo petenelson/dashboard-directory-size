@@ -15,13 +15,15 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 			add_action( 'wp_dashboard_setup', array( $this, 'register_dashboard_widgets' ) );
 
+			add_action( 'admin_init', array( $this, 'check_refresh_size_list' ) );
+
 		}
 
 
 		public function register_dashboard_widgets() {
 
 			// filterable
-			$can_show_widget =  apply_filters( Dashboard_Directory_Size_Common::$plugin_name . '-can-show-widget', current_user_can( 'manage_options' ) );
+			$can_show_widget =  $this->can_show_widget();
 
 			if ( $can_show_widget ) {
 				wp_add_dashboard_widget( $this->plugin_name . '-dashboard-widget',
@@ -38,13 +40,34 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 			wp_enqueue_script( Dashboard_Directory_Size_Common::$plugin_name . '-dashboard-widget', $this->plugin_dir_url. '/admin/js/dashboard-widget.js', array( 'jquery' ), self::$version, true );
 			wp_enqueue_style( Dashboard_Directory_Size_Common::$plugin_name . '-dashboard-widget', $this->plugin_dir_url. '/admin/css/dashboard-widget.css', array( ), self::$version );
 
+			$refresh_url = wp_nonce_url( add_query_arg(
+				array(
+					Dashboard_Directory_Size_Common::$plugin_name . '-action' => 'refresh',
+				), admin_url( '/') ), 'refresh' );
+
 			?>
 				<div class="inside">
 					<?php $this->display_sizes_table(); ?>
-					<p><a href="<?php echo admin_url( 'options-general.php?page=' . Dashboard_Directory_Size_Common::$plugin_name . '-settings' ); ?>"><?php _e( 'Settings', 'dashboard-directory-size' ); ?></a></p>
+					<p>
+						<a href="<?php echo admin_url( 'options-general.php?page=' . Dashboard_Directory_Size_Common::$plugin_name . '-settings' ); ?>"><?php _e( 'Settings', 'dashboard-directory-size' ); ?></a> | 
+						<a href="<?php echo $refresh_url; ?>"><?php _e( 'Refresh', 'dashboard-directory-size' ); ?></a>
+					</p>
 				</div>
 
 			<?php
+		}
+
+
+		public function check_refresh_size_list() {
+			$action = filter_input( INPUT_GET, Dashboard_Directory_Size_Common::$plugin_name . '-action', FILTER_SANITIZE_STRING );
+			if ( $this->can_show_widget() && $action === 'refresh' && wp_verify_nonce( filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING ), 'refresh' ) ) {
+				do_action( Dashboard_Directory_Size_Common::$plugin_name . '-flush-sizes-transient' );
+			}
+		}
+
+
+		private function can_show_widget() {
+			return apply_filters( Dashboard_Directory_Size_Common::$plugin_name . '-can-show-widget', current_user_can( 'manage_options' ) );
 		}
 
 
