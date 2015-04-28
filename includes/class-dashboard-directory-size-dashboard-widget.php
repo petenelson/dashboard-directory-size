@@ -77,7 +77,21 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 					<tr>
 						<td><?php echo esc_html( $directory['name'] ) ?></td>
 						<td><?php $this->output_trimmed_path( $directory['path'] ) ?></td>
-						<td><?php echo esc_html( size_format( $directory['size'] ) ); ?></td>
+						<td><?php
+
+							switch ( intval( $directory['size'] ) ) {
+								case -1:
+									_e( 'Error', 'dashboard-directory-size' );
+									break;
+								case 0;
+									_e( 'Empty', 'dashboard-directory-size' );
+									break;
+								default:
+									echo esc_html( size_format( $directory['size'] ) );
+								break;
+							}
+
+						?></td>
 					</tr>
 				<?php
 			}

@@ -8,12 +8,14 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 		static $plugin_name         = 'dashboard-directory-size';
 
+
 		public function plugins_loaded() {
 
 			add_filter( Dashboard_Directory_Size_Common::$plugin_name . '-get', array( $this, 'filter_get_directory_size' ), 10, 2 );
 			add_filter( Dashboard_Directory_Size_Common::$plugin_name . '-get-directories', array( $this, 'filter_get_directories' ), 10, 1 );
 
 		}
+
 
 		public function filter_get_directories( $directories ) {
 
@@ -27,10 +29,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 				foreach ( $common as $common_dir ) {
 
 					$path = $this->get_path_for_common_dir( $common_dir );
-					if ( ! is_dir( $path ) ) {
-						continue;
-					}
-
 					$new_dir = $this->create_directory_info( $common_dir, $path );
 
 					if ( ! empty( $new_dir ) ) {
@@ -84,9 +82,9 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 				if ( stripos( $path, '~' ) === 0 ) {
 					$path = ABSPATH . substr( $path, 2 );
 				}
-				if ( is_dir( $path ) ) {
-					return $this->create_directory_info( trim( $parts[0] ), $path );
-				}
+
+				return $this->create_directory_info( trim( $parts[0] ), $path );
+
 			}
 
 			return null;
@@ -133,17 +131,18 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function filter_get_directory_size( $size, $directory ) {
+		public function filter_get_directory_size( $size, $path ) {
 
 			require_once ABSPATH . 'wp-includes/ms-functions.php';
 
-			// TODO verify access to directory
-			// TODO verify directory exists
-			// TODO get/set transient
-
-			$size = recurse_dirsize( $directory );
+			if ( ! is_dir( $path ) ) {
+				$size = -1;
+			} else {
+				$size = recurse_dirsize( $path );
+			}
 
 			return $size;
+
 		}
 
 	} // end class
