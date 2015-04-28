@@ -30,7 +30,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 			// create default settings
 			add_option( $this->settings_key_general, array(
 					'transient-time-minutes'   => 15,
-					'common-directories'       => array( 'uploads', 'plugins' ),
+					'common-directories'       => array( 'uploads', 'themes', 'plugins' ),
 				), '', $autoload = 'no' );
 
 			// add an option so we can show the activated admin notice
@@ -73,7 +73,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
 
-			foreach ( array( 'uploads', 'plugins', 'mu-plugins' ) as $dir ) {
+			foreach ( array( 'uploads', 'themes', 'plugins', 'mu-plugins' ) as $dir ) {
 				$common_directories[ $dir ] = $dir;
 			}
 

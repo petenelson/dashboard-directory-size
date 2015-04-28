@@ -117,6 +117,9 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 						return $upload_dir['basedir'];
 					}
 
+				case 'themes':
+					return get_theme_root( );
+
 				case 'plugins':
 					return WP_PLUGIN_DIR;
 
