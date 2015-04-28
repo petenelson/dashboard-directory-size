@@ -25,8 +25,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 		public function activation_hook() {
 
-			// TODO test this
-
 			// create default settings
 			add_option( $this->settings_key_general, array(
 					'transient-time-minutes'   => 15,
@@ -84,7 +82,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				array( 'key' => $key, 'name' => 'custom-directories', 'rows' => 8, 'cols' => 60, 'after' => __( 'A list of names and paths separated by pipe, use ~ for the WordPress install directory, example:<br/><br/>nginx Cache | /var/run/nginx-cache<br/>All WP Content | ~/wp-content/', 'dashboard-directory-size' ) ) );
 
 			add_settings_field( 'transient-time-minutes', __( 'Cache Size List (minutes)', 'dashboard-directory-size' ), array( $this, 'settings_input' ), $key, $section,
-				array( 'key' => $key, 'name' => 'transient-time-minutes', 'type' => 'number', 'min' => 0, 'max' => 1440, 'after' => __( 'Stores the directory sizes as a transient to reduce server load' ) ) );
+				array( 'key' => $key, 'name' => 'transient-time-minutes', 'type' => 'number', 'min' => 0, 'max' => 1440, 'after' => __( 'Caches the directory sizes as a transient to reduce server load, 0 to disable' ) ) );
 
 		}
 
@@ -276,10 +274,10 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 			</div>
 			<?php
 
-			//$settings_updated = filter_input( INPUT_GET, 'settings-updated', FILTER_SANITIZE_STRING );
-			//if ( ! empty( $settings_updated ) ) {
-				//flush_rewrite_rules( );
-			//}
+			$settings_updated = filter_input( INPUT_GET, 'settings-updated', FILTER_SANITIZE_STRING );
+			if ( ! empty( $settings_updated ) ) {
+				do_action( Dashboard_Directory_Size_Common::$plugin_name . '-flush-sizes-transient' );
+			}
 
 		}
 
