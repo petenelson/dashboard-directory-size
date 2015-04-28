@@ -44,7 +44,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 		public function filter_get_directories( $directories ) {
 
-			$transient_time_minutes = intval( apply_filters( Dashboard_Directory_Size_Common::$plugin_name . '-setting-get', 15, Dashboard_Directory_Size_Common::$plugin_name . '-settings-general', 'transient-time-minutes' ) );
+			$transient_time_minutes = intval( apply_filters( Dashboard_Directory_Size_Common::$plugin_name . '-setting-get', 60, Dashboard_Directory_Size_Common::$plugin_name . '-settings-general', 'transient-time-minutes' ) );
 
 			if ( $transient_time_minutes > 0 ) {
 				$transient = get_transient( $this->sizes_transient_name() );

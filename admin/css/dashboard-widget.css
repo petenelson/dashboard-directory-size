@@ -1,3 +1,24 @@
 .dashboard-directory-size-table {
 	width: 100%;
 }
+
+.dashboard-directory-size-table .cell-size {
+	text-align: right;
+}
+
+.dashboard-directory-size-table .trimmed-path {
+	display: none;
+}
+
+.dashboard-directory-size-table .trimmed-path-visible {
+	display: initial;
+}
+
+.dashboard-directory-size-table .full-path {
+	display: none;
+}
+
+.dashboard-directory-size-table .full-path-visible {
+	display: initial;
+}
+

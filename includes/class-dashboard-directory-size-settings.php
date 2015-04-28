@@ -27,7 +27,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 			// create default settings
 			add_option( $this->settings_key_general, array(
-					'transient-time-minutes'   => 15,
+					'transient-time-minutes'   => 60,
 					'common-directories'       => array( 'uploads', 'themes', 'plugins' ),
 				), '', $autoload = 'no' );
 

@@ -1,3 +1,6 @@
-* create repo readme.txt, screenshots, etc.
+* sanitize settings (dirs)
+* add help page
 
-* add rerfresh to widget
+* do once-over of code
+
+* create repo readme.txt, screenshots, etc.

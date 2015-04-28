@@ -6,7 +6,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 	class Dashboard_Directory_Size_Dashboard_Widget {
 
-		static $version             = '2015-04-28-01';
+		static $version             = '2015-04-28-02';
 
 		var $plugin_dir_url         = '';
 
@@ -98,9 +98,9 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 			foreach ( $directories as $directory ) {
 				?>
 					<tr>
-						<td><?php echo esc_html( $directory['name'] ) ?></td>
-						<td><?php $this->output_trimmed_path( $directory['path'] ) ?></td>
-						<td><?php
+						<td class="cell-name"><?php echo esc_html( $directory['name'] ) ?></td>
+						<td class="cell-path"><?php $this->output_trimmed_path( $directory['path'] ) ?></td>
+						<td class="cell-size"><?php
 
 							switch ( intval( $directory['size'] ) ) {
 								case -1:
@@ -124,12 +124,13 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 		private function output_trimmed_path( $path ) {
 			$trim_size = 25;
 			$trimmed = false;
-			$full_path = $path;
 
 			// if this is part of the install, remove the start to show relative path
 			if ( stripos( $path , ABSPATH ) !== false ) {
 				$path = substr( $path, strlen( ABSPATH ) );
 			}
+
+			$full_path = $path;
 
 			// trim directory name
 			if ( ! empty( $path ) && strlen( $path ) > $trim_size ) {
@@ -138,10 +139,10 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 			}
 
 			?>
-				<span class="trimmed-path">
-					<?php if ( $trimmed ) { ?><a class="trimmed-path-expand" href="#"><?php } ?><?php echo esc_html( $path ); ?><?php if ( $trimmed ) { ?>...<?php } ?><?php if ( $trimmed ) { ?></a><?php } ?>
+				<span class="trimmed-path trimmed-path-visible">
+					<?php if ( $trimmed ) { ?><a title="<?php echo esc_attr( $full_path ); ?>" class="trimmed-path-expand" href="#"><?php } ?><?php echo esc_html( $path ); ?><?php if ( $trimmed ) { ?>...<?php } ?><?php if ( $trimmed ) { ?></a><?php } ?>
 				</span>
-				<span class="full-path" style="display: none;">
+				<span class="full-path">
 					<?php echo esc_html( $full_path ); ?>
 				</span>
 			<?php
