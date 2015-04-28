@@ -81,7 +81,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				array( 'key' => $key, 'name' => 'common-directories', 'items' => $common_directories, 'legend' => __( 'Post Types', 'dashboard-directory-size' ) ) );
 
 			add_settings_field( 'custom-directories', __( 'Custom Directories', 'dashboard-directory-size' ), array( $this, 'settings_textarea' ), $key, $section,
-				array( 'key' => $key, 'name' => 'custom-directories', 'rows' => 8, 'cols' => 60, 'after' => __( 'A list of names and paths separated by pipe, use ~ for the WordPress install directory, example:<br/><br/>nginx Cache | /var/run/nginx-cache<br/>All WP Content | ~/wp_content/', 'dashboard-directory-size' ) ) );
+				array( 'key' => $key, 'name' => 'custom-directories', 'rows' => 8, 'cols' => 60, 'after' => __( 'A list of names and paths separated by pipe, use ~ for the WordPress install directory, example:<br/><br/>nginx Cache | /var/run/nginx-cache<br/>All WP Content | ~/wp-content/', 'dashboard-directory-size' ) ) );
 
 			add_settings_field( 'transient-time-minutes', __( 'Cache Size List (minutes)', 'dashboard-directory-size' ), array( $this, 'settings_input' ), $key, $section,
 				array( 'key' => $key, 'name' => 'transient-time-minutes', 'type' => 'number', 'min' => 0, 'max' => 1440, 'after' => __( 'Stores the directory sizes as a transient to reduce server load' ) ) );
@@ -91,8 +91,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 		public function sanitize_general_settings( $settings ) {
 
-			// TODO
-
+			$settings['transient-time-minutes'] = intval( $settings['transient-time-minutes'] );
 			return $settings;
 		}
 
