@@ -2,12 +2,11 @@
 
 if ( ! defined( 'ABSPATH' ) ) die( 'restricted access' );
 
-if ( ! class_exists( 'WP_Directory_Size_Dashboard_Widget' ) ) {
+if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
-	class WP_Directory_Size_Dashboard_Widget {
+	class Dashboard_Directory_Size_Dashboard_Widget {
 
-		static $plugin_name         = 'wp-directory-size';
-		static $version             = '2015-04-27-01';
+		static $version             = '2015-04-28-01';
 
 		var $plugin_dir_url         = '';
 
@@ -15,13 +14,18 @@ if ( ! class_exists( 'WP_Directory_Size_Dashboard_Widget' ) ) {
 		public function plugins_loaded( ) {
 
 			add_action( 'wp_dashboard_setup', array( $this, 'register_dashboard_widgets' ) );
+
 		}
 
 
 		public function register_dashboard_widgets() {
-			if ( current_user_can( 'manage_options' ) ) {
+
+			// filterable
+			$can_show_widget =  apply_filters( Dashboard_Directory_Size_Common::$plugin_name . '-can-show-widget', current_user_can( 'manage_options' ) );
+
+			if ( $can_show_widget ) {
 				wp_add_dashboard_widget( $this->plugin_name . '-dashboard-widget',
-					__('WP Directory Size', 'wp-directory-size' ),
+					__('Dashboard Directory Size', 'dashboard-directory-size' ),
 					array( $this, 'dashboard_widget' )
 				);
 			}
@@ -31,14 +35,13 @@ if ( ! class_exists( 'WP_Directory_Size_Dashboard_Widget' ) ) {
 		public function dashboard_widget() {
 
 			wp_enqueue_script( 'jquery' );
-			wp_enqueue_script( self::$plugin_name . '-dashboard-widget', $this->plugin_dir_url. '/admin/js/wp-directory-size-dashboard-widget.js', array( 'jquery' ), self::$version, true );
-			wp_enqueue_style( self::$plugin_name . '-dashboard-widget', $this->plugin_dir_url. '/admin/css/wp-directory-size-dashboard-widget.css', array( ), self::$version );
+			wp_enqueue_script( Dashboard_Directory_Size_Common::$plugin_name . '-dashboard-widget', $this->plugin_dir_url. '/admin/js/dashboard-widget.js', array( 'jquery' ), self::$version, true );
+			wp_enqueue_style( Dashboard_Directory_Size_Common::$plugin_name . '-dashboard-widget', $this->plugin_dir_url. '/admin/css/dashboard-widget.css', array( ), self::$version );
 
 			?>
 				<div class="inside">
-
 					<?php $this->display_sizes_table(); ?>
-
+					<p><a href="<?php echo admin_url( 'options-general.php?page=' . Dashboard_Directory_Size_Common::$plugin_name . '-settings' ); ?>"><?php _e( 'Settings', 'dashboard-directory-size' ); ?></a></p>
 				</div>
 
 			<?php
@@ -48,15 +51,15 @@ if ( ! class_exists( 'WP_Directory_Size_Dashboard_Widget' ) ) {
 		private function display_sizes_table() {
 
 
-			$directories = apply_filters( WP_Directory_Size_Common::$plugin_name . '-get-directories', array() );
+			$directories = apply_filters( Dashboard_Directory_Size_Common::$plugin_name . '-get-directories', array() );
 
 			?>
-				<table class="wp-directory-size-table">
+				<table class="dashboard-directory-size-table">
 					<thead>
 						<tr>
-							<th><?php _e( 'Name', 'wp-directory-size' ); ?></th>
-							<th><?php _e( 'Path', 'wp-directory-size' ); ?></th>
-							<th><?php _e( 'Size', 'wp-directory-size' ); ?></th>
+							<th><?php _e( 'Name', 'dashboard-directory-size' ); ?></th>
+							<th><?php _e( 'Path', 'dashboard-directory-size' ); ?></th>
+							<th><?php _e( 'Size', 'dashboard-directory-size' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>

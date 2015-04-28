@@ -2,22 +2,22 @@
 
 if ( ! defined( 'ABSPATH' ) ) die( 'restricted access' );
 
-if ( ! class_exists( 'WP_Directory_Size_Common' ) ) {
+if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
-	class WP_Directory_Size_Common {
+	class Dashboard_Directory_Size_Common {
 
-		static $plugin_name         = 'wp-directory-size';
+		static $plugin_name         = 'dashboard-directory-size';
 
 		public function plugins_loaded() {
 
-			add_filter( self::$plugin_name . '-get', array( $this, 'filter_get_directory_size' ), 10, 2 );
-			add_filter( self::$plugin_name . '-get-directories', array( $this, 'filter_get_directories' ), 10, 1 );
+			add_filter( Dashboard_Directory_Size_Common::$plugin_name . '-get', array( $this, 'filter_get_directory_size' ), 10, 2 );
+			add_filter( Dashboard_Directory_Size_Common::$plugin_name . '-get-directories', array( $this, 'filter_get_directories' ), 10, 1 );
 
 		}
 
 		public function filter_get_directories( $directories ) {
 
-			$common = apply_filters( WP_Directory_Size_Common::$plugin_name . '-setting-get', array(), 'wp-directory-size-settings-general', 'common-directories' );
+			$common = apply_filters( Dashboard_Directory_Size_Common::$plugin_name . '-setting-get', array(), Dashboard_Directory_Size_Common::$plugin_name . '-settings-general', 'common-directories' );
 			$common_dirs = array();
 
 			$upload_dir = wp_upload_dir();

@@ -1,2 +1,2 @@
-# wp-directory-size-size
+# dashboard-directory-size-size
 WordPress dashboard widget to display directory sizes

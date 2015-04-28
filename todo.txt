@@ -1,0 +1,5 @@
+* add configurable transient timeout in settings
+* add transient support when reading sizes
+* add hook to allow flushing of transient
+* flush transient when media uploaded
+* flush transient when plugin installed
