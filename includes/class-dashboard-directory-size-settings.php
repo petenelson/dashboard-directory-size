@@ -25,16 +25,12 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 		public function activation_hook() {
 
-			return;
-
-			// TODO update this
+			// TODO test this
 
 			// create default settings
 			add_option( $this->settings_key_general, array(
-					'number_of_revisions'  => 3,
-					'post_types'           =>array( 'post', 'page' ),
-					'prefix'               => '* ',
-					'suffix'               => ' (Rev)',
+					'transient-time-minutes'   => 15,
+					'common-directories'       => array( 'uploads', 'plugins' ),
 				), '', $autoload = 'no' );
 
 			// add an option so we can show the activated admin notice
@@ -77,24 +73,18 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
 
-
-			// TODO refactor this, don't need to store the path in the settings
-
-			$common_directories = array();
-			$upload_dir = wp_upload_dir();
-			if ( ! empty( $upload_dir ) ) {
-				$common_directories[ $upload_dir['basename'] ]  = 'uploads';
+			foreach ( array( 'uploads', 'plugins', 'mu-plugins' ) as $dir ) {
+				$common_directories[ $dir ] = $dir;
 			}
-
-			$common_directories[ WP_PLUGIN_DIR ] = 'plugins';
-			$common_directories[ WPMU_PLUGIN_DIR  ] = 'mu-plugins';
-
 
 			add_settings_field( 'common-directories', __( 'Common Directories', 'dashboard-directory-size' ), array( $this, 'settings_checkbox_list' ), $key, $section,
 				array( 'key' => $key, 'name' => 'common-directories', 'items' => $common_directories, 'legend' => __( 'Post Types', 'dashboard-directory-size' ) ) );
 
 			add_settings_field( 'custom-directories', __( 'Custom Directories', 'dashboard-directory-size' ), array( $this, 'settings_textarea' ), $key, $section,
-				array( 'key' => $key, 'name' => 'custom-directories', 'rows' => 10, 'cols' => 40, 'after' => __( 'A list of names and paths separated by pipe, use ~ for the WordPress install directory, example:<br/><br/>nginx Cache | /var/run/nginx-cache<br/>All WP Content | ~/wp_content/', 'dashboard-directory-size' ) ) );
+				array( 'key' => $key, 'name' => 'custom-directories', 'rows' => 8, 'cols' => 60, 'after' => __( 'A list of names and paths separated by pipe, use ~ for the WordPress install directory, example:<br/><br/>nginx Cache | /var/run/nginx-cache<br/>All WP Content | ~/wp_content/', 'dashboard-directory-size' ) ) );
+
+			add_settings_field( 'transient-time-minutes', __( 'Cache Size List (minutes)', 'dashboard-directory-size' ), array( $this, 'settings_input' ), $key, $section,
+				array( 'key' => $key, 'name' => 'transient-time-minutes', 'type' => 'number', 'min' => 0, 'max' => 1440, 'after' => __( 'Stores the directory sizes as a transient to reduce server load' ) ) );
 
 		}
 

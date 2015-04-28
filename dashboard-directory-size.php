@@ -25,6 +25,7 @@ if ( class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 if ( class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 	$dds_settings = new Dashboard_Directory_Size_Settings();
 	add_action( 'plugins_loaded', array( $dds_settings, 'plugins_loaded' ) );
+	register_activation_hook( __FILE__, array( $dds_settings, 'activation_hook' ) );
 }
 
 

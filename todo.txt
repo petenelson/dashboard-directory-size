@@ -3,3 +3,5 @@
 * add hook to allow flushing of transient
 * flush transient when media uploaded
 * flush transient when plugin installed
+
+* add uninstall
