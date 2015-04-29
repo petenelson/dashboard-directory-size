@@ -6,7 +6,7 @@ Author: Pete Nelson
 Version: 1.0
 */
 
-if ( !defined( 'ABSPATH' ) ) exit( 'restricted access' );
+if ( !defined( 'ABSPATH' ) ) die( 'restricted access' );
 
 // include plugin files
 $include_files = array( 'common', 'settings', 'dashboard-widget' );
@@ -31,6 +31,5 @@ if ( class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 if ( class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 	$dds_dash_widget = new Dashboard_Directory_Size_Dashboard_Widget();
-	$dds_dash_widget->plugin_dir_url = plugin_dir_url( __FILE__ );
 	add_action( 'plugins_loaded', array( $dds_dash_widget, 'plugins_loaded' ) );
 }

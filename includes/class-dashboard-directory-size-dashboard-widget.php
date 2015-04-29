@@ -8,9 +8,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 		static $version             = '2015-04-28-02';
 
-		var $plugin_dir_url         = '';
-
-
 		public function plugins_loaded( ) {
 
 			add_action( 'wp_dashboard_setup', array( $this, 'register_dashboard_widgets' ) );
@@ -37,8 +34,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 		public function dashboard_widget() {
 
 			wp_enqueue_script( 'jquery' );
-			wp_enqueue_script( Dashboard_Directory_Size_Common::$plugin_name . '-dashboard-widget', $this->plugin_dir_url. '/admin/js/dashboard-widget.js', array( 'jquery' ), self::$version, true );
-			wp_enqueue_style( Dashboard_Directory_Size_Common::$plugin_name . '-dashboard-widget', $this->plugin_dir_url. '/admin/css/dashboard-widget.css', array( ), self::$version );
+			wp_enqueue_script( Dashboard_Directory_Size_Common::$plugin_name . '-dashboard-widget', plugins_url( '/admin/js/dashboard-widget.js', dirname( __FILE__ ) ), array( 'jquery' ), self::$version, true );
+			wp_enqueue_style( Dashboard_Directory_Size_Common::$plugin_name . '-dashboard-widget', plugins_url( '/admin/css/dashboard-widget.css', dirname( __FILE__ ) ), array( ), self::$version );
 
 			$refresh_url = wp_nonce_url( add_query_arg(
 				array(
