@@ -45,4 +45,4 @@ We can answer them here!
 == Screenshots ==
 
 1. Sample dashboard widget
-2. Customization page
+2. Settings page

@@ -1,6 +1,1 @@
-* sanitize settings (dirs)
-* add help page
-
 * do once-over of code
-
-* create repo readme.txt, screenshots, etc.
