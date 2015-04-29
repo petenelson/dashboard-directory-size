@@ -11,7 +11,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 		public function plugins_loaded( ) {
 
 			add_action( 'wp_dashboard_setup', array( $this, 'register_dashboard_widgets' ) );
-
 			add_action( 'admin_init', array( $this, 'check_refresh_size_list' ) );
 
 		}
@@ -145,7 +144,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 			<?php
 
 		}
-
 
 
 	} // end class

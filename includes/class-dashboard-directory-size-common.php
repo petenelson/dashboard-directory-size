@@ -18,7 +18,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			add_action( Dashboard_Directory_Size_Common::$plugin_name . '-flush-sizes-transient', array( $this, 'flush_sizes_transient' ) );
 
 			$this->add_transient_flushers();
-			add_action( 'admin_init', array( $this, 'flush_sizes_on_deleted_plugins' ) );
 
 		}
 
@@ -38,6 +37,9 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			foreach ( array( 'update_option', 'deleted_site_transient' ) as $action ) {
 				add_action( $action, array( $this, 'flush_sizes_on_item_match' ) );
 			}
+
+			// checks querystring for plugin deletes
+			add_action( 'admin_init', array( $this, 'flush_sizes_on_deleted_plugins' ) );
 
 		}
 

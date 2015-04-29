@@ -18,6 +18,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 			add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 			add_action( 'admin_notices', array( $this, 'activation_admin_notice' ) );
 
+			// filters to get plugin settings
 			add_filter( Dashboard_Directory_Size_Common::$plugin_name . '-setting-is-enabled', array( $this, 'setting_is_enabled' ), 10, 3 );
 			add_filter( Dashboard_Directory_Size_Common::$plugin_name . '-setting-get', array( $this, 'setting_get' ), 10, 3 );
 
