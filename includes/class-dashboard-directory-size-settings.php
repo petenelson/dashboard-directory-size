@@ -20,6 +20,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 			add_filter( Dashboard_Directory_Size_Common::$plugin_name . '-setting-is-enabled', array( $this, 'setting_is_enabled' ), 10, 3 );
 			add_filter( Dashboard_Directory_Size_Common::$plugin_name . '-setting-get', array( $this, 'setting_get' ), 10, 3 );
+
 		}
 
 
@@ -90,6 +91,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 		public function sanitize_general_settings( $settings ) {
 
 			$settings['transient-time-minutes'] = intval( $settings['transient-time-minutes'] );
+			$settings['custom-directories'] = filter_var( $settings['custom-directories'], FILTER_SANITIZE_STRING );
 			return $settings;
 		}
 
