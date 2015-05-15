@@ -7,3 +7,6 @@
 
 ### v1.0.0 April 28, 2015
 - Initial release
+
+## Roadmap
+- Add option for WordPress database size
