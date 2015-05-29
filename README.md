@@ -12,4 +12,4 @@
 - Initial release
 
 ## Roadmap
-- Add option for WordPress database size (SELECT table_schema, SUM(data_length + index_length) FROM information_schema.TABLES where table_schema = 'tablename' GROUP BY table_schema)
+- Nothing new right now, but pull requests are encouraged and welcome if you have an idea for a new feature.
