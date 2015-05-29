@@ -3,7 +3,7 @@
 Plugin Name: Dashboard Directory Size
 Description: Dashboard widget to display directory sizes
 Author: Pete Nelson <a href="https://twitter.com/GunGeekATX">(@GunGeekATX)</a>
-Version: 1.0.0
+Version: 1.1.0
 Text Domain: dashboard-directory-size
 Domain Path: /languages
 */

@@ -88,7 +88,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				array( 'key' => $key, 'name' => 'show-database-size' ) );
 
 			add_settings_field( 'transient-time-minutes', __( 'Cache Size List (minutes)', 'dashboard-directory-size' ), array( $this, 'settings_input' ), $key, $section,
-				array( 'key' => $key, 'name' => 'transient-time-minutes', 'type' => 'number', 'min' => 0, 'max' => 1440, 'after' => __( 'Caches the directory sizes as a transient to reduce server load, 0 to disable' ) ) );
+				array( 'key' => $key, 'name' => 'transient-time-minutes', 'type' => 'number', 'min' => 0, 'max' => 1440,  'step' => 1, 'after' => __( 'Caches the directory sizes as a transient to reduce server load, 0 to disable' ) ) );
 
 		}
 
