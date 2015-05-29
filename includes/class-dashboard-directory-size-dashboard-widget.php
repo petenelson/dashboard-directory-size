@@ -7,6 +7,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 	class Dashboard_Directory_Size_Dashboard_Widget {
 
 		static $version             = '2015-04-28-02';
+		static $plugin_name         = 'dashboard-directory-size';
 
 		public function plugins_loaded( ) {
 
@@ -22,7 +23,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 			$can_show_widget =  $this->can_show_widget();
 
 			if ( $can_show_widget ) {
-				wp_add_dashboard_widget( $this->plugin_name . '-dashboard-widget',
+				wp_add_dashboard_widget( Dashboard_Directory_Size_Dashboard_Widget::$plugin_name . '-dashboard-widget',
 					__('Dashboard Directory Size', 'dashboard-directory-size' ),
 					array( $this, 'dashboard_widget' )
 				);

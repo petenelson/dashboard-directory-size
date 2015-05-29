@@ -31,6 +31,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 			add_option( $this->settings_key_general, array(
 					'transient-time-minutes'   => 60,
 					'common-directories'       => array( 'uploads', 'themes', 'plugins' ),
+					'show-database-size'       => '1',
 				), '', $autoload = 'no' );
 
 			// add an option so we can show the activated admin notice
@@ -83,8 +84,11 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 			add_settings_field( 'custom-directories', __( 'Custom Directories', 'dashboard-directory-size' ), array( $this, 'settings_textarea' ), $key, $section,
 				array( 'key' => $key, 'name' => 'custom-directories', 'rows' => 8, 'cols' => 60, 'after' => __( 'A list of names and paths separated by pipe, use ~ for the WordPress install directory, example:<br/><br/>nginx Cache | /var/run/nginx-cache<br/>All WP Content | ~/wp-content/', 'dashboard-directory-size' ) ) );
 
+			add_settings_field( 'show-database-size', __( 'Show Database Size', 'dashboard-directory-size' ), array( $this, 'settings_yes_no' ), $key, $section,
+				array( 'key' => $key, 'name' => 'show-database-size' ) );
+
 			add_settings_field( 'transient-time-minutes', __( 'Cache Size List (minutes)', 'dashboard-directory-size' ), array( $this, 'settings_input' ), $key, $section,
-				array( 'key' => $key, 'name' => 'transient-time-minutes', 'type' => 'number', 'min' => 0, 'max' => 1440, 'after' => __( 'Caches the directory sizes as a transient to reduce server load, 0 to disable' ) ) );
+				array( 'key' => $key, 'name' => 'transient-time-minutes', 'type' => 'number', 'min' => 0, 'max' => 1440,  'step' => 1, 'after' => __( 'Caches the directory sizes as a transient to reduce server load, 0 to disable' ) ) );
 
 		}
 

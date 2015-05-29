@@ -4,7 +4,7 @@ Tags: dashboard, dashboard widget, directory size, folder size
 Donate link: https://petenelson.com/
 Requires at least: 4.0
 Tested up to: 4.2.1
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,9 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 
 == Changelog ==
+
+= v1.1.0 May 29, 2015 =
+* Added the ability to show the WordPress database size
 
 = v1.0.0 April 28, 2015 =
 * Initial release
