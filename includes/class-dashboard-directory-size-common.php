@@ -6,16 +6,17 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 	class Dashboard_Directory_Size_Common {
 
-		static $plugin_name         = 'dashboard-directory-size';
+		const VERSION         = '2015-08-19-01';
+		const PLUGIN_NAME     = 'dashboard-directory-size';
 
 
 		public function plugins_loaded() {
 
-			add_filter( Dashboard_Directory_Size_Common::$plugin_name . '-get', array( $this, 'filter_get_directory_size' ), 10, 2 );
-			add_filter( Dashboard_Directory_Size_Common::$plugin_name . '-get-directories', array( $this, 'filter_get_directories' ), 10, 1 );
+			add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get', array( $this, 'filter_get_directory_size' ), 10, 2 );
+			add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array( $this, 'filter_get_directories' ), 10, 1 );
 
 			// hook to allow purging of the transient
-			add_action( Dashboard_Directory_Size_Common::$plugin_name . '-flush-sizes-transient', array( $this, 'flush_sizes_transient' ) );
+			add_action( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-flush-sizes-transient', array( $this, 'flush_sizes_transient' ) );
 
 			$this->add_transient_flushers();
 
@@ -46,7 +47,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 		public function filter_get_directories( $directories ) {
 
-			$transient_time_minutes = intval( apply_filters( Dashboard_Directory_Size_Common::$plugin_name . '-setting-get', 60, Dashboard_Directory_Size_Common::$plugin_name . '-settings-general', 'transient-time-minutes' ) );
+			$transient_time_minutes = intval( apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get', 60, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'transient-time-minutes' ) );
 
 			if ( $transient_time_minutes > 0 ) {
 				$transient = get_transient( $this->sizes_transient_name() );
@@ -78,7 +79,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			$results = array_merge( $directories, $new_dirs );
 
 			// allow filtering of the results
-			$results = apply_filters( Dashboard_Directory_Size_Common::$plugin_name . '-sizes-generated', $results );
+			$results = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes-generated', $results );
 
 			// set transient
 			if( $transient_time_minutes > 0 && ! empty( $results ) ) {
@@ -94,7 +95,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 			$dir_list = array();
 
-			$common = apply_filters( Dashboard_Directory_Size_Common::$plugin_name . '-setting-get', array(), Dashboard_Directory_Size_Common::$plugin_name . '-settings-general', 'common-directories' );
+			$common = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get', array(), Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'common-directories' );
 
 			if ( ! empty( $common ) && is_array( $common ) ) {
 
@@ -119,7 +120,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 			$dir_list = array();
 
-			$custom = apply_filters( Dashboard_Directory_Size_Common::$plugin_name . '-setting-get', array(), Dashboard_Directory_Size_Common::$plugin_name . '-settings-general', 'custom-directories' );
+			$custom = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get', array(), Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'custom-directories' );
 
 			if ( ! empty( $custom ) ) {
 				$custom_dir_list = explode( "\n", $custom );
@@ -213,6 +214,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 		public function filter_get_directory_size( $size, $path ) {
 
+			var_dump($path);
+
 			require_once ABSPATH . 'wp-includes/ms-functions.php';
 
 			if ( ! is_dir( $path ) ) {
@@ -273,7 +276,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 
 		private function sizes_transient_name() {
-			return Dashboard_Directory_Size_Common::$plugin_name . '-sizes';
+			return Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes';
 		}
 
 

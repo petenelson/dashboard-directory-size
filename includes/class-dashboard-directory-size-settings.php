@@ -19,8 +19,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 			add_action( 'admin_notices', array( $this, 'activation_admin_notice' ) );
 
 			// filters to get plugin settings
-			add_filter( Dashboard_Directory_Size_Common::$plugin_name . '-setting-is-enabled', array( $this, 'setting_is_enabled' ), 10, 3 );
-			add_filter( Dashboard_Directory_Size_Common::$plugin_name . '-setting-get', array( $this, 'setting_get' ), 10, 3 );
+			add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-is-enabled', array( $this, 'setting_is_enabled' ), 10, 3 );
+			add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get', array( $this, 'setting_get' ), 10, 3 );
 
 		}
 
@@ -35,20 +35,20 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				), '', $autoload = 'no' );
 
 			// add an option so we can show the activated admin notice
-			add_option( Dashboard_Directory_Size_Common::$plugin_name . '-plugin-activated', '1' );
+			add_option( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-plugin-activated', '1' );
 
 		}
 
 
 		public function activation_admin_notice() {
-			if ( '1' === get_option( Dashboard_Directory_Size_Common::$plugin_name . '-plugin-activated' ) ) { ?>
+			if ( '1' === get_option( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-plugin-activated' ) ) { ?>
 					<div class="updated">
 						<p><?php
 				echo sprintf( __( '<strong>Dashboard Directory Size activated!</strong> Please <a href="%s">visit the Settings page</a> to customize the settings.', 'dashboard-directory-size' ), admin_url( 'options-general.php?page=dashboard-directory-size-settings' ) );
 				?></p>
 					</div>
 				<?php
-				delete_option( Dashboard_Directory_Size_Common::$plugin_name . '-plugin-activated' );
+				delete_option( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-plugin-activated' );
 			}
 		}
 
@@ -283,7 +283,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 			$settings_updated = filter_input( INPUT_GET, 'settings-updated', FILTER_SANITIZE_STRING );
 			if ( ! empty( $settings_updated ) ) {
-				do_action( Dashboard_Directory_Size_Common::$plugin_name . '-flush-sizes-transient' );
+				do_action( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-flush-sizes-transient' );
 			}
 
 		}
