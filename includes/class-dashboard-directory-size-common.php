@@ -8,6 +8,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 		const VERSION         = '2015-08-19-01';
 		const PLUGIN_NAME     = 'dashboard-directory-size';
+		const TEXT_DOMAIN     = 'dashboard-directory-size';
 
 
 		public function plugins_loaded() {

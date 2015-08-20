@@ -22,7 +22,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 			if ( $can_show_widget ) {
 				wp_add_dashboard_widget( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget',
-					__('Dashboard Directory Size', 'dashboard-directory-size' ),
+					__('Dashboard Directory Size', Dashboard_Directory_Size_Common::TEXT_DOMAIN ),
 					array( $this, 'dashboard_widget' )
 				);
 			}
@@ -44,8 +44,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 				<div class="inside">
 					<?php $this->display_sizes_table(); ?>
 					<p>
-						<a href="<?php echo admin_url( 'options-general.php?page=' . Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings' ); ?>"><?php _e( 'Settings', 'dashboard-directory-size' ); ?></a> | 
-						<a href="<?php echo $refresh_url; ?>"><?php _e( 'Refresh', 'dashboard-directory-size' ); ?></a>
+						<a href="<?php echo admin_url( 'options-general.php?page=' . Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings' ); ?>"><?php _e( 'Settings' ); ?></a> | 
+						<a href="<?php echo $refresh_url; ?>"><?php _e( 'Refresh', Dashboard_Directory_Size_Common::TEXT_DOMAIN ); ?></a>
 					</p>
 				</div>
 
@@ -75,9 +75,9 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 				<table class="dashboard-directory-size-table">
 					<thead>
 						<tr>
-							<th><?php _e( 'Name', 'dashboard-directory-size' ); ?></th>
-							<th><?php _e( 'Path', 'dashboard-directory-size' ); ?></th>
-							<th><?php _e( 'Size', 'dashboard-directory-size' ); ?></th>
+							<th><?php _e( 'Name', Dashboard_Directory_Size_Common::TEXT_DOMAIN ); ?></th>
+							<th><?php _e( 'Path', Dashboard_Directory_Size_Common::TEXT_DOMAIN ); ?></th>
+							<th><?php _e( 'Size', Dashboard_Directory_Size_Common::TEXT_DOMAIN ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -99,10 +99,10 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 							switch ( intval( $directory['size'] ) ) {
 								case -1:
-									_e( 'Error', 'dashboard-directory-size' );
+									_e( 'Error', Dashboard_Directory_Size_Common::TEXT_DOMAIN );
 									break;
 								case 0;
-									_e( 'Empty', 'dashboard-directory-size' );
+									_e( 'Empty', Dashboard_Directory_Size_Common::TEXT_DOMAIN );
 									break;
 								default:
 									echo esc_html( size_format( $directory['size'] ) );

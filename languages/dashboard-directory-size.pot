@@ -48,6 +48,9 @@ msgstr ""
 msgid "Size"
 msgstr ""
 
+msgid "Refresh"
+msgstr ""
+
 #: includes/class-dashboard-directory-size-dashboard-widget.php:104
 msgid "Error"
 msgstr ""
