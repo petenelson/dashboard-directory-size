@@ -243,8 +243,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 			}
 
 			echo '<div>';
-			echo "<label><input id='{$name}_1' name='{$key}[{$name}]'  type='radio' value='1' " . ( '1' === $value ? " checked=\"checked\"" : "" ) . "/>" . __( 'Yes', 'dashboard-directory-size' ) . "</label> ";
-			echo "<label><input id='{$name}_0' name='{$key}[{$name}]'  type='radio' value='0' " . ( '0' === $value ? " checked=\"checked\"" : "" ) . "/>" . __( 'No', 'dashboard-directory-size' ) . "</label> ";
+			echo "<label><input id='{$name}_1' name='{$key}[{$name}]'  type='radio' value='1' " . ( '1' === $value ? " checked=\"checked\"" : "" ) . "/>" . __( 'Yes' ) . "</label> ";
+			echo "<label><input id='{$name}_0' name='{$key}[{$name}]'  type='radio' value='0' " . ( '0' === $value ? " checked=\"checked\"" : "" ) . "/>" . __( 'No' ) . "</label> ";
 			echo '</div>';
 
 			$this->output_after( $after );
@@ -274,7 +274,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 					<?php do_settings_sections( $tab ); ?>
 					<?php
 						if ( $this->settings_key_help !== $tab ) {
-							submit_button( __( 'Save Settings', 'dashboard-directory-size' ), 'primary', 'submit', true );
+							submit_button( __( 'Save Changes' ), 'primary', 'submit', true );
 						}
 					?>
 				</form>

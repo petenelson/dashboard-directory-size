@@ -11,27 +11,35 @@ Domain Path: /languages
 if ( !defined( 'ABSPATH' ) ) die( 'restricted access' );
 
 // include plugin files
-$include_files = array( 'common', 'settings', 'dashboard-widget' );
+$include_files = array( 'common', 'i18n', 'settings', 'dashboard-widget' );
 foreach ( $include_files as $include_file ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-dashboard-directory-size-' . $include_file . '.php';
 }
 
+$classes = array();
 
-// hook up our classes
-if ( class_exists( 'Dashboard_Directory_Size_Common' ) ) {
-	$dds_common = new Dashboard_Directory_Size_Common();
-	add_action( 'plugins_loaded', array( $dds_common, 'plugins_loaded' ) );
+$class_names = array(
+	'Dashboard_Directory_Size_Common',
+	'Dashboard_Directory_Size_i18n',
+	'Dashboard_Directory_Size_Settings',
+	'Dashboard_Directory_Size_Dashboard_Widget',
+	);
+
+// instantiate our classes
+foreach ( $class_names as $class_name ) {
+	if ( class_exists( $class_name ) ) {
+		$classes[] = new $class_name;
+	}
+}
+
+// hook our classes into WordPress
+foreach ( $classes as $class ) {
+	add_action( 'plugins_loaded', array( $class, 'plugins_loaded' ) );
 }
 
 
+// handler for activation
 if ( class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 	$dds_settings = new Dashboard_Directory_Size_Settings();
-	add_action( 'plugins_loaded', array( $dds_settings, 'plugins_loaded' ) );
 	register_activation_hook( __FILE__, array( $dds_settings, 'activation_hook' ) );
-}
-
-
-if ( class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
-	$dds_dash_widget = new Dashboard_Directory_Size_Dashboard_Widget();
-	add_action( 'plugins_loaded', array( $dds_dash_widget, 'plugins_loaded' ) );
 }

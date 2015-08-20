@@ -36,14 +36,6 @@ msgstr ""
 msgid "Dashboard Directory Size"
 msgstr ""
 
-#: includes/class-dashboard-directory-size-dashboard-widget.php:49
-msgid "Settings"
-msgstr ""
-
-#: includes/class-dashboard-directory-size-dashboard-widget.php:50
-msgid "Refresh"
-msgstr ""
-
 #: includes/class-dashboard-directory-size-dashboard-widget.php:80
 msgid "Name"
 msgstr ""
@@ -106,26 +98,12 @@ msgid ""
 "Caches the directory sizes as a transient to reduce server load, 0 to disable"
 msgstr ""
 
-#: includes/class-dashboard-directory-size-settings.php:106
-msgid "Help"
-msgstr ""
-
-#: includes/class-dashboard-directory-size-settings.php:246
-msgid "Yes"
-msgstr ""
-
-#: includes/class-dashboard-directory-size-settings.php:247
-msgid "No"
-msgstr ""
 
 #: includes/class-dashboard-directory-size-settings.php:263
 #: includes/class-dashboard-directory-size-settings.php:300
 msgid "Dashboard Directory Size Settings"
 msgstr ""
 
-#: includes/class-dashboard-directory-size-settings.php:277
-msgid "Save Settings"
-msgstr ""
 
 #. Description of the plugin/theme
 msgid "Dashboard widget to display directory sizes"

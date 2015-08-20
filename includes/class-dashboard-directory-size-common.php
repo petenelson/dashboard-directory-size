@@ -214,8 +214,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 		public function filter_get_directory_size( $size, $path ) {
 
-			var_dump($path);
-
 			require_once ABSPATH . 'wp-includes/ms-functions.php';
 
 			if ( ! is_dir( $path ) ) {
