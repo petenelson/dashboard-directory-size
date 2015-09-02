@@ -26,6 +26,9 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 == Changelog ==
 
+= v1.2.0 August 19, 2015 =
+* Added .po files to support upcoming translations
+
 = v1.1.0 May 29, 2015 =
 * Added the ability to show the WordPress database size
 
@@ -35,8 +38,11 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 == Upgrade Notice ==
 
-= v1.0.0 April 28, 2015 =
-* Initial release
+= v1.2.0 August 19, 2015 =
+* Added .po files to support upcoming translations
+
+= v1.1.0 May 29, 2015 =
+* Added the ability to show the WordPress database size
 
 
 == Frequently Asked Questions ==

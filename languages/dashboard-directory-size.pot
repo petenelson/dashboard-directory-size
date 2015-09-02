@@ -1,0 +1,118 @@
+# Copyright (C) 2015 Dashboard Directory Size
+# This file is distributed under the same license as the Dashboard Directory Size package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Dashboard Directory Size 1.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/dashboard-"
+"directory-size\n"
+"POT-Creation-Date: 2015-08-20 00:30:46+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: admin/partials/admin-help.php:18
+msgid "Contact"
+msgstr ""
+
+#: admin/partials/admin-help.php:20
+msgid "E-Mail"
+msgstr ""
+
+#: admin/partials/admin-help.php:21
+msgid "Twitter"
+msgstr ""
+
+#: admin/partials/admin-help.php:22
+msgid "GitHub"
+msgstr ""
+
+#. #-#-#-#-#  plugin.pot (Dashboard Directory Size 1.1.0)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: includes/class-dashboard-directory-size-dashboard-widget.php:27
+#: includes/class-dashboard-directory-size-settings.php:263
+msgid "Dashboard Directory Size"
+msgstr ""
+
+#: includes/class-dashboard-directory-size-dashboard-widget.php:80
+msgid "Name"
+msgstr ""
+
+#: includes/class-dashboard-directory-size-dashboard-widget.php:81
+msgid "Path"
+msgstr ""
+
+#: includes/class-dashboard-directory-size-dashboard-widget.php:82
+msgid "Size"
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+#: includes/class-dashboard-directory-size-dashboard-widget.php:104
+msgid "Error"
+msgstr ""
+
+#: includes/class-dashboard-directory-size-dashboard-widget.php:107
+msgid "Empty"
+msgstr ""
+
+#: includes/class-dashboard-directory-size-settings.php:47
+msgid ""
+"<strong>Dashboard Directory Size activated!</strong> Please <a href=\"%s"
+"\">visit the Settings page</a> to customize the settings."
+msgstr ""
+
+#: includes/class-dashboard-directory-size-settings.php:69
+msgid "General"
+msgstr ""
+
+#: includes/class-dashboard-directory-size-settings.php:81
+msgid "Common Directories"
+msgstr ""
+
+#: includes/class-dashboard-directory-size-settings.php:82
+msgid "Post Types"
+msgstr ""
+
+#: includes/class-dashboard-directory-size-settings.php:84
+msgid "Custom Directories"
+msgstr ""
+
+#: includes/class-dashboard-directory-size-settings.php:85
+msgid ""
+"A list of names and paths separated by pipe, use ~ for the WordPress install "
+"directory, example:<br/><br/>nginx Cache | /var/run/nginx-cache<br/>All WP "
+"Content | ~/wp-content/"
+msgstr ""
+
+#: includes/class-dashboard-directory-size-settings.php:87
+msgid "Show Database Size"
+msgstr ""
+
+#: includes/class-dashboard-directory-size-settings.php:90
+msgid "Cache Size List (minutes)"
+msgstr ""
+
+#: includes/class-dashboard-directory-size-settings.php:91
+msgid ""
+"Caches the directory sizes as a transient to reduce server load, 0 to disable"
+msgstr ""
+
+
+#: includes/class-dashboard-directory-size-settings.php:263
+#: includes/class-dashboard-directory-size-settings.php:300
+msgid "Dashboard Directory Size Settings"
+msgstr ""
+
+
+#. Description of the plugin/theme
+msgid "Dashboard widget to display directory sizes"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid ""
+"Pete Nelson <a href=\"https://twitter.com/GunGeekATX\">(@GunGeekATX)</a>"
+msgstr ""

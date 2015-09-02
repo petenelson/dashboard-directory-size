@@ -5,6 +5,9 @@
 
 ## Revision History
 
+### v1.2.0 August 19, 2015
+- Added .po files to support upcoming translations
+
 ### v1.1.0 May 29, 2015
 - Added the ability to show the WordPress database size
 
