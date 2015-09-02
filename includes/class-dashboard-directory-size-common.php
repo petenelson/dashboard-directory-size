@@ -77,12 +77,14 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			// merge all the directories
 			$results = array_merge( $directories, $new_dirs );
 
+			$results = $this->apply_friendly_sizes( $results );
+
 			// allow filtering of the results
 			$results = apply_filters( Dashboard_Directory_Size_Common::$plugin_name . '-sizes-generated', $results );
 
 			// set transient
 			if( $transient_time_minutes > 0 && ! empty( $results ) ) {
-				set_transient( $this->sizes_transient_name(), $results, $transient_time_minutes * 60 );
+				set_transient( $this->sizes_transient_name(), $results, $transient_time_minutes * MINUTE_IN_SECONDS );
 			}
 
 			return $results;
@@ -274,6 +276,18 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 		private function sizes_transient_name() {
 			return Dashboard_Directory_Size_Common::$plugin_name . '-sizes';
+		}
+
+
+		private function apply_friendly_sizes( $results ) {
+			if ( is_array( $results ) ) {
+				for( $i = 0; $i < count( $results ); $i++ ) {
+					if ( ! empty( $results[ $i ]['size'] ) ) {
+						$results[ $i ]['size_friendly'] = size_format( $results[ $i ]['size'] );
+					}
+				}
+			}
+			return $results;
 		}
 
 
