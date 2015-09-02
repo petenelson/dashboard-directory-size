@@ -39,7 +39,8 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 == Upgrade Notice ==
 
-= v1.2.0 August 19, 2015 =
+= v1.2.0 September 1, 2015 =
+* Added WP REST API support
 * Added .po files to support upcoming translations
 
 = v1.1.0 May 29, 2015 =
