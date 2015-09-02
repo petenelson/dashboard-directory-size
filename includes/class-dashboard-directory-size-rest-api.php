@@ -25,12 +25,12 @@ if ( ! class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
 
 
 		public function api_namespace() {
-			return apply_filters( Dashboard_Directory_Size_Common::$plugin_name . '-rest-api-namespace', 'dashboard-directory-size' );
+			return apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-rest-api-namespace', 'dashboard-directory-size' );
 		}
 
 
 		public function get_sizes( WP_REST_Request $request ) {
-			return apply_filters( Dashboard_Directory_Size_Common::$plugin_name . '-get-directories', array() );
+			return apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
 		}
 
 

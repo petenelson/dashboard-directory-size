@@ -3,7 +3,7 @@
 Plugin Name: Dashboard Directory Size
 Description: Dashboard widget to display directory sizes
 Author: Pete Nelson <a href="https://twitter.com/GunGeekATX">(@GunGeekATX)</a>
-Version: 1.2.0
+Version: 1.3.0
 Text Domain: dashboard-directory-size
 Domain Path: /languages
 */
@@ -23,6 +23,7 @@ $class_names = array(
 	'Dashboard_Directory_Size_i18n',
 	'Dashboard_Directory_Size_Settings',
 	'Dashboard_Directory_Size_Dashboard_Widget',
+	'Dashboard_Directory_Size_REST_API',
 	);
 
 // instantiate our classes
@@ -44,14 +45,3 @@ if ( class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 	register_activation_hook( __FILE__, array( $dds_settings, 'activation_hook' ) );
 }
 
-
-if ( class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
-	$dds_dash_widget = new Dashboard_Directory_Size_Dashboard_Widget();
-	add_action( 'plugins_loaded', array( $dds_dash_widget, 'plugins_loaded' ) );
-}
-
-
-if ( class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
-	$dds_rest_api = new Dashboard_Directory_Size_REST_API();
-	add_action( 'plugins_loaded', array( $dds_rest_api, 'plugins_loaded' ) );
-}
