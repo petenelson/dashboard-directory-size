@@ -11,7 +11,7 @@ Domain Path: /languages
 if ( !defined( 'ABSPATH' ) ) die( 'restricted access' );
 
 // include plugin files
-$include_files = array( 'common', 'i18n', 'settings', 'dashboard-widget' );
+$include_files = array( 'common', 'i18n', 'settings', 'dashboard-widget', 'rest-api' );
 foreach ( $include_files as $include_file ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-dashboard-directory-size-' . $include_file . '.php';
 }
@@ -42,4 +42,16 @@ foreach ( $classes as $class ) {
 if ( class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 	$dds_settings = new Dashboard_Directory_Size_Settings();
 	register_activation_hook( __FILE__, array( $dds_settings, 'activation_hook' ) );
+}
+
+
+if ( class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
+	$dds_dash_widget = new Dashboard_Directory_Size_Dashboard_Widget();
+	add_action( 'plugins_loaded', array( $dds_dash_widget, 'plugins_loaded' ) );
+}
+
+
+if ( class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
+	$dds_rest_api = new Dashboard_Directory_Size_REST_API();
+	add_action( 'plugins_loaded', array( $dds_rest_api, 'plugins_loaded' ) );
 }

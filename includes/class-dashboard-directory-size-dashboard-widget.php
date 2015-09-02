@@ -6,6 +6,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 	class Dashboard_Directory_Size_Dashboard_Widget {
 
+		static $version             = '2015-09-01-01';
+		static $plugin_name         = 'dashboard-directory-size';
 
 		public function plugins_loaded( ) {
 
@@ -105,7 +107,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 									_e( 'Empty', Dashboard_Directory_Size_Common::TEXT_DOMAIN );
 									break;
 								default:
-									echo esc_html( size_format( $directory['size'] ) );
+									echo esc_html( $directory['size_friendly'] );
 								break;
 							}
 
