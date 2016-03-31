@@ -42,14 +42,10 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 		public function activation_admin_notice() {
 			if ( '1' === get_option( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-plugin-activated' ) ) {
-				$allowed_html = array(
-					'a' => array( 'href' => array() ),
-					'strong',
-					);
 				?>
 					<div class="updated">
 						<p>
-							<?php echo wp_kses( sprintf( __( '<strong>Dashboard Directory Size activated!</strong> Please <a href="%s">visit the Settings page</a> to customize the settings.', 'dashboard-directory-size' ), esc_url( admin_url( 'options-general.php?page=dashboard-directory-size-settings' ) ) ), $allowed_html ); ?>
+							<?php echo wp_kses_post( sprintf( __( '<strong>Dashboard Directory Size activated!</strong> Please <a href="%s">visit the Settings page</a> to customize the settings.', 'dashboard-directory-size' ), esc_url( admin_url( 'options-general.php?page=dashboard-directory-size-settings' ) ) ) ); ?>
 						</p>
 					</div>
 				<?php
@@ -87,7 +83,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				array( 'key' => $key, 'name' => 'common-directories', 'items' => $common_directories, 'legend' => __( 'Post Types', 'dashboard-directory-size' ) ) );
 
 			add_settings_field( 'custom-directories', __( 'Custom Directories', 'dashboard-directory-size' ), array( $this, 'settings_textarea' ), $key, $section,
-				array( 'key' => $key, 'name' => 'custom-directories', 'rows' => 8, 'cols' => 60, 'after' => __( 'A list of names and paths separated by pipe, use ~ for the WordPress install directory, example:<br/><br/>nginx Cache | /var/run/nginx-cache<br/>All WP Content | ~/wp-content/', 'dashboard-directory-size' ) ) );
+				array( 'key' => $key, 'name' => 'custom-directories', 'rows' => 8, 'cols' => 60, 'after' => __( 'A list of names and paths separated by pipe, use ~ for the WordPress install directory, example:<br><br>nginx Cache | /var/run/nginx-cache<br>All WP Content | ~/wp-content/', 'dashboard-directory-size' ) ) );
 
 			add_settings_field( 'show-database-size', __( 'Show Database Size', 'dashboard-directory-size' ), array( $this, 'settings_yes_no' ), $key, $section,
 				array( 'key' => $key, 'name' => 'show-database-size' ) );
@@ -192,17 +188,13 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 						<?php echo esc_html( $legend ) ?>
 					</legend>
 
-			<?php
-			foreach ( $items as $post_type => $post_type_dispay ) {
-				?>
-					<label>
-						<input type="checkbox" name="<?php echo $key ?>[<?php echo $name ?>][]" value="<?php echo $post_type ?>"<?php echo in_array( $post_type, $values) ? ' checked="checked"' : ''  ?> />
-						<?php echo esc_html( $post_type_dispay ); ?>
-					</label>
-					<br/>
-				<?php
-			}
-			?>
+					<?php foreach ( $items as $value => $value_dispay ) : ?>
+						<label>
+							<input type="checkbox" name="<?php echo $key ?>[<?php echo $name ?>][]" value="<?php echo $value ?>" <?php checked( in_array( $value, $values) ); ?> />
+							<?php echo esc_html( $value_dispay ); ?>
+						</label>
+						<br/>
+					<?php endforeach; ?>
 				</fieldset>
 			<?php
 
@@ -243,15 +235,15 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 			) );
 
 			$option = get_option( $key );
-			$value = isset( $option[$name] ) ? esc_attr( $option[$name] ) : '';
+			$value = isset( $option[ $name ] ) ? esc_attr( $option[ $name ] ) : '';
 
 			if ( empty( $value ) ) {
 				$value = '0';
 			}
 
 			echo '<div>';
-			echo "<label><input id='{$name}_1' name='{$key}[{$name}]'  type='radio' value='1' " . ( '1' === $value ? " checked=\"checked\"" : "" ) . "/>" . __( 'Yes' ) . "</label> ";
-			echo "<label><input id='{$name}_0' name='{$key}[{$name}]'  type='radio' value='0' " . ( '0' === $value ? " checked=\"checked\"" : "" ) . "/>" . __( 'No' ) . "</label> ";
+			echo "<label><input id='{$name}_1' name='{$key}[{$name}]'  type='radio' value='1' " . ( '1' === $value ? " checked=\"checked\"" : "" ) . "/>" . esc_html__( 'Yes' ) . "</label> ";
+			echo "<label><input id='{$name}_0' name='{$key}[{$name}]'  type='radio' value='0' " . ( '0' === $value ? " checked=\"checked\"" : "" ) . "/>" . esc_html__( 'No' ) . "</label> ";
 			echo '</div>';
 
 			$this->output_after( $after );
@@ -260,8 +252,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 
 		private function output_after( $after ) {
-			if ( !empty( $after ) ) {
-				echo '<div>' . $after . '</div>';
+			if ( ! empty( $after ) ) {
+				echo '<div>' . wp_kses_post( $after ) . '</div>';
 			}
 		}
 
@@ -319,10 +311,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				case 'help';
 					include_once trailingslashit( WP_PLUGIN_DIR ) . 'dashboard-directory-size/admin/partials/admin-help.php';
 					break;
-			}
-
-			if ( ! empty( $output ) ) {
-				echo '<p class="settings-section-header">' . $output . '</p>';
 			}
 
 		}
