@@ -71,8 +71,10 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 			$directories = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
 
+			$classes = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes-table-classes', 'wp-list-table widefat striped' );
+
 			?>
-				<table class="dashboard-directory-size-table">
+				<table class="<?php echo esc_attr( $classes ); ?>">
 					<thead>
 						<tr>
 							<th><?php _e( 'Name', Dashboard_Directory_Size_Common::TEXT_DOMAIN ); ?></th>
@@ -99,7 +101,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 							switch ( intval( $directory['size'] ) ) {
 								case -1:
-									_e( 'Error', Dashboard_Directory_Size_Common::TEXT_DOMAIN );
+									esc_html_e( 'Error', Dashboard_Directory_Size_Common::TEXT_DOMAIN );
 									break;
 								case 0;
 									_e( 'Empty', Dashboard_Directory_Size_Common::TEXT_DOMAIN );
@@ -117,6 +119,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 
 		private function output_trimmed_path( $path ) {
+
 			$trim_size = 25;
 			$trimmed = false;
 
@@ -137,7 +140,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 				<span class="trimmed-path trimmed-path-visible">
 					<?php if ( $trimmed ) { ?><a title="<?php echo esc_attr( $full_path ); ?>" class="trimmed-path-expand" href="#"><?php } ?><?php echo esc_html( $path ); ?><?php if ( $trimmed ) { ?>...<?php } ?><?php if ( $trimmed ) { ?></a><?php } ?>
 				</span>
-				<span class="full-path">
+				<span class="full-path hidden">
 					<?php echo esc_html( $full_path ); ?>
 				</span>
 			<?php
