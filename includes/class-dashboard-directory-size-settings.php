@@ -41,11 +41,12 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 
 		public function activation_admin_notice() {
-			if ( '1' === get_option( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-plugin-activated' ) ) { ?>
+			if ( '1' === get_option( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-plugin-activated' ) ) {
+				?>
 					<div class="updated">
-						<p><?php
-				echo sprintf( __( '<strong>Dashboard Directory Size activated!</strong> Please <a href="%s">visit the Settings page</a> to customize the settings.', Dashboard_Directory_Size_Common::TEXT_DOMAIN ), admin_url( 'options-general.php?page=dashboard-directory-size-settings' ) );
-				?></p>
+						<p>
+							<?php echo wp_kses_post( sprintf( __( '<strong>Dashboard Directory Size activated!</strong> Please <a href="%s">visit the Settings page</a> to customize the settings.', 'dashboard-directory-size' ), esc_url( admin_url( 'options-general.php?page=dashboard-directory-size-settings' ) ) ) ); ?>
+						</p>
 					</div>
 				<?php
 				delete_option( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-plugin-activated' );
@@ -66,7 +67,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 		private function register_general_settings() {
 			$key = $this->settings_key_general;
-			$this->plugin_settings_tabs[$key] = __( 'General', Dashboard_Directory_Size_Common::TEXT_DOMAIN );
+			$this->plugin_settings_tabs[$key] = __( 'General' );
 
 			register_setting( $key, $key, array( $this, 'sanitize_general_settings') );
 
@@ -78,16 +79,16 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				$common_directories[ $dir ] = $dir;
 			}
 
-			add_settings_field( 'common-directories', __( 'Common Directories', Dashboard_Directory_Size_Common::TEXT_DOMAIN ), array( $this, 'settings_checkbox_list' ), $key, $section,
-				array( 'key' => $key, 'name' => 'common-directories', 'items' => $common_directories, 'legend' => __( 'Post Types', Dashboard_Directory_Size_Common::TEXT_DOMAIN ) ) );
+			add_settings_field( 'common-directories', __( 'Common Directories', 'dashboard-directory-size' ), array( $this, 'settings_checkbox_list' ), $key, $section,
+				array( 'key' => $key, 'name' => 'common-directories', 'items' => $common_directories, 'legend' => __( 'Post Types', 'dashboard-directory-size' ) ) );
 
-			add_settings_field( 'custom-directories', __( 'Custom Directories', Dashboard_Directory_Size_Common::TEXT_DOMAIN ), array( $this, 'settings_textarea' ), $key, $section,
-				array( 'key' => $key, 'name' => 'custom-directories', 'rows' => 8, 'cols' => 60, 'after' => __( 'A list of names and paths separated by pipe, use ~ for the WordPress install directory, example:<br/><br/>nginx Cache | /var/run/nginx-cache<br/>All WP Content | ~/wp-content/', Dashboard_Directory_Size_Common::TEXT_DOMAIN ) ) );
+			add_settings_field( 'custom-directories', __( 'Custom Directories', 'dashboard-directory-size' ), array( $this, 'settings_textarea' ), $key, $section,
+				array( 'key' => $key, 'name' => 'custom-directories', 'rows' => 8, 'cols' => 60, 'after' => __( 'A list of names and paths separated by pipe, use ~ for the WordPress install directory, example:<br><br>nginx Cache | /var/run/nginx-cache<br>All WP Content | ~/wp-content/', 'dashboard-directory-size' ) ) );
 
-			add_settings_field( 'show-database-size', __( 'Show Database Size', Dashboard_Directory_Size_Common::TEXT_DOMAIN ), array( $this, 'settings_yes_no' ), $key, $section,
+			add_settings_field( 'show-database-size', __( 'Show Database Size', 'dashboard-directory-size' ), array( $this, 'settings_yes_no' ), $key, $section,
 				array( 'key' => $key, 'name' => 'show-database-size' ) );
 
-			add_settings_field( 'transient-time-minutes', __( 'Cache Size List (minutes)', Dashboard_Directory_Size_Common::TEXT_DOMAIN ), array( $this, 'settings_input' ), $key, $section,
+			add_settings_field( 'transient-time-minutes', __( 'Cache Size List (minutes)', 'dashboard-directory-size' ), array( $this, 'settings_input' ), $key, $section,
 				array( 'key' => $key, 'name' => 'transient-time-minutes', 'type' => 'number', 'min' => 0, 'max' => 1440,  'step' => 1, 'after' => __( 'Caches the directory sizes as a transient to reduce server load, 0 to disable' ) ) );
 
 			add_settings_field( 'rest-api-support', __( 'REST API Support', 'dashboard-directory-size' ), array( $this, 'settings_yes_no' ), $key, $section,
@@ -187,17 +188,13 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 						<?php echo esc_html( $legend ) ?>
 					</legend>
 
-			<?php
-			foreach ( $items as $post_type => $post_type_dispay ) {
-				?>
-					<label>
-						<input type="checkbox" name="<?php echo $key ?>[<?php echo $name ?>][]" value="<?php echo $post_type ?>"<?php echo in_array( $post_type, $values) ? ' checked="checked"' : ''  ?> />
-						<?php echo esc_html( $post_type_dispay ); ?>
-					</label>
-					<br/>
-				<?php
-			}
-			?>
+					<?php foreach ( $items as $value => $value_dispay ) : ?>
+						<label>
+							<input type="checkbox" name="<?php echo $key ?>[<?php echo $name ?>][]" value="<?php echo $value ?>" <?php checked( in_array( $value, $values) ); ?> />
+							<?php echo esc_html( $value_dispay ); ?>
+						</label>
+						<br/>
+					<?php endforeach; ?>
 				</fieldset>
 			<?php
 
@@ -238,15 +235,15 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 			) );
 
 			$option = get_option( $key );
-			$value = isset( $option[$name] ) ? esc_attr( $option[$name] ) : '';
+			$value = isset( $option[ $name ] ) ? esc_attr( $option[ $name ] ) : '';
 
 			if ( empty( $value ) ) {
 				$value = '0';
 			}
 
 			echo '<div>';
-			echo "<label><input id='{$name}_1' name='{$key}[{$name}]'  type='radio' value='1' " . ( '1' === $value ? " checked=\"checked\"" : "" ) . "/>" . __( 'Yes' ) . "</label> ";
-			echo "<label><input id='{$name}_0' name='{$key}[{$name}]'  type='radio' value='0' " . ( '0' === $value ? " checked=\"checked\"" : "" ) . "/>" . __( 'No' ) . "</label> ";
+			echo "<label><input id='{$name}_1' name='{$key}[{$name}]'  type='radio' value='1' " . ( '1' === $value ? " checked=\"checked\"" : "" ) . "/>" . esc_html__( 'Yes' ) . "</label> ";
+			echo "<label><input id='{$name}_0' name='{$key}[{$name}]'  type='radio' value='0' " . ( '0' === $value ? " checked=\"checked\"" : "" ) . "/>" . esc_html__( 'No' ) . "</label> ";
 			echo '</div>';
 
 			$this->output_after( $after );
@@ -255,14 +252,14 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 
 		private function output_after( $after ) {
-			if ( !empty( $after ) ) {
-				echo '<div>' . $after . '</div>';
+			if ( ! empty( $after ) ) {
+				echo '<div>' . wp_kses_post( $after ) . '</div>';
 			}
 		}
 
 
 		public function admin_menu() {
-			add_options_page( __( 'Dashboard Directory Size Settings', Dashboard_Directory_Size_Common::TEXT_DOMAIN ), __( 'Dashboard Directory Size', Dashboard_Directory_Size_Common::TEXT_DOMAIN ), 'manage_options', $this->settings_page, array( $this, 'options_page' ), 30 );
+			add_options_page( 'Dashboard Directory Size' . __( 'Settings' ), __( 'Dashboard Directory Size', 'dashboard-directory-size' ), 'manage_options', $this->settings_page, array( $this, 'options_page' ), 30 );
 		}
 
 
@@ -299,10 +296,10 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 		private function plugin_options_tabs() {
 			$current_tab = $this->current_tab();
-			echo '<h2>' . __( 'Dashboard Directory Size Settings', Dashboard_Directory_Size_Common::TEXT_DOMAIN ) . '</h2><h2 class="nav-tab-wrapper">';
+			echo '<h2>' . __( 'Settings' ) . ' &rsaquo; Dashboard Directory Size</h2><h2 class="nav-tab-wrapper">';
 			foreach ( $this->plugin_settings_tabs as $tab_key => $tab_caption ) {
 				$active = $current_tab == $tab_key ? 'nav-tab-active' : '';
-				echo '<a class="nav-tab ' . $active . '" href="?page=' . $this->settings_page . '&tab=' . $tab_key . '">' . $tab_caption . '</a>';
+				echo '<a class="nav-tab ' . $active . '" href="?page=' . urlencode( $this->settings_page ) . '&tab=' . urlencode( $tab_key ) . '">' . esc_html( $tab_caption ) . '</a>';
 			}
 			echo '</h2>';
 		}
@@ -314,10 +311,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				case 'help';
 					include_once trailingslashit( WP_PLUGIN_DIR ) . 'dashboard-directory-size/admin/partials/admin-help.php';
 					break;
-			}
-
-			if ( ! empty( $output ) ) {
-				echo '<p class="settings-section-header">' . $output . '</p>';
 			}
 
 		}

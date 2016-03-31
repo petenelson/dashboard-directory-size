@@ -5,3 +5,10 @@
 .dashboard-directory-size-table .cell-size {
 	text-align: right;
 }
+
+.dashboard-directory-size-help p {
+	margin-bottom: 2em;
+}
+.dashboard-directory-size-help .indent {
+	text-indent: 2em;
+}
