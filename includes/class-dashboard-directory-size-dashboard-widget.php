@@ -126,7 +126,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 		private function output_trimmed_path( $path ) {
 
-			$trim_size = 25;
+			$trim_size = $trim_size = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-trimmed-path-length', 25 );
 			$trimmed = false;
 
 			// if this is part of the install, remove the start to show relative path
