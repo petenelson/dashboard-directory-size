@@ -5,6 +5,9 @@
 
 ## Revision History
 
+### v1.3.0 ??
+
+
 ### v1.2.0 September 1, 2015
 - Added WP REST API support
 - Added .po files to support upcoming translations

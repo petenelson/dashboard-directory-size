@@ -3,8 +3,8 @@ Contributors: gungeekatx
 Tags: dashboard, dashboard widget, directory size, folder size
 Donate link: https://petenelson.com/
 Requires at least: 4.0
-Tested up to: 4.4
-Stable tag: 1.2.0
+Tested up to: 4.5
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,9 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 
 == Changelog ==
+
+= v1.3.0 ?? =
+* Added WP REST API support
 
 = v1.2.0 September 1, 2015 =
 * Added WP REST API support
