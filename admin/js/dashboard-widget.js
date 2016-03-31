@@ -1,8 +1,8 @@
-jQuery(document).ready(function() {
+( function ( $ ) {
 
-	jQuery( '.dashboard-directory-size-table .trimmed-path-expand' ).click( function( e ) {
+	$( '.dashboard-directory-size-table').on( 'click', '.trimmed-path-expand', function( e ) {
 		e.preventDefault();
-		jQuery( this ).parent().removeClass('trimmed-path-visible').parent().find( '.full-path' ).addClass('full-path-visible');
+		$( this ).parent().addClass('hidden').parent().find( '.full-path' ).removeClass('hidden');
 	});
 
-});
+} ) ( jQuery );

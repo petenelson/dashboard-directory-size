@@ -11,7 +11,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 			add_action( 'wp_dashboard_setup', array( $this, 'register_dashboard_widgets' ) );
 			add_action( 'admin_init', array( $this, 'check_refresh_size_list' ) );
-
+			add_action( 'admin_init', array( $this, 'register_scripts') );
 		}
 
 
@@ -29,11 +29,19 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 		}
 
 
+		public function register_scripts() {
+
+			wp_register_script( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget', plugins_url( '/admin/js/dashboard-widget.js', dirname( __FILE__ ) ), array( 'jquery' ), Dashboard_Directory_Size_Common::VERSION, true );
+			wp_register_style( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget', plugins_url( '/admin/css/dashboard-widget.css', dirname( __FILE__ ) ), array( ), Dashboard_Directory_Size_Common::VERSION );
+
+		}
+
+
 		public function dashboard_widget() {
 
 			wp_enqueue_script( 'jquery' );
-			wp_enqueue_script( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget', plugins_url( '/admin/js/dashboard-widget.js', dirname( __FILE__ ) ), array( 'jquery' ), Dashboard_Directory_Size_Common::VERSION, true );
-			wp_enqueue_style( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget', plugins_url( '/admin/css/dashboard-widget.css', dirname( __FILE__ ) ), array( ), Dashboard_Directory_Size_Common::VERSION );
+			wp_enqueue_script( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget' );
+			wp_enqueue_style( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget' );
 
 			$refresh_url = wp_nonce_url( add_query_arg(
 				array(
@@ -68,10 +76,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 		private function display_sizes_table() {
 
-
 			$directories = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
-
-			$classes = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes-table-classes', 'wp-list-table widefat striped' );
+			$classes     = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes-table-classes', 'wp-list-table widefat striped dashboard-directory-size-table' );
 
 			?>
 				<table class="<?php echo esc_attr( $classes ); ?>">
@@ -137,8 +143,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 			}
 
 			?>
-				<span class="trimmed-path trimmed-path-visible">
-					<?php if ( $trimmed ) { ?><a title="<?php echo esc_attr( $full_path ); ?>" class="trimmed-path-expand" href="#"><?php } ?><?php echo esc_html( $path ); ?><?php if ( $trimmed ) { ?>...<?php } ?><?php if ( $trimmed ) { ?></a><?php } ?>
+				<span class="trimmed-path">
+					<?php if ( $trimmed ) { ?><a title="<?php echo esc_attr( $full_path ); ?>" class="trimmed-path-expand" href="#<?php echo esc_attr( $full_path ); ?>"><?php } ?><?php echo esc_html( $path ); ?><?php if ( $trimmed ) { ?>...<?php } ?><?php if ( $trimmed ) { ?></a><?php } ?>
 				</span>
 				<span class="full-path hidden">
 					<?php echo esc_html( $full_path ); ?>
