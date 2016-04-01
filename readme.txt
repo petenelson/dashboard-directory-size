@@ -26,13 +26,13 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 == Changelog ==
 
-= v1.3.0 March 31, 2016
+= v1.3.0 April 2, 2016
 * Updated CSS classes on dashboard widget table
 * Made the trimmed path size filterable (defaults to 25 characters)
 
 = v1.2.0 September 1, 2015 =
 * Added WP REST API support
-* Added .po files to support upcoming translations
+* Added .pot file to support upcoming translations
 
 = v1.1.0 May 29, 2015 =
 * Added the ability to show the WordPress database size
