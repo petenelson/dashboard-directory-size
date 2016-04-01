@@ -23,8 +23,9 @@ module.exports = function( grunt ) {
 				files: [
 
 					// directories
-					{ expand: true, src: ['lang/**'], dest: 'release/' },
-					{ expand: true, src: ['lib/**'], dest: 'release/' },
+					{ expand: true, src: ['admin/**'], dest: 'release/' },
+					{ expand: true, src: ['includes/**'], dest: 'release/' },
+					{ expand: true, src: ['languages/**'], dest: 'release/' },
 
 					// root dir files
 					{
@@ -59,7 +60,7 @@ module.exports = function( grunt ) {
 	// Register tasks
 
 	// create release for WordPress repository
-	grunt.registerTask( 'wp', [ 'makepot', 'clean', 'copy' ] );
+	grunt.registerTask( 'wp', [ 'clean', 'copy' ] );
 
 	grunt.util.linefeed = '\n';
 
