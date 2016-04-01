@@ -5,8 +5,9 @@
 
 ## Revision History
 
-### v1.3.0 ??
-
+### v1.3.0 March 31, 2016
+- Updated CSS classes on dashboard widget table
+- Made the trimmed path size filterable (defaults to 25 characters)
 
 ### v1.2.0 September 1, 2015
 - Added WP REST API support
