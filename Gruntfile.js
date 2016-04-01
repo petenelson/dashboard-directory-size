@@ -6,8 +6,8 @@ module.exports = function( grunt ) {
 		makepot: {
 			target: {
 				options: {
-					type:       'wp-plugin',
-					mainFile:   'wp-anyipsum.php'
+					type:        'wp-plugin',
+					mainFile:    'dashboard-directory-size.php'
 				}
 			}
 		},
