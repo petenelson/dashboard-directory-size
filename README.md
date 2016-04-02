@@ -5,8 +5,6 @@
 [![Code Climate](https://codeclimate.com/github/petenelson/dashboard-directory-size/badges/coverage.svg)](https://codeclimate.com/github/petenelson/dashboard-directory-size)
 [![Travis CS](https://api.travis-ci.org/petenelson/dashboard-directory-size.svg)](https://travis-ci.org/petenelson/dashboard-directory-size)
 
-https://api.travis-ci.org/petenelson/dashboard-directory-size.svg
-
 ## Revision History
 
 ### v1.3.0 April 2, 2016
