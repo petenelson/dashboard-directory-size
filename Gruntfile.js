@@ -1,5 +1,7 @@
 module.exports = function( grunt ) {
 
+	require('phplint').gruntPlugin(grunt);
+
 	grunt.initConfig( {
 		pkg:    grunt.file.readJSON( 'package.json' ),
 
@@ -14,6 +16,19 @@ module.exports = function( grunt ) {
 
 		clean:  {
 			wp: [ "release" ]
+		},
+
+		phplint: {
+			options: {
+				limit: 10,
+				stdout: true,
+				stderr: true
+			},
+			files: [
+				'admin/**/*.php',
+				'includes/*.php',
+				'*.php'
+			]
 		},
 
 		copy:   {
@@ -58,6 +73,8 @@ module.exports = function( grunt ) {
 
 
 	// Register tasks
+
+	grunt.registerTask( 'test', [ 'phplint' ] );
 
 	// create release for WordPress repository
 	grunt.registerTask( 'wp', [ 'clean', 'copy' ] );
