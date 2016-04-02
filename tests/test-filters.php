@@ -1,14 +1,6 @@
 <?php
-/**
- * Class SampleTest
- *
- * @package 
- */
 
-/**
- * Sample test case.
- */
-class Test_Dashboard_Directory_Size_Common extends WP_UnitTestCase {
+class Test_Dashboard_Directory_Size_Filters extends WP_UnitTestCase {
 
 	public function setUp() {
 		parent::setUp();
