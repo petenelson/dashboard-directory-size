@@ -27,7 +27,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		public function add_transient_flushers() {
 
 			// hooks and filters to allow us to purge the transient
-			foreach ( array( 'add_attachment', 'edit_attachment', 'upgrader_process_complete' ) as $action ) {
+			foreach ( array( 'add_attachment', 'edit_attachment', 'upgrader_process_complete', 'deleted_plugin' ) as $action ) {
 				add_action( $action, array( $this, 'flush_sizes_transient' ) );
 			}
 
@@ -39,9 +39,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			foreach ( array( 'update_option', 'deleted_site_transient' ) as $action ) {
 				add_action( $action, array( $this, 'flush_sizes_on_item_match' ) );
 			}
-
-			// checks querystring for plugin deletes
-			add_action( 'admin_init', array( $this, 'flush_sizes_on_deleted_plugins' ) );
 
 		}
 
@@ -165,7 +162,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		private function get_database_size( ) {
 
 			$database = array();
-			$database['name'] = 'WP Database';
+			$database['name'] = 'WP ' . __( 'Database' );
 			$database['path'] = DB_NAME;
 
 			global $wpdb;
@@ -248,34 +245,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function flush_sizes_on_deleted_plugins() {
-
-			// this needs a hook in core
-			// https://core.trac.wordpress.org/ticket/26904
-			// until then, this is a hack
-
-			// sample form post
-			// verify-delete:1
-			// action:delete-selected
-			// checked[]:wp-super-cache/wp-cache.php
-			// _wpnonce:e3d218a7f5
-			// _wp_http_referer:/wp-admin/plugins.php?action=delete-selected&checked%5B0%5D=wp-super-cache%2Fwp-cache.php&plugin_status=all&paged=1&s&_wpnonce=e3d218a7f5
-			// submit:Yes, Delete these files
-
-			if (
-				stripos( filter_input( INPUT_POST, '_wp_http_referer', FILTER_SANITIZE_STRING ), 'wp-admin/plugins.php' ) !== false &&
-				filter_input( INPUT_POST, 'action', FILTER_SANITIZE_STRING ) === 'delete-selected' &&
-				filter_input( INPUT_POST, 'verify-delete', FILTER_SANITIZE_STRING ) === '1' &&
-				! empty( $_POST['checked'] )
-				) {
-
-				$this->flush_sizes_transient();
-
-			}
-
-		}
-
-
 		private function sizes_transient_name() {
 			return Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes';
 		}
@@ -286,6 +255,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 				for( $i = 0; $i < count( $results ); $i++ ) {
 					if ( ! empty( $results[ $i ]['size'] ) ) {
 						$results[ $i ]['size_friendly'] = size_format( $results[ $i ]['size'] );
+					} else {
+						$results[ $i ]['size_friendly'] = __( 'Empty', 'dashboard-directory-size' );
 					}
 				}
 			}
