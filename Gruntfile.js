@@ -1,5 +1,7 @@
 module.exports = function( grunt ) {
 
+	require('phplint').gruntPlugin(grunt);
+
 	grunt.initConfig( {
 		pkg:    grunt.file.readJSON( 'package.json' ),
 
@@ -16,8 +18,27 @@ module.exports = function( grunt ) {
 			wp: [ "release" ]
 		},
 
-		copy:   {
+		phplint: {
+			options: {
+				limit: 10,
+				stdout: true,
+				stderr: true
+			},
+			files: [
+				'admin/**/*.php',
+				'includes/*.php',
+				'*.php'
+			]
+		},
 
+		phpunit: {
+			'default': {
+				cmd: 'phpunit',
+				args: ['-c', 'phpunit.xml.dist']
+			},
+		},
+
+		copy:   {
 			// create release for WordPress repository
 			wp: {
 				files: [
@@ -59,8 +80,18 @@ module.exports = function( grunt ) {
 
 	// Register tasks
 
+	grunt.registerTask( 'test', [ 'phplint', 'phpunit' ] );
+
 	// create release for WordPress repository
 	grunt.registerTask( 'wp', [ 'clean', 'copy' ] );
+
+	grunt.registerMultiTask('phpunit', 'Runs PHPUnit tests', function() {
+		grunt.util.spawn({
+			cmd: this.data.cmd,
+			args: this.data.args,
+			opts: {stdio: 'inherit'}
+		}, this.async());
+	});
 
 	grunt.util.linefeed = '\n';
 
