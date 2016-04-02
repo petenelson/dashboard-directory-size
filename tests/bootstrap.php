@@ -5,7 +5,7 @@
  * @package dashboard-directory-size
  */
 
-require_once 'vendor/autoload.php';
+require_once getcwd() . '/vendor/autoload.php';
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 if ( ! $_tests_dir ) {
