@@ -25,6 +25,7 @@ matrix:
 
 install:
     - composer self-update && composer --version
+    - composer install --no-interaction --prefer-source
     - export PATH="$HOME/.composer/vendor/bin:$PATH"
 
 before_script:
