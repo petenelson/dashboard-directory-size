@@ -10,10 +10,14 @@ Domain Path: /languages
 
 if ( !defined( 'ABSPATH' ) ) die( 'restricted access' );
 
+if ( ! defined( 'DASHBOARD_DIRECOTRY_SIZE_ROOT' ) ) {
+	define( 'DASHBOARD_DIRECOTRY_SIZE_ROOT', trailingslashit( dirname( __FILE__ ) ) );
+}
+
 // include plugin files
 $include_files = array( 'common', 'i18n', 'settings', 'dashboard-widget', 'rest-api' );
 foreach ( $include_files as $include_file ) {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-dashboard-directory-size-' . $include_file . '.php';
+	require_once DASHBOARD_DIRECOTRY_SIZE_ROOT . 'includes/class-dashboard-directory-size-' . $include_file . '.php';
 }
 
 $classes = array();
