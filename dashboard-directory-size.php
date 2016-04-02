@@ -48,4 +48,3 @@ if ( class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 	$dds_settings = new Dashboard_Directory_Size_Settings();
 	register_activation_hook( __FILE__, array( $dds_settings, 'activation_hook' ) );
 }
-
