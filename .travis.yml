@@ -7,7 +7,7 @@ notifications:
 
 branches:
   only:
-    - master
+    - feature/php-unit-tests
 
 php:
   - 5.3
