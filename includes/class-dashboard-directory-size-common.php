@@ -165,7 +165,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		private function get_database_size( ) {
 
 			$database = array();
-			$database['name'] = 'WP Database';
+			$database['name'] = 'WP ' . __( 'Database' );
 			$database['path'] = DB_NAME;
 
 			global $wpdb;
@@ -286,6 +286,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 				for( $i = 0; $i < count( $results ); $i++ ) {
 					if ( ! empty( $results[ $i ]['size'] ) ) {
 						$results[ $i ]['size_friendly'] = size_format( $results[ $i ]['size'] );
+					} else {
+						$results[ $i ]['size_friendly'] = __( 'Empty', 'dashboard-directory-size' );
 					}
 				}
 			}
