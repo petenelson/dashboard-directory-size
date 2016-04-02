@@ -31,3 +31,7 @@ before_script:
   - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
 
 script: phpunit
+
+addons:
+    code_climate:
+        repo_token: b729d87214a7f754c60a4159f52eab56a3137366502e098b71ccbae22dbfcb73
