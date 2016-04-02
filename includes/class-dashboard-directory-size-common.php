@@ -45,9 +45,10 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 		public function filter_get_directories( $directories ) {
 
-			$transient_time_minutes = intval( apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get', 60, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'transient-time-minutes' ) );
+			// time in minutes
+			$transient_time = intval( apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get', 60, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'transient-time-minutes' ) );
 
-			if ( $transient_time_minutes > 0 ) {
+			if ( $transient_time > 0 ) {
 				$transient = get_transient( $this->sizes_transient_name() );
 				if ( ! empty( $transient ) ) {
 					return $transient;
@@ -82,8 +83,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			$results = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes-generated', $results );
 
 			// set transient
-			if( $transient_time_minutes > 0 && ! empty( $results ) ) {
-				set_transient( $this->sizes_transient_name(), $results, $transient_time_minutes * MINUTE_IN_SECONDS );
+			if( $transient_time > 0 && ! empty( $results ) ) {
+				set_transient( $this->sizes_transient_name(), $results, $transient_time * MINUTE_IN_SECONDS );
 			}
 
 			return $results;
