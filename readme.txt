@@ -26,7 +26,7 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 == Changelog ==
 
-= v1.3.0 April 2, 2016
+= v1.3.0 April 2, 2016 =
 * Updated CSS classes on dashboard widget table
 * Made the trimmed path size filterable (defaults to 25 characters)
 
