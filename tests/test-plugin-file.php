@@ -43,9 +43,9 @@ class Test_Dashboard_Directory_Size_Plugin_File extends WP_UnitTestCase {
 
 	public function test_plugins_loaded() {
 
-		do_action( 'plugins_loaded' );
+		// do_action( 'plugins_loaded' );
 
-		
+
 
 	}
 
