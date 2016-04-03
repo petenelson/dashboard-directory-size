@@ -160,7 +160,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		private function get_database_size( ) {
+		public function get_database_size() {
 
 			$database = array();
 			$database['name'] = 'WP ' . __( 'Database' );
