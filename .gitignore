@@ -5,3 +5,4 @@ release/
 .mo
 composer.lock
 vendor/
+build/

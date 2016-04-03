@@ -8,38 +8,57 @@ Text Domain: dashboard-directory-size
 Domain Path: /languages
 */
 
-if ( !defined( 'ABSPATH' ) ) die( 'restricted access' );
+if ( ! defined( 'ABSPATH' ) ) die( 'restricted access' );
 
-if ( ! defined( 'DASHBOARD_DIRECOTRY_SIZE_ROOT' ) ) {
-	define( 'DASHBOARD_DIRECOTRY_SIZE_ROOT', trailingslashit( dirname( __FILE__ ) ) );
+class Dashboard_Directory_Size_Plugin {
+
+	function define_constants() {
+		if ( ! defined( 'DASHBOARD_DIRECOTRY_SIZE_ROOT' ) ) {
+			define( 'DASHBOARD_DIRECOTRY_SIZE_ROOT', trailingslashit( dirname( __FILE__ ) ) );
+		}
+	}
+
+	function get_required_files() {
+		$include_files = array( 'common', 'i18n', 'settings', 'dashboard-widget', 'rest-api' );
+		$files = array();
+		foreach ( $include_files as $include_file ) {
+			$files[] = DASHBOARD_DIRECOTRY_SIZE_ROOT . 'includes/class-dashboard-directory-size-' . $include_file . '.php';
+		}
+		return $files;
+	}
+
+	function get_class_names() {
+		return array(
+			'Dashboard_Directory_Size_Common',
+			'Dashboard_Directory_Size_i18n',
+			'Dashboard_Directory_Size_Settings',
+			'Dashboard_Directory_Size_Dashboard_Widget',
+			'Dashboard_Directory_Size_REST_API',
+			);
+	}
+
+	function require_files( $files ) {
+		foreach( $files as $file ) {
+			require_once $file;
+		}
+	}
+
 }
 
-// include plugin files
-$include_files = array( 'common', 'i18n', 'settings', 'dashboard-widget', 'rest-api' );
-foreach ( $include_files as $include_file ) {
-	require_once DASHBOARD_DIRECOTRY_SIZE_ROOT . 'includes/class-dashboard-directory-size-' . $include_file . '.php';
-}
+$plugin = new Dashboard_Directory_Size_Plugin();
+$plugin->define_constants();
+$plugin->require_files( $plugin->get_required_files() );
 
-$classes = array();
-
-$class_names = array(
-	'Dashboard_Directory_Size_Common',
-	'Dashboard_Directory_Size_i18n',
-	'Dashboard_Directory_Size_Settings',
-	'Dashboard_Directory_Size_Dashboard_Widget',
-	'Dashboard_Directory_Size_REST_API',
-	);
-
-// instantiate our classes
-foreach ( $class_names as $class_name ) {
+// load plugin classes
+foreach( $plugin->get_class_names() as $class_name ) {
+	$classes = array();
 	if ( class_exists( $class_name ) ) {
 		$classes[] = new $class_name;
 	}
-}
 
-// hook our classes into WordPress
-foreach ( $classes as $class ) {
-	add_action( 'plugins_loaded', array( $class, 'plugins_loaded' ) );
+	foreach ( $classes as $class ) {
+		add_action( 'plugins_loaded', array( $class, 'plugins_loaded' ) );
+	}
 }
 
 
@@ -48,3 +67,4 @@ if ( class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 	$dds_settings = new Dashboard_Directory_Size_Settings();
 	register_activation_hook( __FILE__, array( $dds_settings, 'activation_hook' ) );
 }
+
