@@ -1,8 +1,9 @@
-.phpintel
-npm-debug.log
-node_modules/
-release/
-.mo
-composer.lock
-vendor/
-build/
+/.phpintel
+/npm-debug.log
+/node_modules
+/release
+/.mo
+/composer.lock
+/vendor
+/build
+/languages/*.mo
