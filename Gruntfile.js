@@ -34,6 +34,26 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		wp_readme_to_markdown: {
+			options: {
+				screenshot_url: "https://raw.githubusercontent.com/petenelson/dashboard-directory-size/master/assets/{screenshot}.png",
+				},
+			your_target: {
+				files: {
+					'README.md': 'readme.txt'
+				}
+			},
+		},
+
+		insert: {
+			options: {},
+			badges: {
+				src: "badges.md",
+				dest: "README.md",
+				match: "**License URI:** http://www.gnu.org/licenses/gpl-2.0.html  "
+			},
+		},
+
 		clean:  {
 			wp: [ "release" ]
 		},
@@ -92,7 +112,9 @@ module.exports = function( grunt ) {
 		'grunt-contrib-clean',
 		'grunt-contrib-copy',
 		'grunt-wp-i18n',
-		'grunt-potomo'
+		'grunt-potomo',
+		'grunt-wp-readme-to-markdown',
+		'grunt-insert'
 		];
 
 	for	( var i = 0; i < tasks.length; i++ ) {
@@ -103,6 +125,8 @@ module.exports = function( grunt ) {
 	// Register tasks
 
 	grunt.registerTask( 'test', [ 'phplint', 'phpunit' ] );
+
+	grunt.registerTask( 'readme', ['wp_readme_to_markdown', 'insert:badges'] );
 
 	// create release for WordPress repository
 	grunt.registerTask( 'wp', [ 'clean', 'copy' ] );
