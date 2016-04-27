@@ -26,7 +26,7 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 == Changelog ==
 
-= v1.4.0 ???, 2016 =
+= v1.4.0 April 27, 2016 =
 * Added WP-CLI support: wp dashboard-directory-size
 * Added German translations (thanks Gahapati)
 
@@ -47,7 +47,7 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 == Upgrade Notice ==
 
-= v1.4.0 ???, 2016 =
+= v1.4.0 April 27, 2016 =
 * Added WP-CLI support: wp dashboard-directory-size
 * Added German translations (thanks Gahapati)
 
