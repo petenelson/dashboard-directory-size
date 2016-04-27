@@ -66,7 +66,8 @@ module.exports = function( grunt ) {
 					// directories
 					{ expand: true, src: ['admin/**'], dest: 'release/' },
 					{ expand: true, src: ['includes/**'], dest: 'release/' },
-					{ expand: true, src: ['languages/**'], dest: 'release/' },
+					{ expand: true, src: ['languages/*.pot'], dest: 'release/' },
+					{ expand: true, src: ['languages/*.mo'], dest: 'release/' },
 
 					// root dir files
 					{
