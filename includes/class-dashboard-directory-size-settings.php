@@ -29,6 +29,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				'transient-time-minutes'   => 60,
 				'common-directories'       => array( 'uploads', 'themes', 'plugins' ),
 				'show-database-size'       => '1',
+				'custom-directories'       => '',
 			);
 		}
 
