@@ -24,15 +24,19 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 		}
 
+		public function get_default_settings() {
+			return array(
+				'transient-time-minutes'   => 60,
+				'common-directories'       => array( 'uploads', 'themes', 'plugins' ),
+				'show-database-size'       => '1',
+			);
+		}
+
 
 		public function activation_hook() {
 
 			// create default settings
-			add_option( $this->settings_key_general, array(
-					'transient-time-minutes'   => 60,
-					'common-directories'       => array( 'uploads', 'themes', 'plugins' ),
-					'show-database-size'       => '1',
-				), '', $autoload = 'no' );
+			add_option( $this->settings_key_general, $this->get_default_settings(), '', $autoload = 'no' );
 
 			// add an option so we can show the activated admin notice
 			add_option( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-plugin-activated', '1' );

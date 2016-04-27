@@ -30,6 +30,12 @@ if ( ! class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
 
 
 		public function get_sizes( WP_REST_Request $request ) {
+
+			global $wp_filter;
+
+			return rest_ensure_response( $wp_filter['plugins_loaded'] );
+
+
 			return apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
 		}
 
