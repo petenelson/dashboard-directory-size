@@ -72,6 +72,32 @@ class Dashboard_Directory_Size_Command extends Dashboard_Directory_Size_Base_Com
 		$formatter->display_items( $rows );
 
 	}
+
+	/**
+	 * Refresh the directory sizes transient
+	 *
+	 * ## OPTIONS
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp dashboard-directory-size refresh
+	 *
+	 * @subcommand refresh
+	 *
+	 * @synopsis
+	 */
+	function refresh( $positional_args, $assoc_args = array() ) {
+
+		WP_CLI::Line( __( 'Refreshing directory sizes...' ), 'dashboard-directory-size' );
+
+		do_action( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-flush-sizes-transient' );
+
+		$directories = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
+
+		WP_CLI::Success( __( 'Done' ), 'dashboard-directory-size' );
+
+	}
+
 }
 
 WP_CLI::add_command( 'dashboard-directory-size', 'Dashboard_Directory_Size_Command' );
