@@ -8,7 +8,7 @@
 ## Revision History
 
 ### v1.4.0 ???, 2016
-- TODO Added WP-CLI support
+- Added WP-CLI support
 - Added unit tests
 
 ### v1.3.0 April 2, 2016

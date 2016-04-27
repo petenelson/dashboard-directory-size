@@ -4,6 +4,7 @@
 /release
 /.mo
 /composer.lock
+/composer.phar
 /vendor
 /build
 /languages/*.mo
