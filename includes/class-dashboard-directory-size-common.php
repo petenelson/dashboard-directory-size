@@ -92,7 +92,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		private function get_common_dirs() {
+		public function get_common_dirs() {
 
 			$dir_list = array();
 
@@ -117,7 +117,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		private function get_custom_dirs() {
+		public function get_custom_dirs() {
 
 			$dir_list = array();
 
@@ -142,7 +142,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		private function get_custom_dir( $row ) {
+		public function get_custom_dir( $row ) {
 
 			$parts = explode( '|', $row );
 			if ( ! empty( $parts ) && count( $parts ) == 2) {
@@ -174,7 +174,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		private function create_directory_info( $name, $path ) {
+		public function create_directory_info( $name, $path ) {
 
 			if ( ! empty( $path ) ) {
 				$new_dir['path'] = $path;
@@ -188,7 +188,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		private function get_path_for_common_dir( $common_dir ) {
+		public function get_path_for_common_dir( $common_dir ) {
 
 			switch ( $common_dir ) {
 				case 'uploads':
@@ -246,12 +246,12 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		private function sizes_transient_name() {
+		public function sizes_transient_name() {
 			return Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes';
 		}
 
 
-		private function apply_friendly_sizes( $results ) {
+		public function apply_friendly_sizes( $results ) {
 			if ( is_array( $results ) ) {
 				for( $i = 0; $i < count( $results ); $i++ ) {
 					if ( ! empty( $results[ $i ]['size'] ) ) {
