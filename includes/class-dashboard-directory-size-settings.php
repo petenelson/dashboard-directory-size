@@ -24,15 +24,20 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 		}
 
+		public function get_default_settings() {
+			return array(
+				'transient-time-minutes'   => 60,
+				'common-directories'       => array( 'uploads', 'themes', 'plugins' ),
+				'show-database-size'       => '1',
+				'custom-directories'       => '',
+			);
+		}
+
 
 		public function activation_hook() {
 
 			// create default settings
-			add_option( $this->settings_key_general, array(
-					'transient-time-minutes'   => 60,
-					'common-directories'       => array( 'uploads', 'themes', 'plugins' ),
-					'show-database-size'       => '1',
-				), '', $autoload = 'no' );
+			add_option( $this->settings_key_general, $this->get_default_settings(), '', $autoload = 'no' );
 
 			// add an option so we can show the activated admin notice
 			add_option( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-plugin-activated', '1' );
@@ -89,10 +94,10 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				array( 'key' => $key, 'name' => 'show-database-size' ) );
 
 			add_settings_field( 'transient-time-minutes', __( 'Cache Size List (minutes)', 'dashboard-directory-size' ), array( $this, 'settings_input' ), $key, $section,
-				array( 'key' => $key, 'name' => 'transient-time-minutes', 'type' => 'number', 'min' => 0, 'max' => 1440,  'step' => 1, 'after' => __( 'Caches the directory sizes as a transient to reduce server load, 0 to disable' ) ) );
+				array( 'key' => $key, 'name' => 'transient-time-minutes', 'type' => 'number', 'min' => 0, 'max' => 1440,  'step' => 1, 'after' => __( 'Caches the directory sizes as a transient to reduce server load, 0 to disable', 'dashboard-directory-size' ) ) );
 
 			add_settings_field( 'rest-api-support', __( 'REST API Support', 'dashboard-directory-size' ), array( $this, 'settings_yes_no' ), $key, $section,
-				array( 'key' => $key, 'name' => 'rest-api-support', 'after' => 'exposes data via the dashboard-directory-size endpoint in the WP REST API' ) );
+				array( 'key' => $key, 'name' => 'rest-api-support', 'after' => __( 'Exposes data via the dashboard-directory-size endpoint in the WP REST API', 'dashboard-directory-size' ) ) );
 		}
 
 
@@ -259,7 +264,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 
 		public function admin_menu() {
-			add_options_page( 'Dashboard Directory Size' . __( 'Settings' ), __( 'Dashboard Directory Size', 'dashboard-directory-size' ), 'manage_options', $this->settings_page, array( $this, 'options_page' ), 30 );
+			add_options_page( 'Dashboard Directory Size ' . __( 'Settings' ), __( 'Dashboard Directory Size', 'dashboard-directory-size' ), 'manage_options', $this->settings_page, array( $this, 'options_page' ), 30 );
 		}
 
 

@@ -14,6 +14,46 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		dirs: {
+			lang: 'languages',
+		},
+
+		potomo: {
+			dist: {
+				options: {
+					poDel: false
+				},
+				files: [{
+					expand: true,
+					cwd: '<%= dirs.lang %>',
+					src: ['*.po'],
+					dest: '<%= dirs.lang %>',
+					ext: '.mo',
+					nonull: true
+				}]
+			}
+		},
+
+		wp_readme_to_markdown: {
+			options: {
+				screenshot_url: "https://raw.githubusercontent.com/petenelson/dashboard-directory-size/master/assets/{screenshot}.png",
+				},
+			your_target: {
+				files: {
+					'README.md': 'readme.txt'
+				}
+			},
+		},
+
+		insert: {
+			options: {},
+			badges: {
+				src: "badges.md",
+				dest: "README.md",
+				match: "**License URI:** http://www.gnu.org/licenses/gpl-2.0.html  "
+			},
+		},
+
 		clean:  {
 			wp: [ "release" ]
 		},
@@ -46,7 +86,8 @@ module.exports = function( grunt ) {
 					// directories
 					{ expand: true, src: ['admin/**'], dest: 'release/' },
 					{ expand: true, src: ['includes/**'], dest: 'release/' },
-					{ expand: true, src: ['languages/**'], dest: 'release/' },
+					{ expand: true, src: ['languages/*.pot'], dest: 'release/' },
+					{ expand: true, src: ['languages/*.mo'], dest: 'release/' },
 
 					// root dir files
 					{
@@ -70,7 +111,10 @@ module.exports = function( grunt ) {
 	var tasks = [
 		'grunt-contrib-clean',
 		'grunt-contrib-copy',
-		'grunt-wp-i18n'
+		'grunt-wp-i18n',
+		'grunt-potomo',
+		'grunt-wp-readme-to-markdown',
+		'grunt-insert'
 		];
 
 	for	( var i = 0; i < tasks.length; i++ ) {
@@ -81,6 +125,8 @@ module.exports = function( grunt ) {
 	// Register tasks
 
 	grunt.registerTask( 'test', [ 'phplint', 'phpunit' ] );
+
+	grunt.registerTask( 'readme', ['wp_readme_to_markdown', 'insert:badges'] );
 
 	// create release for WordPress repository
 	grunt.registerTask( 'wp', [ 'clean', 'copy' ] );

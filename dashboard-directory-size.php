@@ -68,3 +68,6 @@ if ( class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 	register_activation_hook( __FILE__, array( $dds_settings, 'activation_hook' ) );
 }
 
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	require_once DASHBOARD_DIRECOTRY_SIZE_ROOT . 'includes/wp-cli/setup.php';
+}
