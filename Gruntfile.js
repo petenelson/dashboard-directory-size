@@ -14,6 +14,26 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		dirs: {
+			lang: 'languages',
+		},
+
+		potomo: {
+			dist: {
+				options: {
+					poDel: false
+				},
+				files: [{
+					expand: true,
+					cwd: '<%= dirs.lang %>',
+					src: ['*.po'],
+					dest: '<%= dirs.lang %>',
+					ext: '.mo',
+					nonull: true
+				}]
+			}
+		},
+
 		clean:  {
 			wp: [ "release" ]
 		},
@@ -70,7 +90,8 @@ module.exports = function( grunt ) {
 	var tasks = [
 		'grunt-contrib-clean',
 		'grunt-contrib-copy',
-		'grunt-wp-i18n'
+		'grunt-wp-i18n',
+		'grunt-potomo'
 		];
 
 	for	( var i = 0; i < tasks.length; i++ ) {
