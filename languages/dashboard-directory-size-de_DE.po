@@ -49,7 +49,7 @@ msgstr "Leer"
 #: includes/class-dashboard-directory-size-dashboard-widget.php:25
 #: includes/class-dashboard-directory-size-settings.php:262
 msgid "Dashboard Directory Size"
-msgstr "Dashboard Directory Size | Verzeichnisgröße"
+msgstr "Dashboard Directory Size"
 
 #: includes/class-dashboard-directory-size-dashboard-widget.php:55
 #: includes/class-dashboard-directory-size-settings.php:262
@@ -121,11 +121,8 @@ msgid "Cache Size List (minutes)"
 msgstr "Cache-Dauer (Minuten)"
 
 #: includes/class-dashboard-directory-size-settings.php:92
-msgid ""
-"Caches the directory sizes as a transient to reduce server load, 0 to disable"
-msgstr ""
-"Verzeichnisgrößen werden im Zwischencache gehalten, um die Serverlast zu "
-"verringern, Gib zum deaktivieren '0' ein."
+msgid "Caches the directory sizes as a transient to reduce server load, 0 to disable"
+msgstr "Verzeichnisgrößen werden im Zwischencache gehalten, um die Serverlast zu verringern, Gib zum deaktivieren '0' ein."
 
 #: includes/class-dashboard-directory-size-settings.php:94
 msgid "REST API Support"
