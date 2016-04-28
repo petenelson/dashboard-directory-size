@@ -84,10 +84,10 @@ module.exports = function( grunt ) {
 				files: [
 
 					// directories
-					{ expand: true, src: ['admin/**'], dest: 'release/' },
-					{ expand: true, src: ['includes/**'], dest: 'release/' },
-					{ expand: true, src: ['languages/*.pot'], dest: 'release/' },
-					{ expand: true, src: ['languages/*.mo'], dest: 'release/' },
+					{ expand: true, src: ['admin/**'], dest: 'release/dashboard-directory-size' },
+					{ expand: true, src: ['includes/**'], dest: 'release/dashboard-directory-size' },
+					{ expand: true, src: ['languages/*.pot'], dest: 'release/dashboard-directory-size' },
+					{ expand: true, src: ['languages/*.mo'], dest: 'release/dashboard-directory-size' },
 
 					// root dir files
 					{
@@ -96,7 +96,7 @@ module.exports = function( grunt ) {
 							'*.php',
 							'readme.txt',
 							],
-						dest: 'release/'
+						dest: 'release/dashboard-directory-size'
 					}
 
 				]
