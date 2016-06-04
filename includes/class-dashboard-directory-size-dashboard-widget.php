@@ -126,21 +126,11 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 		private function output_trimmed_path( $path ) {
 
-			$trim_size = $trim_size = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-trimmed-path-length', 25 );
-			$trimmed = false;
+			$trim_results = Dashboard_Directory_Size_Common::trim_path( $path );
 
-			// if this is part of the install, remove the start to show relative path
-			if ( stripos( $path , ABSPATH ) !== false ) {
-				$path = substr( $path, strlen( ABSPATH ) );
-			}
-
-			$full_path = $path;
-
-			// trim directory name
-			if ( ! empty( $path ) && strlen( $path ) > $trim_size ) {
-				$path = substr( $path, 0, $trim_size );
-				$trimmed = true;
-			}
+			$full_path = $trim_results['full_path'];
+			$path      = $trim_results['path'];
+			$trimmed   = $trim_results['trimmed'];
 
 			?>
 				<span class="trimmed-path">

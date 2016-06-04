@@ -264,6 +264,34 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			return $results;
 		}
 
+		/**
+		 * Trims a path to a predetermined length
+		 *
+		 * @param  string $path full path
+		 * @return array       trimmed path and boolean to indicate if
+		 *                     it was trimmed
+		 */
+		static public function trim_path( $path ) {
+
+			$trim_size = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-trimmed-path-length', 25 );
+			$trimmed = false;
+
+			// if this is part of the install, remove the start to show relative path
+			if ( stripos( $path , ABSPATH ) !== false ) {
+				$path = substr( $path, strlen( ABSPATH ) );
+			}
+
+			$full_path = $path;
+
+			// trim directory name
+			if ( ! empty( $path ) && strlen( $path ) > $trim_size ) {
+				$path = substr( $path, 0, $trim_size );
+				$trimmed = true;
+			}
+
+			return compact( 'path', 'full_path', 'trimmed' );
+		}
+
 
 	} // end class
 
