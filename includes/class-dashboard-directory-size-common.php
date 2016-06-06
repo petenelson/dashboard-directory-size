@@ -174,12 +174,12 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function create_directory_info( $name, $path ) {
+		public function create_directory_info( $name, $path, $include_size = true ) {
 
 			if ( ! empty( $path ) ) {
 				$new_dir['path'] = $path;
 				$new_dir['name'] = $name;
-				$new_dir['size'] = $this->filter_get_directory_size( -1, $path );
+				$new_dir['size'] = $include_size ? $this->filter_get_directory_size( -1, $path ) : -2;
 				return $new_dir;
 			} else {
 				return null;
