@@ -45,16 +45,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 		public function filter_get_directories( $directories ) {
 
-			// time in minutes
-			$transient_time = intval( apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get', 60, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'transient-time-minutes' ) );
-
-			if ( $transient_time > 0 ) {
-				$transient = get_transient( $this->sizes_transient_name() );
-				if ( ! empty( $transient ) ) {
-					return $transient;
-				}
-			}
-
 			$new_dirs = array();
 
 			// add common directories
@@ -81,11 +71,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 			// allow filtering of the results
 			$results = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes-generated', $results );
-
-			// set transient
-			if( $transient_time > 0 && ! empty( $results ) ) {
-				set_transient( $this->sizes_transient_name(), $results, $transient_time * MINUTE_IN_SECONDS );
-			}
 
 			return $results;
 
@@ -174,7 +159,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function create_directory_info( $name, $path, $include_size = true ) {
+		public function create_directory_info( $name, $path, $include_size = false ) {
 
 			if ( ! empty( $path ) ) {
 				$new_dir['path'] = $path;
@@ -214,6 +199,23 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 
 		public function filter_get_directory_size( $size, $path ) {
+			return self::get_directory_size( $path );
+		}
+
+		static public function get_directory_size( $path, $refresh = false ) {
+
+			$transient_time = self::get_transient_time();
+
+			if ( $refresh ) {
+				self::flush_size_transient( $path );
+			}
+
+			if ( 0 > $transient_time ) {
+				$size = get_transient( self::transient_path_key( $path ) );
+				if ( false !== $size ) {
+					return $size;
+				}
+			}
 
 			require_once ABSPATH . 'wp-includes/ms-functions.php';
 
@@ -223,8 +225,15 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 				$size = recurse_dirsize( $path );
 			}
 
-			return $size;
+			if ( $transient_time > 0 ) {
+				set_transient( self::transient_path_key( $path ), $size, $transient_time );
+			}
 
+			return $size;
+		}
+
+		static public function get_transient_time() {
+			return intval( apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get', 60, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'transient-time-minutes' ) );
 		}
 
 
@@ -239,15 +248,28 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 		public function flush_sizes_transient( $data = null ) {
 
-			delete_transient( $this->sizes_transient_name() );
+			$directories = apply_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
+			foreach( $directories as $directory ) {
+				self::flush_size_transient( $directory['path'] );
+			}
 
 			// catch-all for actions and filters, we're not modifying anything, so return whatever was passed to us
 			return $data;
 		}
 
 
+		static public function flush_size_transient( $path ) {
+			delete_transient( self::transient_path_key( $path ) );
+		}
+
+
 		public function sizes_transient_name() {
 			return Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes';
+		}
+
+
+		static public function transient_path_key( $path ) {
+			return 'DD-Path-Size-' . md5( $path );
 		}
 
 

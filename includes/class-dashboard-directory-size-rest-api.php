@@ -29,20 +29,13 @@ if ( ! class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
 					'args'       => array(
 						'directory' => array(
 							'required' => true,
-							)
-						)
-					)
-				);
-
-			register_rest_route( $this->api_namespace(), '/v1/size',
-				array(
-					'methods'    => WP_REST_Server::DELETABLE,
-					'callback'   => array( $this, 'delete_size' ),
-					'args'       => array(
-						'directory' => array(
-							'required' => true,
-							)
-						)
+							'validate_callback' => 'Dashboard_Directory_Size_REST_API::is_valid_directory',
+							),
+						'refresh'   => array(
+							'required' => false,
+							'sanitize_callback' => 'absint',
+							),
+						),
 					)
 				);
 
@@ -67,8 +60,26 @@ if ( ! class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
 
 		public function get_size( WP_REST_Request $request ) {
 
+			$response = new stdClass();
+			$response->directory = $request['directory'];
+			$response->size = Dashboard_Directory_Size_Common::get_directory_size( $request['directory'], ! empty( $request['refresh'] ) );
+			$response->size_friendly = size_format( $response->size );
+
+			return rest_ensure_response( $response );
+		}
 
 
+		public function get_directories( WP_REST_Request $request ) {
+
+			$response = new stdClass();
+			$response->directories = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
+
+			return rest_ensure_response( $response );
+		}
+
+		static public function is_valid_directory( $directory ) {
+			$directories = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
+			return in_array( $directory, wp_list_pluck( $directories, 'path' ) );
 		}
 
 

@@ -80,7 +80,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 			$classes     = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes-table-classes', 'wp-list-table widefat striped dashboard-directory-size-table' );
 
 			?>
-				<table class="<?php echo esc_attr( $classes ); ?>">
+				<table class="<?php echo esc_attr( $classes ); ?>" data-sizeendpoint="<?php echo esc_url( rest_url( 'dashboard-directory-size/v1/size' ) ); ?>">
 					<thead>
 						<tr>
 							<th><?php _e( 'Name', 'dashboard-directory-size' ); ?></th>
@@ -99,25 +99,36 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 		private function display_size_rows( $directories ) {
 			foreach ( $directories as $directory ) {
+				$size = intval( $directory['size'] );
+
+				$cell_size_class = array( 'cell-size' );
+				// a size of -2 means we need to load it via the REST API
+				if ( -2 === $size ) {
+					$cell_size_class[] = 'cell-size-needed';
+				}
 				?>
 					<tr>
 						<td class="cell-name"><?php echo esc_html( $directory['name'] ) ?></td>
 						<td class="cell-path"><?php $this->output_trimmed_path( $directory['path'] ) ?></td>
-						<td class="cell-size"><?php
+						<td class="<?php echo esc_attr( implode( ' ', $cell_size_class ) ); ?>" data-path="<?php echo esc_attr( $directory['path'] ); ?>">
 
-							switch ( intval( $directory['size'] ) ) {
-								case -1:
-									esc_html_e( 'Error', 'dashboard-directory-size' );
-									break;
-								case 0;
-									_e( 'Empty', 'dashboard-directory-size' );
-									break;
-								default:
-									echo esc_html( $directory['size_friendly'] );
-								break;
-							}
+							<span class="spinner <?php echo ( -2 === $size ? 'is-active' : '' ); ?>"></span>
+							<span class="size"><?php
 
-						?></td>
+								switch ( $size ) {
+									case -1:
+										esc_html_e( 'Error', 'dashboard-directory-size' );
+										break;
+									case 0;
+										esc_html_e( 'Empty', 'dashboard-directory-size' );
+										break;
+									default:
+										echo esc_html( $directory['size_friendly'] );
+										break;
+								}
+
+							?></span>
+						</td>
 					</tr>
 				<?php
 			}
