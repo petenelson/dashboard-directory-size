@@ -43,10 +43,15 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 			wp_enqueue_script( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget' );
 			wp_enqueue_style( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget' );
 
+			$size_endpont = rest_url( 'dashboard-directory-size/v1/size' );
+			if ( is_ssl() ) {
+				$size_endpont = str_replace( 'http://', 'https://', $size_endpont );
+			}
+
 			$settings = array(
 				'nonce'           => wp_create_nonce( 'wp_rest' ),
 				'endpoints'       => array(
-					'size'   => rest_url( 'dashboard-directory-size/v1/size' ),
+					'size'   => ,
 					),
 				);
 
