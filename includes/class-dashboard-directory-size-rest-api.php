@@ -27,9 +27,9 @@ if ( ! class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
 					'methods'    => WP_REST_Server::READABLE,
 					'callback'   => array( $this, 'get_size' ),
 					'args'       => array(
-						'directory' => array(
+						'path' => array(
 							'required' => true,
-							'validate_callback' => 'Dashboard_Directory_Size_REST_API::is_valid_directory',
+							'validate_callback' => 'Dashboard_Directory_Size_REST_API::is_valid_path',
 							),
 						'refresh'   => array(
 							'required' => false,
@@ -60,9 +60,11 @@ if ( ! class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
 
 		public function get_size( WP_REST_Request $request ) {
 
+			$refresh = ! empty( $request['refresh'] );
+
 			$response = new stdClass();
-			$response->directory = $request['directory'];
-			$response->size = Dashboard_Directory_Size_Common::get_directory_size( $request['directory'], ! empty( $request['refresh'] ) );
+			$response->path = $request['path'];
+			$response->size = Dashboard_Directory_Size_Common::get_directory_size( $request['path'], $refresh );
 			$response->size_friendly = size_format( $response->size );
 
 			return rest_ensure_response( $response );
@@ -77,7 +79,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
 			return rest_ensure_response( $response );
 		}
 
-		static public function is_valid_directory( $directory ) {
+		static public function is_valid_path( $directory ) {
 			$directories = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
 			return in_array( $directory, wp_list_pluck( $directories, 'path' ) );
 		}

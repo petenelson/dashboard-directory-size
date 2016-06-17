@@ -43,17 +43,22 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 			wp_enqueue_script( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget' );
 			wp_enqueue_style( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget' );
 
-			$refresh_url = wp_nonce_url( add_query_arg(
-				array(
-					Dashboard_Directory_Size_Common::PLUGIN_NAME . '-action' => 'refresh',
-				), admin_url( '/') ), 'refresh' );
+			$settings = array(
+				'nonce'           => wp_create_nonce( 'wp_rest' ),
+				'endpoints'       => array(
+					'size'   => rest_url( 'dashboard-directory-size/v1/size' ),
+					),
+				);
+
+			wp_localize_script( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget', 'Dashboard_Directory_Size_Settings', $settings );
+
 
 			?>
 				<div class="inside">
 					<?php $this->display_sizes_table(); ?>
 					<p>
-						<a href="<?php echo admin_url( 'options-general.php?page=' . Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings' ); ?>"><?php _e( 'Settings' ); ?></a> | 
-						<a href="<?php echo $refresh_url; ?>"><?php _e( 'Refresh', 'dashboard-directory-size' ); ?></a>
+						<a href="<?php echo admin_url( 'options-general.php?page=' . Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings' ); ?>"><?php esc_html_e( 'Settings' ); ?></a> | 
+						<a class="refresh" href="#refresh"><?php esc_html_e( 'Refresh', 'dashboard-directory-size' ); ?></a>
 					</p>
 				</div>
 
@@ -80,7 +85,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 			$classes     = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes-table-classes', 'wp-list-table widefat striped dashboard-directory-size-table' );
 
 			?>
-				<table class="<?php echo esc_attr( $classes ); ?>" data-sizeendpoint="<?php echo esc_url( rest_url( 'dashboard-directory-size/v1/size' ) ); ?>">
+				<table class="<?php echo esc_attr( $classes ); ?>">
 					<thead>
 						<tr>
 							<th><?php _e( 'Name', 'dashboard-directory-size' ); ?></th>

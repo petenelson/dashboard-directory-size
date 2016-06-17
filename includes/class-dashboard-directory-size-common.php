@@ -210,7 +210,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 				self::flush_size_transient( $path );
 			}
 
-			if ( 0 > $transient_time ) {
+			if ( $transient_time > 0 ) {
 				$size = get_transient( self::transient_path_key( $path ) );
 				if ( false !== $size ) {
 					return $size;
