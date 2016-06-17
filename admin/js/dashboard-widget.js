@@ -31,7 +31,7 @@
 			// expand trimmed paths
 			self.widget.on( 'click', '.trimmed-path-expand', function( e ) {
 				e.preventDefault();
-				$( this ).parent().addClass('hidden').parent().find( '.full-path' ).removeClass('hidden');
+				$( this ).parent().addClass('hidden').parent().find( '.full-path' ).removeClass( 'hidden' );
 			} );
 
 			// refresh the sizes
@@ -46,7 +46,7 @@
 			var self = this;
 			self.table.find( '.cell-size-needed' ).each( function() {
 				var el = $( this );
-				el.find( '.spinner' ).addClass( 'is-active' ).show();
+				el.find( '.spinner' ).addClass( 'is-active' ).removeClass( 'hidden' );
 				el.find( '.size' ).html( '' );
 				self.getSize( el, refresh );
 			} );
@@ -76,7 +76,7 @@
 
 		populateSize: function( el, response ) {
 			if ( response ) {
-				el.find( '.spinner' ).removeClass( 'is-active' ).hide();
+				el.find( '.spinner' ).removeClass( 'is-active' ).addClass( 'hidden' )
 				el.find( '.size' ).html( response.size_friendly );
 			}
 		}
