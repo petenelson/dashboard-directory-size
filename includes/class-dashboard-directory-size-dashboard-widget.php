@@ -51,7 +51,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 			$settings = array(
 				'nonce'           => wp_create_nonce( 'wp_rest' ),
 				'endpoints'       => array(
-					'size'   => ,
+					'size'   => $size_endpont,
 					),
 				);
 
