@@ -248,7 +248,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 		public function flush_sizes_transient( $data = null ) {
 
-			$directories = apply_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
+			$directories = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
 			foreach( $directories as $directory ) {
 				self::flush_size_transient( $directory['path'] );
 			}
