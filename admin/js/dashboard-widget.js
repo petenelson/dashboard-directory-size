@@ -46,7 +46,7 @@
 			var self = this;
 			self.table.find( '.cell-size-needed' ).each( function() {
 				var el = $( this );
-				el.find( '.spinner' ).addClass( 'is-active' );
+				el.find( '.spinner' ).addClass( 'is-active' ).show();
 				el.find( '.size' ).html( '' );
 				self.getSize( el, refresh );
 			} );
@@ -76,7 +76,7 @@
 
 		populateSize: function( el, response ) {
 			if ( response ) {
-				el.find( '.spinner' ).removeClass( 'is-active' );
+				el.find( '.spinner' ).removeClass( 'is-active' ).hide();
 				el.find( '.size' ).html( response.size_friendly );
 			}
 		}

@@ -122,7 +122,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 						<td class="cell-path"><?php $this->output_trimmed_path( $directory['path'] ) ?></td>
 						<td class="<?php echo esc_attr( implode( ' ', $cell_size_class ) ); ?>" data-path="<?php echo esc_attr( $directory['path'] ); ?>">
 
-							<span class="spinner <?php echo ( -2 === $size ? 'is-active' : '' ); ?>"></span>
+							<span class="spinner <?php echo ( -2 === $size ? 'is-active' : '' ); ?>" style="display: none;"></span>
 							<span class="size"><?php
 
 								switch ( $size ) {
