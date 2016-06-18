@@ -24,9 +24,10 @@ if ( ! class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
 
 			register_rest_route( $this->api_namespace(), '/v1/size',
 				array(
-					'methods'    => WP_REST_Server::READABLE,
-					'callback'   => array( $this, 'get_size' ),
-					'args'       => array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_size' ),
+					'permission_callback' => 'is_user_logged_in',
+					'args'                => array(
 						'path' => array(
 							'required' => true,
 							'validate_callback' => 'Dashboard_Directory_Size_REST_API::is_valid_path',
@@ -41,8 +42,9 @@ if ( ! class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
 
 			register_rest_route( $this->api_namespace(), '/v1/directories',
 				array(
-					'methods'    => WP_REST_Server::READABLE,
-					'callback'   => array( $this, 'get_directories' ),
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_directories' ),
+					'permission_callback' => 'is_user_logged_in',
 					)
 				);
 
@@ -55,7 +57,12 @@ if ( ! class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
 
 
 		public function get_sizes( WP_REST_Request $request ) {
-			return apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
+			$sizes = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
+			for( $i = 0; $i < count( $sizes ); $i++ ) {
+				$sizes[ $i ]['size'] = Dashboard_Directory_Size_Common::get_directory_size( $sizes[ $i ]['path'] );
+				$sizes[ $i ]['size_friendly'] = size_format( $sizes[ $i ]['size'] );
+			}
+			return rest_ensure_response( $sizes );
 		}
 
 		public function get_size( WP_REST_Request $request ) {
