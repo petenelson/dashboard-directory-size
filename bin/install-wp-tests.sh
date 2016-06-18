@@ -13,6 +13,7 @@ WP_VERSION=${5-latest}
 
 WP_TESTS_DIR=${WP_TESTS_DIR-/tmp/wordpress-tests-lib}
 WP_CORE_DIR=${WP_CORE_DIR-/tmp/wordpress/}
+WP_CORE_DIR_UPLOADS=${WP_CORE_DIR_UPLOADS-/tmp/wordpress/wp-content/uploads}
 
 download() {
     if [ `which curl` ]; then
@@ -63,6 +64,7 @@ install_wp() {
 		tar --strip-components=1 -zxmf /tmp/wordpress.tar.gz -C $WP_CORE_DIR
 	fi
 
+	mkdir -p $WP_CORE_DIR_UPLOADS
 	download https://raw.github.com/markoheijnen/wp-mysqli/master/db.php $WP_CORE_DIR/wp-content/db.php
 }
 
