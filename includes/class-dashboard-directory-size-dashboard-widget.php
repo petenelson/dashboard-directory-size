@@ -43,17 +43,27 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 			wp_enqueue_script( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget' );
 			wp_enqueue_style( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget' );
 
-			$refresh_url = wp_nonce_url( add_query_arg(
-				array(
-					Dashboard_Directory_Size_Common::PLUGIN_NAME . '-action' => 'refresh',
-				), admin_url( '/') ), 'refresh' );
+			$size_endpont = rest_url( 'dashboard-directory-size/v1/size' );
+			if ( is_ssl() ) {
+				$size_endpont = str_replace( 'http://', 'https://', $size_endpont );
+			}
+
+			$settings = array(
+				'nonce'           => wp_create_nonce( 'wp_rest' ),
+				'endpoints'       => array(
+					'size'   => $size_endpont,
+					),
+				);
+
+			wp_localize_script( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget', 'Dashboard_Directory_Size_Settings', $settings );
+
 
 			?>
 				<div class="inside">
 					<?php $this->display_sizes_table(); ?>
 					<p>
-						<a href="<?php echo admin_url( 'options-general.php?page=' . Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings' ); ?>"><?php _e( 'Settings' ); ?></a> | 
-						<a href="<?php echo $refresh_url; ?>"><?php _e( 'Refresh', 'dashboard-directory-size' ); ?></a>
+						<a href="<?php echo admin_url( 'options-general.php?page=' . Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings' ); ?>"><?php esc_html_e( 'Settings' ); ?></a> | 
+						<a class="refresh" href="#refresh"><?php esc_html_e( 'Refresh', 'dashboard-directory-size' ); ?></a>
 					</p>
 				</div>
 
@@ -99,25 +109,36 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 		private function display_size_rows( $directories ) {
 			foreach ( $directories as $directory ) {
+				$size = intval( $directory['size'] );
+
+				$cell_size_class = array( 'cell-size' );
+				// a size of -2 means we need to load it via the REST API
+				if ( -2 === $size ) {
+					$cell_size_class[] = 'cell-size-needed';
+				}
 				?>
 					<tr>
 						<td class="cell-name"><?php echo esc_html( $directory['name'] ) ?></td>
 						<td class="cell-path"><?php $this->output_trimmed_path( $directory['path'] ) ?></td>
-						<td class="cell-size"><?php
+						<td class="<?php echo esc_attr( implode( ' ', $cell_size_class ) ); ?>" data-path="<?php echo esc_attr( $directory['path'] ); ?>">
 
-							switch ( intval( $directory['size'] ) ) {
-								case -1:
-									esc_html_e( 'Error', 'dashboard-directory-size' );
-									break;
-								case 0;
-									_e( 'Empty', 'dashboard-directory-size' );
-									break;
-								default:
-									echo esc_html( $directory['size_friendly'] );
-								break;
-							}
+							<span class="spinner <?php echo ( -2 === $size ? 'is-active' : '' ); ?> hidden"></span>
+							<span class="size"><?php
 
-						?></td>
+								switch ( $size ) {
+									case -1:
+										esc_html_e( 'Error', 'dashboard-directory-size' );
+										break;
+									case 0;
+										esc_html_e( 'Empty', 'dashboard-directory-size' );
+										break;
+									default:
+										echo esc_html( $directory['size_friendly'] );
+										break;
+								}
+
+							?></span>
+						</td>
 					</tr>
 				<?php
 			}
@@ -126,21 +147,11 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 		private function output_trimmed_path( $path ) {
 
-			$trim_size = $trim_size = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-trimmed-path-length', 25 );
-			$trimmed = false;
+			$trim_results = Dashboard_Directory_Size_Common::trim_path( $path );
 
-			// if this is part of the install, remove the start to show relative path
-			if ( stripos( $path , ABSPATH ) !== false ) {
-				$path = substr( $path, strlen( ABSPATH ) );
-			}
-
-			$full_path = $path;
-
-			// trim directory name
-			if ( ! empty( $path ) && strlen( $path ) > $trim_size ) {
-				$path = substr( $path, 0, $trim_size );
-				$trimmed = true;
-			}
+			$full_path = $trim_results['full_path'];
+			$path      = $trim_results['path'];
+			$trimmed   = $trim_results['trimmed'];
 
 			?>
 				<span class="trimmed-path">
