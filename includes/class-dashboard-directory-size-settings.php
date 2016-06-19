@@ -231,16 +231,20 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 		public function settings_yes_no( $args ) {
 
-			extract( wp_parse_args( $args,
+			$args = wp_parse_args( $args,
 				array(
 					'name' => '',
 					'key' => '',
 					'after' => '',
-				)
-			) );
+					)
+				);
 
-			$option = get_option( $key );
-			$value = isset( $option[ $name ] ) ? esc_attr( $option[ $name ] ) : '';
+			$name    = $args['name'];
+			$key     = $args['key'];
+			$after   = $args['after'];
+
+			$option  = get_option( $key );
+			$value   = isset( $option[ $name ] ) ? esc_attr( $option[ $name ] ) : '';
 
 			if ( empty( $value ) ) {
 				$value = '0';

@@ -2,9 +2,9 @@
 Contributors: gungeekatx
 Tags: dashboard, dashboard widget, directory size, folder size
 Donate link: https://petenelson.com/
-Requires at least: 4.0
+Requires at least: 4.4
 Tested up to: 4.5
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,9 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 
 == Changelog ==
+
+= v1.5.0 June 17, 2016 =
+* Viewing/refreshing directory sizes from the dahsboard widget is now done via an async REST API request
 
 = v1.4.0 April 27, 2016 =
 * Added WP-CLI support: wp dashboard-directory-size
@@ -47,13 +50,12 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 == Upgrade Notice ==
 
+= v1.5.0 June 17, 2016 =
+* Viewing/refreshing directory sizes from the dahsboard widget is now done via an async REST API request
+
 = v1.4.0 April 27, 2016 =
 * Added WP-CLI support: wp dashboard-directory-size
 * Added German translations (thanks Gahapati)
-
-= v1.3.0 April 2, 2016 =
-* Updated CSS classes on dashboard widget table
-* Made the trimmed path size filterable (defaults to 25 characters)
 
 
 == Frequently Asked Questions ==

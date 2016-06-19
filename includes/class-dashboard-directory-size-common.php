@@ -6,7 +6,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 	class Dashboard_Directory_Size_Common {
 
-		const VERSION         = '2016-03-30-01';
+		const VERSION         = '2016-06-16-03';
 		const PLUGIN_NAME     = 'dashboard-directory-size';
 		const TEXT_DOMAIN     = 'dashboard-directory-size';
 
@@ -45,16 +45,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 		public function filter_get_directories( $directories ) {
 
-			// time in minutes
-			$transient_time = intval( apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get', 60, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'transient-time-minutes' ) );
-
-			if ( $transient_time > 0 ) {
-				$transient = get_transient( $this->sizes_transient_name() );
-				if ( ! empty( $transient ) ) {
-					return $transient;
-				}
-			}
-
 			$new_dirs = array();
 
 			// add common directories
@@ -81,11 +71,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 			// allow filtering of the results
 			$results = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes-generated', $results );
-
-			// set transient
-			if( $transient_time > 0 && ! empty( $results ) ) {
-				set_transient( $this->sizes_transient_name(), $results, $transient_time * MINUTE_IN_SECONDS );
-			}
 
 			return $results;
 
@@ -174,12 +159,12 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function create_directory_info( $name, $path ) {
+		public function create_directory_info( $name, $path, $include_size = false ) {
 
 			if ( ! empty( $path ) ) {
 				$new_dir['path'] = $path;
 				$new_dir['name'] = $name;
-				$new_dir['size'] = $this->filter_get_directory_size( -1, $path );
+				$new_dir['size'] = $include_size ? $this->filter_get_directory_size( -1, $path ) : -2;
 				return $new_dir;
 			} else {
 				return null;
@@ -214,6 +199,23 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 
 		public function filter_get_directory_size( $size, $path ) {
+			return self::get_directory_size( $path );
+		}
+
+		static public function get_directory_size( $path, $refresh = false ) {
+
+			$transient_time = self::get_transient_time();
+
+			if ( $refresh ) {
+				self::flush_size_transient( $path );
+			}
+
+			if ( $transient_time > 0 ) {
+				$size = get_transient( self::transient_path_key( $path ) );
+				if ( false !== $size ) {
+					return $size;
+				}
+			}
 
 			require_once ABSPATH . 'wp-includes/ms-functions.php';
 
@@ -223,8 +225,15 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 				$size = recurse_dirsize( $path );
 			}
 
-			return $size;
+			if ( $transient_time > 0 ) {
+				set_transient( self::transient_path_key( $path ), $size, MINUTE_IN_SECONDS * $transient_time );
+			}
 
+			return $size;
+		}
+
+		static public function get_transient_time() {
+			return intval( apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get', 60, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'transient-time-minutes' ) );
 		}
 
 
@@ -239,15 +248,28 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 		public function flush_sizes_transient( $data = null ) {
 
-			delete_transient( $this->sizes_transient_name() );
+			$directories = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
+			foreach( $directories as $directory ) {
+				self::flush_size_transient( $directory['path'] );
+			}
 
 			// catch-all for actions and filters, we're not modifying anything, so return whatever was passed to us
 			return $data;
 		}
 
 
+		static public function flush_size_transient( $path ) {
+			delete_transient( self::transient_path_key( $path ) );
+		}
+
+
 		public function sizes_transient_name() {
 			return Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes';
+		}
+
+
+		static public function transient_path_key( $path ) {
+			return 'DD-Path-Size-' . md5( $path );
 		}
 
 
@@ -262,6 +284,34 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 				}
 			}
 			return $results;
+		}
+
+		/**
+		 * Trims a path to a predetermined length
+		 *
+		 * @param  string $path full path
+		 * @return array       trimmed path and boolean to indicate if
+		 *                     it was trimmed
+		 */
+		static public function trim_path( $path ) {
+
+			$trim_size = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-trimmed-path-length', 25 );
+			$trimmed = false;
+
+			// if this is part of the install, remove the start to show relative path
+			if ( stripos( $path , ABSPATH ) !== false ) {
+				$path = substr( $path, strlen( ABSPATH ) );
+			}
+
+			$full_path = $path;
+
+			// trim directory name
+			if ( ! empty( $path ) && strlen( $path ) > $trim_size ) {
+				$path = substr( $path, 0, $trim_size );
+				$trimmed = true;
+			}
+
+			return compact( 'path', 'full_path', 'trimmed' );
 		}
 
 
