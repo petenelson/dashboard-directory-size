@@ -199,7 +199,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 
 		public function filter_get_directory_size( $size, $path ) {
-			return self::get_directory_size( $path );
+			$size = self::get_directory_size( $path );
+			return $size;
 		}
 
 		static public function get_directory_size( $path, $refresh = false ) {
