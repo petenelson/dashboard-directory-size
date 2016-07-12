@@ -12,13 +12,13 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 		static public function plugins_loaded() {
 
-			//add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get', 'Dashboard_Directory_Size_Common::filter_get_directory_size', 10, 2 );
-			//add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', 'Dashboard_Directory_Size_Common::filter_get_directories', 10, 1 );
+			add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get', 'Dashboard_Directory_Size_Common::filter_get_directory_size', 10, 2 );
+			add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', 'Dashboard_Directory_Size_Common::filter_get_directories', 10, 1 );
 
 			// hook to allow purging of the transient
-			//add_action( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-flush-sizes-transient', 'Dashboard_Directory_Size_Common::flush_sizes_transient' );
+			add_action( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-flush-sizes-transient', 'Dashboard_Directory_Size_Common::flush_sizes_transient' );
 
-			//self::add_transient_flushers();
+			self::add_transient_flushers();
 
 		}
 
@@ -27,16 +27,16 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 			// hooks and filters to allow us to purge the transient
 			foreach ( array( 'add_attachment', 'edit_attachment', 'upgrader_process_complete', 'deleted_plugin' ) as $action ) {
-				add_action( $action, array( $this, 'flush_sizes_transient' ) );
+				add_action( $action, 'Dashboard_Directory_Size_Common::flush_sizes_transient' );
 			}
 
 			foreach( array( 'wp_update_attachment_metadata', 'wp_handle_upload' ) as $filter ) {
-				add_filter( $filter, array( $this, 'flush_sizes_transient' ) );
+				add_filter( $filter, 'Dashboard_Directory_Size_Common::flush_sizes_transient' );
 			}
 
 			// this passes the specific option or transient affected
 			foreach ( array( 'update_option', 'deleted_site_transient' ) as $action ) {
-				add_action( $action, array( $this, 'flush_sizes_on_item_match' ) );
+				add_action( $action, 'Dashboard_Directory_Size_Common::flush_sizes_on_item_match' );
 			}
 
 		}
@@ -246,7 +246,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function flush_sizes_transient( $data = null ) {
+		static public function flush_sizes_transient( $data = null ) {
 
 			$directories = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
 			foreach( $directories as $directory ) {
