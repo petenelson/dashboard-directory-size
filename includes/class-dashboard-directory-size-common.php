@@ -86,7 +86,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 				foreach ( $common as $common_dir ) {
 
-					$path = $this->get_path_for_common_dir( $common_dir );
+					$path = self::get_path_for_common_dir( $common_dir );
 					$new_dir = self::create_directory_info( $common_dir, $path );
 
 					if ( ! empty( $new_dir ) ) {
@@ -172,7 +172,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function get_path_for_common_dir( $common_dir ) {
+		static public function get_path_for_common_dir( $common_dir ) {
 
 			switch ( $common_dir ) {
 				case 'uploads':
@@ -182,7 +182,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 					}
 
 				case 'themes':
-					return get_theme_root( );
+					return get_theme_root();
 
 				case 'plugins':
 					return WP_PLUGIN_DIR;

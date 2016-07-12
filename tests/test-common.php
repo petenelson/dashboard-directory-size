@@ -111,4 +111,45 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 		$this->assertEquals( 'DD-Path-Size-' . md5( $path ), $key );
 	}
 
+	public function test_get_path_for_common_dir() {
+
+		// Mock the wp_upload_dir() call
+		M::wpFunction( 'wp_upload_dir', array(
+			'times'  => 1,
+			'return' => array(
+				'basedir' => ABSPATH . 'wp-content/uploads',
+				),
+			)
+		);
+		
+		// Mock the get_theme_root() call
+		M::wpFunction( 'get_theme_root', array(
+			'times'  => 1,
+			'return' => '/wordpress/wp-content/themes'
+			)
+		);
+
+		// test the uploads dir
+		$path = Dashboard_Directory_Size_Common::get_path_for_common_dir( 'uploads' );
+		$this->assertEquals( '/wordpress/wp-content/uploads', $path );
+
+		// test the themes root
+		$path = Dashboard_Directory_Size_Common::get_path_for_common_dir( 'themes' );
+		$this->assertEquals( '/wordpress/wp-content/themes', $path );
+
+		// test the plugins
+		$path = Dashboard_Directory_Size_Common::get_path_for_common_dir( 'plugins' );
+		$this->assertEquals( '/wordpress/wp-content/plugins', $path );
+
+		// test the mu-plugins
+		$path = Dashboard_Directory_Size_Common::get_path_for_common_dir( 'mu-plugins' );
+		$this->assertEquals( '/wordpress/wp-content/mu-plugins', $path );
+
+		// test an invalid value
+		$path = Dashboard_Directory_Size_Common::get_path_for_common_dir( 'invalid' );
+		$this->assertEmpty( $path );
+
+	}
+
+
 }

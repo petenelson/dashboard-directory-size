@@ -13,6 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', '/wordpress/' );
 }
 
+if ( ! defined( 'WP_PLUGIN_DIR' ) ) {
+	define( 'WP_PLUGIN_DIR', '/wordpress/wp-content/plugins' );
+}
+
+if ( ! defined( 'WPMU_PLUGIN_DIR' ) ) {
+	define( 'WPMU_PLUGIN_DIR', '/wordpress/wp-content/mu-plugins' );
+}
+
 require_once PROJECT . '/vendor/autoload.php';
 
 WP_Mock::setUsePatchwork( true );
