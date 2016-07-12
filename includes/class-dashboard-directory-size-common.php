@@ -8,23 +8,22 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 		const VERSION         = '2016-06-16-03';
 		const PLUGIN_NAME     = 'dashboard-directory-size';
-		const TEXT_DOMAIN     = 'dashboard-directory-size';
 
 
-		public function plugins_loaded() {
+		static public function plugins_loaded() {
 
-			add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get', array( $this, 'filter_get_directory_size' ), 10, 2 );
-			add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array( $this, 'filter_get_directories' ), 10, 1 );
+			//add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get', 'Dashboard_Directory_Size_Common::filter_get_directory_size', 10, 2 );
+			//add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', 'Dashboard_Directory_Size_Common::filter_get_directories', 10, 1 );
 
 			// hook to allow purging of the transient
-			add_action( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-flush-sizes-transient', array( $this, 'flush_sizes_transient' ) );
+			//add_action( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-flush-sizes-transient', 'Dashboard_Directory_Size_Common::flush_sizes_transient' );
 
-			$this->add_transient_flushers();
+			//self::add_transient_flushers();
 
 		}
 
 
-		public function add_transient_flushers() {
+		static public function add_transient_flushers() {
 
 			// hooks and filters to allow us to purge the transient
 			foreach ( array( 'add_attachment', 'edit_attachment', 'upgrader_process_complete', 'deleted_plugin' ) as $action ) {

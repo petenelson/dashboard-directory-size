@@ -12,7 +12,12 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 		\WP_Mock::tearDown();
 	}
 
-	public function test_create_directory_info() {
+	public function test_class_constants() {
+		$this->assertEquals( Dashboard_Directory_Size_Common::PLUGIN_NAME, 'dashboard-directory-size' );
+		$this->assertNotEmpty( Dashboard_Directory_Size_Common::VERSION );
+	}
+
+	public function test_create_directory_info_valid() {
 
 		$directory_info = Dashboard_Directory_Size_Common::create_directory_info( 'dirname', 'dirpath' );
 
@@ -20,6 +25,20 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 		$this->assertEquals( $directory_info['name'], 'dirname' );
 		$this->assertEquals( $directory_info['size'], -2 );
 
+	}
+
+	public function test_create_directory_info_invalid() {
+
+		$directory_info = Dashboard_Directory_Size_Common::create_directory_info( '', '' );
+
+		$this->assertNull( $directory_info );
+
+	}
+
+	public function test_plugins_loaded() {
+
+
+		Dashboard_Directory_Size_Common::plugins_loaded();
 	}
 
 }
