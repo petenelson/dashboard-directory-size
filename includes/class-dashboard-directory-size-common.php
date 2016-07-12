@@ -60,7 +60,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 			// add database size
 			if ( apply_filters( 'dashboard-directory-size-setting-is-enabled', false, 'dashboard-directory-size-settings-general', 'show-database-size' ) ) {
-				$new_dirs = array_merge( $new_dirs, $this->get_database_size() );
+				$new_dirs = array_merge( $new_dirs, self::get_database_size() );
 			}
 
 			// merge all the directories
@@ -144,13 +144,13 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function get_database_size() {
+		static public function get_database_size() {
+
+			global $wpdb;
 
 			$database = array();
 			$database['name'] = 'WP ' . __( 'Database' );
 			$database['path'] = DB_NAME;
-
-			global $wpdb;
 			$database['size'] = $wpdb->get_var( $wpdb->prepare( "SELECT SUM(data_length + index_length) FROM information_schema.TABLES where table_schema = '%s' GROUP BY table_schema;", DB_NAME ) );
 
 			return array( $database );
@@ -202,6 +202,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			return $size;
 		}
 
+
 		static public function get_directory_size( $path, $refresh = false ) {
 
 			$transient_time = self::get_transient_time();
@@ -217,7 +218,9 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 				}
 			}
 
-			require_once ABSPATH . 'wp-includes/ms-functions.php';
+			if ( file_exists( ABSPATH . 'wp-includes/ms-functions.php' ) ) {
+				require_once ABSPATH . 'wp-includes/ms-functions.php';
+			}
 
 			if ( ! is_dir( $path ) ) {
 				$size = -1;
@@ -231,6 +234,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 			return $size;
 		}
+
 
 		static public function get_transient_time() {
 			return intval( apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get', 60, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'transient-time-minutes' ) );

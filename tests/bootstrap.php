@@ -21,6 +21,10 @@ if ( ! defined( 'WPMU_PLUGIN_DIR' ) ) {
 	define( 'WPMU_PLUGIN_DIR', '/wordpress/wp-content/mu-plugins' );
 }
 
+if ( ! defined( 'DB_NAME' ) ) {
+	define( 'DB_NAME', 'wordpress-default' );
+}
+
 require_once PROJECT . '/vendor/autoload.php';
 
 WP_Mock::setUsePatchwork( true );

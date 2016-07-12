@@ -151,5 +151,53 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 
 	}
 
+	public function test_flush_size_transient() {
+		M::wpPassthruFunction( 'delete_transient' );
+		Dashboard_Directory_Size_Common::flush_size_transient( 'path' );
+	}
+
+	public function test_get_transient_time() {
+
+		// Mock a different transient time
+		M::onFilter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get' )
+			->with( 60, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'transient-time-minutes' )
+			->reply( 90 );
+
+		$time = Dashboard_Directory_Size_Common::get_transient_time();
+		$this->assertEquals( 90, $time );
+	}
+
+	public function test_get_database_size() {
+		global $wpdb;
+
+		$wpdb = Mockery::mock( '\WPDB' );
+
+		$wpdb->shouldReceive( 'prepare' )
+			->once()
+			->with(
+				Mockery::any(), // SQL statement
+				Mockery::any() // table_schema
+				)
+			->andReturn( 'SQL STATEMENT' );
+
+		$wpdb->shouldReceive( 'get_var' )
+			->once()
+			->with( 'SQL STATEMENT' )
+			->andReturn( 100000 );
+
+		M::wpFunction( '__', array(
+			'times'  => 1,
+			'return' => 'Database',
+			)
+		);
+
+		$database = Dashboard_Directory_Size_Common::get_database_size();
+
+		$this->assertEquals( 'WP Database', $database[0]['name'] );
+		$this->assertEquals( DB_NAME, $database[0]['path'] );
+		$this->assertEquals( 100000, $database[0]['size'] );
+
+	}
+
 
 }
