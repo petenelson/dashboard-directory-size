@@ -9,6 +9,10 @@ if ( ! defined( 'PROJECT' ) ) {
 	define( 'PROJECT', getcwd() );
 }
 
+if ( ! defined( 'ABSPATH' ) ) {
+	define( 'ABSPATH', '/wordpress/' );
+}
+
 require_once PROJECT . '/vendor/autoload.php';
 
 WP_Mock::setUsePatchwork( true );
