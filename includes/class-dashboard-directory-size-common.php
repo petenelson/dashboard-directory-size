@@ -88,7 +88,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 				foreach ( $common as $common_dir ) {
 
 					$path = $this->get_path_for_common_dir( $common_dir );
-					$new_dir = $this->create_directory_info( $common_dir, $path );
+					$new_dir = self::create_directory_info( $common_dir, $path );
 
 					if ( ! empty( $new_dir ) ) {
 						$dir_list[] = $new_dir;
@@ -136,7 +136,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 					$path = ABSPATH . substr( $path, 2 );
 				}
 
-				return $this->create_directory_info( trim( $parts[0] ), $path );
+				return self::create_directory_info( trim( $parts[0] ), $path );
 
 			}
 
@@ -159,7 +159,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function create_directory_info( $name, $path ) {
+		static public function create_directory_info( $name, $path ) {
 
 			if ( ! empty( $path ) ) {
 				$new_dir['path'] = $path;

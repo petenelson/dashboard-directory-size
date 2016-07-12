@@ -14,9 +14,7 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 
 	public function test_create_directory_info() {
 
-		$common = new Dashboard_Directory_Size_Common();
-
-		$directory_info = $common->create_directory_info( 'dirname', 'dirpath' );
+		$directory_info = Dashboard_Directory_Size_Common::create_directory_info( 'dirname', 'dirpath' );
 
 		$this->assertEquals( $directory_info['path'], 'dirpath' );
 		$this->assertEquals( $directory_info['name'], 'dirname' );
