@@ -263,11 +263,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function sizes_transient_name() {
-			return Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes';
-		}
-
-
 		static public function transient_path_key( $path ) {
 			return 'DD-Path-Size-' . md5( $path );
 		}

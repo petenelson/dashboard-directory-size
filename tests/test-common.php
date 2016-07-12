@@ -71,8 +71,8 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 		$full_path = '/this/is/a/long/path/name';
 		$path = Dashboard_Directory_Size_Common::trim_path( $full_path );
 
-		$this->assertEquals( $path['path'], '/this/is/a/long/path' );
-		$this->assertEquals( $path['full_path'], $full_path );
+		$this->assertEquals( '/this/is/a/long/path', $path['path'] );
+		$this->assertEquals( $full_path, $path['full_path'] );
 		$this->assertTrue( $path['trimmed'] );
 
 	}
@@ -87,8 +87,8 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 		$full_path = '/this/is/a/long/path/name';
 		$path = Dashboard_Directory_Size_Common::trim_path( $full_path );
 
-		$this->assertEquals( $path['path'], $full_path );
-		$this->assertEquals( $path['full_path'], $full_path );
+		$this->assertEquals( $full_path, $path['path'] );
+		$this->assertEquals( $full_path, $path['full_path'] );
 		$this->assertFalse( $path['trimmed'] );
 
 	}
@@ -98,9 +98,17 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 		$full_path = '/wordpress/wp-content';
 		$path = Dashboard_Directory_Size_Common::trim_path( $full_path );
 
-		$this->assertEquals( $path['path'], 'wp-content' );
-		$this->assertEquals( $path['full_path'], 'wp-content' );
+		$this->assertEquals( 'wp-content', $path['path'] );
+		$this->assertEquals( 'wp-content', $path['full_path'] );
 
+	}
+
+	public function test_transient_path_key() {
+
+		$path = '/some/path';
+		$key = Dashboard_Directory_Size_Common::transient_path_key( $path );
+
+		$this->assertEquals( 'DD-Path-Size-' . md5( $path ), $key );
 	}
 
 }
