@@ -5,23 +5,19 @@
  * @package dashboard-directory-size
  */
 
-require_once getcwd() . '/vendor/autoload.php';
-
-$_tests_dir = getenv( 'WP_TESTS_DIR' );
-if ( ! $_tests_dir ) {
-	$_tests_dir = '/tmp/wordpress-tests-lib';
+if ( ! defined( 'PROJECT' ) ) {
+	define( 'PROJECT', getcwd() );
 }
 
-// Give access to tests_add_filter() function.
-require_once $_tests_dir . '/includes/functions.php';
+require_once PROJECT . '/vendor/autoload.php';
 
-/**
- * Manually load the plugin being tested.
- */
-function _manually_load_plugin() {
-	require dirname( dirname( __FILE__ ) ) . '/dashboard-directory-size.php';
-}
-tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
+WP_Mock::setUsePatchwork( true );
+WP_Mock::bootstrap();
+WP_Mock::tearDown();
 
-// Start up the WP testing environment.
-require $_tests_dir . '/includes/bootstrap.php';
+require_once PROJECT . '/tests/base-test.php';
+require_once PROJECT . '/includes/class-dashboard-directory-size-common.php';
+require_once PROJECT . '/includes/class-dashboard-directory-size-dashboard-widget.php';
+require_once PROJECT . '/includes/class-dashboard-directory-size-i18n.php';
+require_once PROJECT . '/includes/class-dashboard-directory-size-rest-api.php';
+require_once PROJECT . '/includes/class-dashboard-directory-size-settings.php';
