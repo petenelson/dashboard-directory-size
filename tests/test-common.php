@@ -199,5 +199,23 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 
 	}
 
+	public function test_flush_sizes_transient() {
+
+		// Mock some directory results
+		$directories = array(
+			array( 'path' => '/path1' ),
+			array( 'path' => '/path2' ),
+			);
+
+		M::onFilter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories' )
+			->with( array() )
+			->reply( $directories );
+
+		$data = Dashboard_Directory_Size_Common::flush_sizes_transient( 'filter value' );
+
+		// The filter above should not change what was passed to it.
+		$this->assertEquals( 'filter value', $data );
+
+	}
 
 }
