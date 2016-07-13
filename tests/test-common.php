@@ -218,4 +218,23 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 
 	}
 
+	public function test_get_custom_dir() {
+
+		// test a valid dir
+		$dir_info = Dashboard_Directory_Size_Common::get_custom_dir( 'name|/path' );
+		$this->assertEquals( 'name', $dir_info['name'] );
+		$this->assertEquals( '/path', $dir_info['path'] );
+
+		// test an invalid dir
+		$dir_info = Dashboard_Directory_Size_Common::get_custom_dir( 'name /path' );
+		$this->assertNull( $dir_info );
+
+		// test a relative dir
+		$dir_info = Dashboard_Directory_Size_Common::get_custom_dir( 'name|~/wp-content' );
+		$this->assertEquals( 'name', $dir_info['name'] );
+		$this->assertEquals( '/wordpress/wp-content', $dir_info['path'] );
+
+	}
+
+
 }

@@ -112,7 +112,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 				if ( ! empty( $custom_dir_list ) ) {
 
 					foreach ( $custom_dir_list as $row ) {
-						$custom_dir = $this->get_custom_dir( $row );
+						$custom_dir = self::get_custom_dir( $row );
 						if ( ! empty( $custom_dir ) ) {
 							$dir_list[] = $custom_dir;
 						}
@@ -126,7 +126,14 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function get_custom_dir( $row ) {
+		/**
+		 * Converts a custom row entry from settings into a directory
+		 * info array.
+		 *
+		 * @param  string $row Entry from settings ( name | path )
+		 * @return array       Results from create_directory_info()
+		 */
+		static public function get_custom_dir( $row ) {
 
 			$parts = explode( '|', $row );
 			if ( ! empty( $parts ) && count( $parts ) == 2) {
