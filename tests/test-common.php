@@ -290,13 +290,6 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 			)
 		);
 
-		// M::wpFunction( 'recurse_dirsize', array(
-		// 	'times'  => 1,
-		// 	'args'   => '/invalid',
-		// 	'return' => -1
-		// 	)
-		// );
-
 		$size = Dashboard_Directory_Size_Common::get_directory_size( '/invalid' );
 
 		$this->assertEquals( -1, $size);
@@ -305,25 +298,78 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 
 	public function test_get_directory_size_valid() {
 
-		M::wpPassthruFunction( 'set_transient' );
+		$dirname = dirname( __FILE__ );
+
+		// Mock a transient time
+		M::onFilter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get' )
+			->with( 60, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'transient-time-minutes' )
+			->reply( 60 );
 
 		M::wpFunction( 'get_transient', array(
 			'times'  => 1,
-			'args'   => Dashboard_Directory_Size_Common::transient_path_key( dirname( __FILE__ ) ),
+			'args'   => Dashboard_Directory_Size_Common::transient_path_key( $dirname ),
 			'return' => false,
 			)
 		);
 
 		M::wpFunction( 'recurse_dirsize', array(
 			'times'  => 1,
-			'args'   => dirname( __FILE__ ),
+			'args'   => $dirname,
 			'return' => 100
 			)
 		);
 
-		$size = Dashboard_Directory_Size_Common::get_directory_size( dirname( __FILE__ ) );
+		M::wpFunction( 'delete_transient', array(
+			'times'  => 1,
+			'args'   => Dashboard_Directory_Size_Common::transient_path_key( $dirname ),
+			'return' => true,
+			)
+		);
+
+		M::wpFunction( 'set_transient', array(
+			'times'  => 1,
+			'args'   => array(
+				Dashboard_Directory_Size_Common::transient_path_key( $dirname ),
+				100,
+				MINUTE_IN_SECONDS * 60,
+				),
+			'return' => true,
+			)
+		);
+
+		$size = Dashboard_Directory_Size_Common::get_directory_size( $dirname, true );
 
 		$this->assertEquals( 100, $size);
+
+	}
+
+
+	public function test_get_directory_size_cached() {
+
+		$dirname = dirname( __FILE__ );
+
+		// Mock a transient time
+		M::onFilter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get' )
+			->with( 60, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'transient-time-minutes' )
+			->reply( 60 );
+
+		M::wpFunction( 'get_transient', array(
+			'times'  => 1,
+			'args'   => Dashboard_Directory_Size_Common::transient_path_key( $dirname ),
+			'return' => 100,
+			)
+		);
+
+		$size = Dashboard_Directory_Size_Common::get_directory_size( $dirname, true );
+		$this->assertEquals( 100, $size);
+
+	}
+
+
+
+	public function test_get_common_dirs() {
+
+
 
 	}
 
