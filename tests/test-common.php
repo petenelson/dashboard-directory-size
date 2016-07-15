@@ -257,4 +257,26 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 		Dashboard_Directory_Size_Common::flush_sizes_on_item_match( 'update_themes' );
 	}
 
+
+	public function test_get_custom_dirs() {
+
+		$custom_dirs = "dir-1|/path-1\ndir-2|/path-2";
+
+		M::onFilter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get' )
+			->with( array(), Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'custom-directories' )
+			->reply( $custom_dirs );
+
+		$dirs = Dashboard_Directory_Size_Common::get_custom_dirs();
+
+		$this->assertCount( 2, $dirs );
+
+		$this->assertEquals( 'dir-1', $dirs[0]['name'] );
+		$this->assertEquals( 'dir-2', $dirs[1]['name'] );
+
+		$this->assertEquals( '/path-1', $dirs[0]['path'] );
+		$this->assertEquals( '/path-2', $dirs[1]['path'] );
+
+	}
+
+
 }
