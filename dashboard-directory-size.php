@@ -20,7 +20,9 @@ require_once DASHBOARD_DIRECOTRY_SIZE_ROOT . 'includes/class-dashboard-directory
 require_once DASHBOARD_DIRECOTRY_SIZE_ROOT . 'includes/class-dashboard-directory-size-dashboard-widget.php';
 require_once DASHBOARD_DIRECOTRY_SIZE_ROOT . 'includes/class-dashboard-directory-size-rest-api.php';
 
+add_action( 'plugins_loaded', 'Dashboard_Directory_Size_i18n::plugins_loaded' );
 add_action( 'plugins_loaded', 'Dashboard_Directory_Size_Common::plugins_loaded' );
+
 // add_action( 'plugins_loaded', 'Dashboard_Directory_Size_Common::plugins_loaded' );
 
 // handler for activation

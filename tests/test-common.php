@@ -5,8 +5,6 @@ use WP_Mock as M;
 class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size_Base {
 
 	public function setUp() {
-
-
 		M::setUp();
 	}
 
