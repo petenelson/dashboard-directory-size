@@ -279,4 +279,29 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 	}
 
 
+	public function test_get_directory_size_invalid() {
+
+		M::wpPassthruFunction( 'set_transient' );
+
+		M::wpFunction( 'get_transient', array(
+			'times'  => 1,
+			'args'   => Dashboard_Directory_Size_Common::transient_path_key( '/invalid' ),
+			'return' => false,
+			)
+		);
+
+		// M::wpFunction( 'recurse_dirsize', array(
+		// 	'times'  => 1,
+		// 	'args'   => '/invalid',
+		// 	'return' => -1
+		// 	)
+		// );
+
+		$size = Dashboard_Directory_Size_Common::get_directory_size( '/invalid' );
+
+		$this->assertEquals( -1, $size);
+
+	}
+
+
 }
