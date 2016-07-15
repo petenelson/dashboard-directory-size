@@ -235,4 +235,26 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 	}
 
 
+	public function test_flush_sizes_on_item_match() {
+
+		// Mock some directory results
+		$directories = array(
+			array( 'path' => '/path1' ),
+			array( 'path' => '/path2' ),
+			);
+
+		M::onFilter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories' )
+			->with( array() )
+			->reply( $directories );
+
+		M::wpFunction( 'delete_transient', array(
+			'times' => 6,
+			)
+		);
+
+		Dashboard_Directory_Size_Common::flush_sizes_on_item_match( 'active_plugins' );
+		Dashboard_Directory_Size_Common::flush_sizes_on_item_match( 'uninstall_plugins' );
+		Dashboard_Directory_Size_Common::flush_sizes_on_item_match( 'update_themes' );
+	}
+
 }

@@ -42,7 +42,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function filter_get_directories( $directories ) {
+		static public function filter_get_directories( $directories ) {
 
 			$new_dirs = array();
 
@@ -76,7 +76,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function get_common_dirs() {
+		static public function get_common_dirs() {
 
 			$dir_list = array();
 
@@ -101,7 +101,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function get_custom_dirs() {
+		static public function get_custom_dirs() {
 
 			$dir_list = array();
 
@@ -204,7 +204,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function filter_get_directory_size( $size, $path ) {
+		static public function filter_get_directory_size( $size, $path ) {
 			$size = self::get_directory_size( $path );
 			return $size;
 		}
@@ -252,7 +252,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			// hook for deleted plugins and deleted themes
 			$flushable_items = array( 'active_plugins', 'uninstall_plugins', 'update_themes' );
 			if ( in_array( $item, $flushable_items ) ) {
-				$this->flush_sizes_transient();
+				self::flush_sizes_transient();
 			}
 		}
 
