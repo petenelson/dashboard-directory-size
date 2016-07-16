@@ -430,4 +430,8 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 
 	}
 
+	public function test_filter_get_directories() {
+		
+	}
+
 }
