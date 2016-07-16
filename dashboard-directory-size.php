@@ -22,6 +22,7 @@ require_once DASHBOARD_DIRECOTRY_SIZE_ROOT . 'includes/class-dashboard-directory
 
 add_action( 'plugins_loaded', 'Dashboard_Directory_Size_i18n::plugins_loaded' );
 add_action( 'plugins_loaded', 'Dashboard_Directory_Size_Common::plugins_loaded' );
+add_action( 'plugins_loaded', 'Dashboard_Directory_Size_Dashboard_Widget::plugins_loaded' );
 
 // add_action( 'plugins_loaded', 'Dashboard_Directory_Size_Common::plugins_loaded' );
 

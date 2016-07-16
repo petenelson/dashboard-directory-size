@@ -47,13 +47,13 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			$new_dirs = array();
 
 			// add common directories
-			$common_dirs = $this->get_common_dirs();
+			$common_dirs = self::get_common_dirs();
 			if ( ! empty( $common_dirs) ) {
 				$new_dirs = array_merge( $new_dirs, $common_dirs );
 			}
 
 			// add custom directories
-			$custom_dirs = $this->get_custom_dirs();
+			$custom_dirs = self::get_custom_dirs();
 			if ( ! empty( $custom_dirs) ) {
 				$new_dirs = array_merge( $new_dirs, $custom_dirs );
 			}
@@ -66,7 +66,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			// merge all the directories
 			$results = array_merge( $directories, $new_dirs );
 
-			$results = $this->apply_friendly_sizes( $results );
+			$results = self::apply_friendly_sizes( $results );
 
 			// allow filtering of the results
 			$results = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes-generated', $results );
@@ -279,7 +279,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function apply_friendly_sizes( $results ) {
+		static public function apply_friendly_sizes( $results ) {
 			if ( is_array( $results ) ) {
 				for( $i = 0; $i < count( $results ); $i++ ) {
 					if ( ! empty( $results[ $i ]['size'] ) ) {
