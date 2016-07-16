@@ -431,7 +431,82 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 	}
 
 	public function test_filter_get_directories() {
-		
+
+		// Mock some common dirs
+		M::onFilter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get' )
+			->with( array(), Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'common-directories' )
+			->reply( array( 'uploads', 'plugins' ) );
+
+		M::wpFunction( 'wp_upload_dir', array(
+			'times'  => 1,
+			'return' => array(
+				'basedir' => ABSPATH . 'wp-content/uploads',
+				),
+			)
+		);
+
+		// Mocks some custom dirs
+		$custom_dirs = "dir-1|/path-1\ndir-2|/path-2";
+
+		M::onFilter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get' )
+			->with( array(), Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'custom-directories' )
+			->reply( $custom_dirs );
+
+		// Mock the database size and wpdb
+		M::onFilter( 'dashboard-directory-size-setting-is-enabled' )
+			->with( false, 'dashboard-directory-size-settings-general', 'show-database-size' )
+			->reply( true );
+
+
+		global $wpdb;
+
+		$wpdb = Mockery::mock( '\WPDB' );
+
+		$wpdb->shouldReceive( 'prepare' )
+			->once()
+			->with(
+				Mockery::any(), // SQL statement
+				Mockery::any() // table_schema
+				)
+			->andReturn( 'SQL STATEMENT' );
+
+		$wpdb->shouldReceive( 'get_var' )
+			->once()
+			->with( 'SQL STATEMENT' )
+			->andReturn( 100000 );
+
+		M::wpFunction( '__', array(
+			'times'  => 1,
+			'return' => 'Database',
+			)
+		);
+
+
+		M::wpFunction( 'size_format', array(
+			'times' => 4,
+			'args' => -2,
+			'return' => '',
+			)
+		);
+
+		M::wpFunction( 'size_format', array(
+			'times' => 1,
+			'args' => 100000,
+			'return' => '100MB',
+			)
+		);
+
+		// Get the directories above
+		$dirs = Dashboard_Directory_Size_Common::filter_get_directories( array() );
+
+		$this->assertCount( 5, $dirs );
+
+		$this->assertEquals( 'uploads', $dirs[0]['name'] );
+		$this->assertEquals( 'plugins', $dirs[1]['name'] );
+		$this->assertEquals( 'dir-1',   $dirs[2]['name'] );
+		$this->assertEquals( 'dir-2',   $dirs[3]['name'] );
+		$this->assertEquals( 'WP Database',   $dirs[4]['name'] );
+
 	}
 
 }
