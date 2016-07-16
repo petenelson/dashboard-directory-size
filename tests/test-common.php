@@ -360,7 +360,7 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 			)
 		);
 
-		$size = Dashboard_Directory_Size_Common::get_directory_size( $dirname, true );
+		$size = Dashboard_Directory_Size_Common::filter_get_directory_size( 100, $dirname );
 		$this->assertEquals( 100, $size);
 
 	}
