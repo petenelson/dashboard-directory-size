@@ -366,10 +366,30 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 	}
 
 
-
 	public function test_get_common_dirs() {
 
+		// Mock some common dirs
+		M::onFilter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get' )
+			->with( array(), Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'common-directories' )
+			->reply( array( 'uploads', 'plugins' ) );
 
+		M::wpFunction( 'wp_upload_dir', array(
+			'times'  => 1,
+			'return' => array(
+				'basedir' => ABSPATH . 'wp-content/uploads',
+				),
+			)
+		);
+
+		$dir_list = Dashboard_Directory_Size_Common::get_common_dirs();
+
+		$this->assertCount( 2, $dir_list );
+
+		$this->assertEquals( '/wordpress/wp-content/uploads', $dir_list[0]['path'] );
+		$this->assertEquals( 'uploads', $dir_list[0]['name'] );
+
+		$this->assertEquals( '/wordpress/wp-content/plugins', $dir_list[1]['path'] );
+		$this->assertEquals( 'plugins', $dir_list[1]['name'] );
 
 	}
 
