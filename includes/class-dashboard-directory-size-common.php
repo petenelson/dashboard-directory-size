@@ -248,7 +248,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function flush_sizes_on_item_match( $item ) {
+		static public function flush_sizes_on_item_match( $item ) {
 			// hook for deleted plugins and deleted themes
 			$flushable_items = array( 'active_plugins', 'uninstall_plugins', 'update_themes' );
 			if ( in_array( $item, $flushable_items ) ) {
