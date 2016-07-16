@@ -393,4 +393,41 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 
 	}
 
+	public function test_apply_friendly_sizes() {
+		$dirs = array(
+				array( 'size' => 100 ),
+				array( 'size' => 200 ),
+				array( 'size' => 0 ),
+			);
+
+		M::wpFunction( 'size_format', array(
+			'times' => 1,
+			'args' => 100,
+			'return' => '100MB',
+			)
+		);
+
+		M::wpFunction( 'size_format', array(
+			'times' => 1,
+			'args' => 200,
+			'return' => '200MB',
+			)
+		);
+
+		M::wpFunction( '__', array(
+			'times'  => 1,
+			'return' => 'Empty',
+			)
+		);
+
+		$dirs = Dashboard_Directory_Size_Common::apply_friendly_sizes( $dirs );
+
+		$this->assertCount( 3, $dirs );
+
+		$this->assertEquals( '100MB', $dirs[0]['size_friendly'] );
+		$this->assertEquals( '200MB', $dirs[1]['size_friendly'] );
+		$this->assertEquals( 'Empty', $dirs[2]['size_friendly'] );
+
+	}
+
 }
