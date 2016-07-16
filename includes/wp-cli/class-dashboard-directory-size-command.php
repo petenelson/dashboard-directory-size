@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Mamane Dashboard Directory Size plugin
+ * Manage Dashboard Directory Size plugin
  */
 class Dashboard_Directory_Size_Command extends Dashboard_Directory_Size_Base_Command  {
 
