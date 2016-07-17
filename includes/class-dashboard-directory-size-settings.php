@@ -38,7 +38,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 		static public function activation_hook() {
 
 			// create default settings
-			add_option( self::$settings_key_general, self::get_default_settings(), '', $autoload = 'no' );
+			add_option( self::$settings_key_general, self::get_default_settings(), '', 'no' );
 
 			// add an option so we can show the activated admin notice
 			add_option( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-plugin-activated', '1' );

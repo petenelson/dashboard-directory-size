@@ -33,4 +33,30 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 		$this->assertEquals( $settings['custom-directories'], '' );
 	}
 
+	public function test_activation_hook() {
+
+		M::wpFunction( 'add_option', array(
+			'times' => 1,
+			'args' => array(
+				Dashboard_Directory_Size_Settings::$settings_key_general,
+				Dashboard_Directory_Size_Settings::get_default_settings(),
+				'',
+				'no',
+				)
+			)
+		);
+
+		M::wpFunction( 'add_option', array(
+			'times' => 1,
+			'args' => array(
+				Dashboard_Directory_Size_Common::PLUGIN_NAME . '-plugin-activated',
+				'1',
+				)
+			)
+		);
+
+		Dashboard_Directory_Size_Settings::activation_hook();
+
+	}
+
 }
