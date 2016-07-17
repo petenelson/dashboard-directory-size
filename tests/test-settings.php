@@ -25,4 +25,12 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 
 	}
 
+	public function test_get_default_settings() {
+		$settings = Dashboard_Directory_Size_Settings::get_default_settings();
+		$this->assertEquals( $settings['transient-time-minutes'], 60 );
+		$this->assertEquals( $settings['common-directories'], array( 'uploads', 'themes', 'plugins' ) );
+		$this->assertEquals( $settings['show-database-size'], '1' );
+		$this->assertEquals( $settings['custom-directories'], '' );
+	}
+
 }
