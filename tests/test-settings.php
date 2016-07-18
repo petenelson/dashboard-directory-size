@@ -59,4 +59,50 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 
 	}
 
+	public function test_activation_admin_notice_activated() {
+
+		M::wpFunction( 'get_option', array(
+			'times' => 1,
+			'args' => Dashboard_Directory_Size_Common::PLUGIN_NAME . '-plugin-activated',
+			'return' => '1',
+			)
+		);
+
+		M::wpFunction( 'delete_option', array(
+			'times' => 1,
+			'args' => Dashboard_Directory_Size_Common::PLUGIN_NAME . '-plugin-activated',
+			'return' => '1',
+			)
+		);
+
+		M::wpPassthruFunction( 'wp_kses_post' );
+		M::wpPassthruFunction( '__' );
+		M::wpPassthruFunction( 'esc_url' );
+		M::wpPassthruFunction( 'admin_url' );
+
+		ob_start();
+		Dashboard_Directory_Size_Settings::activation_admin_notice();
+		$results = ob_get_clean();
+
+		$this->assertContains( 'Dashboard Directory Size activated', $results );
+
+	}
+
+	public function test_activation_admin_notice_not_activated() {
+
+		M::wpFunction( 'get_option', array(
+			'times' => 1,
+			'args' => Dashboard_Directory_Size_Common::PLUGIN_NAME . '-plugin-activated',
+			'return' => false,
+			)
+		);
+
+		ob_start();
+		Dashboard_Directory_Size_Settings::activation_admin_notice();
+		$results = ob_get_clean();
+
+		$this->assertEmpty( $results );
+
+	}
+
 }
