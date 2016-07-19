@@ -27,7 +27,7 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 
 	public function test_get_default_settings() {
 		$settings = Dashboard_Directory_Size_Settings::get_default_settings();
-		$this->assertEquals( $settings['transient-time-minutes'], 60 );
+		$this->assertEquals( $settings['transient-time-minutes'], 360 );
 		$this->assertEquals( $settings['common-directories'], array( 'uploads', 'themes', 'plugins' ) );
 		$this->assertEquals( $settings['show-database-size'], '1' );
 		$this->assertEquals( $settings['custom-directories'], '' );
@@ -56,7 +56,6 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 		);
 
 		Dashboard_Directory_Size_Settings::activation_hook();
-
 	}
 
 	public function test_activation_admin_notice_activated() {
@@ -102,6 +101,61 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 		$results = ob_get_clean();
 
 		$this->assertEmpty( $results );
+
+	}
+
+	public function mock_get_option( $key, $return = false, $times = 1 ) {
+		M::wpFunction( 'get_option', array(
+			'times'  => $times,
+			'args'   => $key,
+			'return' => $return,
+			)
+		);
+	}
+
+	public function mock_wp_parse_args( $args, $defaults, $return, $times = 1 ) {
+		M::wpFunction( 'wp_parse_args', array(
+			'times'  => $times,
+			'args'   => array( $args, $defaults ),
+			'return' => $return,
+			)
+		);
+	}
+
+	public function test_setting_get() {
+
+		// Return an actual setting
+		$this->mock_get_option( 'dashboard-directory-size-settings-general', array( 'transient-time-minutes' => 60 ) );
+
+		$this->mock_wp_parse_args(
+			array( 'transient-time-minutes' => 60 ),  // args
+			array( 'transient-time-minutes' => 360 ), // default
+			array( 'transient-time-minutes' => 60 )   // return
+			);
+
+		// 360 would be the default
+		$value = Dashboard_Directory_Size_Settings::setting_get( 360, 'dashboard-directory-size-settings-general', 'transient-time-minutes' );
+
+		// verify that the actual setting, not the default, was returned
+		$this->assertEquals( 60, $value );
+
+
+		// Return a missing setting
+		$this->mock_get_option( 'dashboard-directory-size-settings-general', false );
+
+		$this->mock_wp_parse_args(
+			false,                                    // args
+			array( 'transient-time-minutes' => 360 ), // default
+			array( 'transient-time-minutes' => 360 )  // return
+			);
+
+
+		// 360 would be the default
+		$value = Dashboard_Directory_Size_Settings::setting_get( 360, 'dashboard-directory-size-settings-general', 'transient-time-minutes' );
+
+		// verify that the default, not the missing setting, was returned
+		$this->assertEquals( 360, $value );
+
 
 	}
 

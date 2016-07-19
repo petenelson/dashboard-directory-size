@@ -27,7 +27,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 		static public function get_default_settings() {
 			return array(
-				'transient-time-minutes'   => 60,
+				'transient-time-minutes'   => 360,
 				'common-directories'       => array( 'uploads', 'themes', 'plugins' ),
 				'show-database-size'       => '1',
 				'custom-directories'       => '',
@@ -57,11 +57,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				<?php
 				delete_option( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-plugin-activated' );
 			}
-		}
-
-
-		static public function deactivation_hook() {
-			// placeholder in case we need deactivation code
 		}
 
 
@@ -132,30 +127,35 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				)
 			);
 
-			return $args[$setting];
+			return $args[ $setting ];
 		}
 
 
 		static public function settings_input( $args ) {
 
-			// TODO don't use extract
-			extract( wp_parse_args( $args,
+			$args = wp_parse_args( $args,
 				array(
-					'name' => '',
-					'key' => '',
+					'name'      => '',
+					'key'       => '',
 					'maxlength' => 50,
-					'size' => 30,
-					'after' => '',
-					'type' => 'text',
-					'min' => 0,
-					'max' => 0,
-					'step' => 1,
+					'size'      => 30,
+					'after'     => '',
+					'type'      => 'text',
+					'min'       => 0,
+					'max'       => 0,
+					'step'      => 1,
 				)
-			) );
+			);
 
+			$name        = $args['name'];
+			$key         = $args['key'];
+			$maxlength   = $args['maxlength'];
+			$size        = $args['size'];
+			$after       = $args['after'];
+			$type        = $args['type'];
 
-			$option = get_option( $key );
-			$value = isset( $option[$name] ) ? esc_attr( $option[$name] ) : '';
+			$option      = get_option( $key );
+			$value       = isset( $option[ $name ] ) ? esc_attr( $option[ $name ] ) : '';
 
 			$min_max_step = '';
 			if ( $type === 'number' ) {
