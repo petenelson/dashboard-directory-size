@@ -159,4 +159,165 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 
 	}
 
+	public function test_get_common_dirs() {
+		$common_directories = Dashboard_Directory_Size_Settings::get_common_dirs();
+		$this->assertContains( 'uploads',    $common_directories );
+		$this->assertContains( 'themes',     $common_directories );
+		$this->assertContains( 'plugins',    $common_directories );
+		$this->assertContains( 'mu-plugins', $common_directories );
+	}
+
+	public function test_admin_init() {
+
+		M::wpPassthruFunction( '__' );
+
+		// General tab
+
+		// Mock the register_setting call
+		M::wpFunction( 'register_setting', array(
+			'times' => 1,
+			'args' => array(
+				Dashboard_Directory_Size_Settings::$settings_key_general,
+				Dashboard_Directory_Size_Settings::$settings_key_general,
+				'Dashboard_Directory_Size_Settings::sanitize_general_settings',
+				),
+			)
+		);
+
+		// Mock the add_settings_section call
+		M::wpFunction( 'add_settings_section', array(
+			'times' => 1,
+			'args' => array(
+				'general',
+				'',
+				'Dashboard_Directory_Size_Settings::section_header',
+				Dashboard_Directory_Size_Settings::$settings_key_general,
+				),
+			)
+		);
+
+		// Mock the common-directories checkbox list
+		M::wpFunction( 'add_settings_field', array(
+			'times' => 1,
+			'args' => array(
+				'common-directories',
+				'Common Directories',
+				'Dashboard_Directory_Size_Settings::settings_checkbox_list',
+				Dashboard_Directory_Size_Settings::$settings_key_general,
+				'general',
+				array(
+					'key' => Dashboard_Directory_Size_Settings::$settings_key_general,
+					'name' => 'common-directories',
+					'items' => Dashboard_Directory_Size_Settings::get_common_dirs(),
+					'legend' => 'Post Types',
+					),
+				),
+			)
+		);
+
+		// Mock the custom-directories checkbox list
+		M::wpFunction( 'add_settings_field', array(
+			'times' => 1,
+			'args' => array(
+				'custom-directories',
+				'Custom Directories',
+				'Dashboard_Directory_Size_Settings::settings_textarea',
+				Dashboard_Directory_Size_Settings::$settings_key_general,
+				'general',
+				array(
+					'key' => Dashboard_Directory_Size_Settings::$settings_key_general,
+					'name' => 'custom-directories',
+					'rows' => 8,
+					'cols' => 60,
+					'after' => 'A list of names and paths separated by pipe, use ~ for the WordPress install directory, example:<br><br>nginx Cache | /var/run/nginx-cache<br>All WP Content | ~/wp-content/',
+					),
+				),
+			)
+		);
+
+		// Mock the show-database-size checkbox list
+		M::wpFunction( 'add_settings_field', array(
+			'times' => 1,
+			'args' => array(
+				'show-database-size',
+				'Show Database Size',
+				'Dashboard_Directory_Size_Settings::settings_yes_no',
+				Dashboard_Directory_Size_Settings::$settings_key_general,
+				'general',
+				array(
+					'key' => Dashboard_Directory_Size_Settings::$settings_key_general,
+					'name' => 'show-database-size',
+					),
+				),
+			)
+		);
+
+		// Mock the transient-time-minutes numeric input field
+		M::wpFunction( 'add_settings_field', array(
+			'times' => 1,
+			'args' => array(
+				'transient-time-minutes',
+				'Cache Size List (minutes)',
+				'Dashboard_Directory_Size_Settings::settings_input',
+				Dashboard_Directory_Size_Settings::$settings_key_general,
+				'general',
+				array(
+					'key'   => Dashboard_Directory_Size_Settings::$settings_key_general,
+					'name'  =>'transient-time-minutes',
+					'type'  => 'number',
+					'min'   => 0,
+					'max'   => 1440,
+					'step'  => 1,
+					'after' => 'Caches the directory sizes as a transient to reduce server load, 0 to disable',
+					),
+				),
+			)
+		);
+
+		// Mock the rest-api yes/no input field
+		M::wpFunction( 'add_settings_field', array(
+			'times' => 1,
+			'args' => array(
+				'rest-api-support',
+				'REST API Support',
+				'Dashboard_Directory_Size_Settings::settings_yes_no',
+				Dashboard_Directory_Size_Settings::$settings_key_general,
+				'general',
+				array(
+					'key'   => Dashboard_Directory_Size_Settings::$settings_key_general,
+					'name'  => 'rest-api-support',
+					'after' => 'Exposes data via the dashboard-directory-size endpoint in the WP REST API',
+					),
+				),
+			)
+		);
+
+
+		// Help tab
+
+		// Mock the register_setting call
+		M::wpFunction( 'register_setting', array(
+			'times' => 1,
+			'args' => array(
+				Dashboard_Directory_Size_Settings::$settings_key_help,
+				Dashboard_Directory_Size_Settings::$settings_key_help,
+				),
+			)
+		);
+
+		// Mock the add_settings_section call
+		M::wpFunction( 'add_settings_section', array(
+			'times' => 1,
+			'args' => array(
+				'help',
+				'',
+				'Dashboard_Directory_Size_Settings::section_header',
+				Dashboard_Directory_Size_Settings::$settings_key_help,
+				),
+			)
+		);
+
+		Dashboard_Directory_Size_Settings::admin_init();
+	}
+
 }

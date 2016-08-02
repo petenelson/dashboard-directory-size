@@ -76,26 +76,100 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 			add_settings_section( $section, '', 'Dashboard_Directory_Size_Settings::section_header', $key );
 
+			$common_dirs = self::get_common_dirs();
+
+			// Add a checkbox list for common directories.
+			add_settings_field(
+				'common-directories',
+				__( 'Common Directories', 'dashboard-directory-size' ),
+				'Dashboard_Directory_Size_Settings::settings_checkbox_list',
+				$key,
+				$section,
+				array(
+					'key'    => $key,
+					'name'   => 'common-directories',
+					'items'  => $common_dirs,
+					'legend' => __( 'Post Types', 'dashboard-directory-size' ),
+					)
+				);
+
+			// Add a textarea for custom directories.
+			add_settings_field(
+				'custom-directories',
+				__( 'Custom Directories', 'dashboard-directory-size' ),
+				'Dashboard_Directory_Size_Settings::settings_textarea',
+				$key,
+				$section,
+				array(
+					'key'   => $key,
+					'name'  => 'custom-directories',
+					'rows'  => 8,
+					'cols'  => 60,
+					'after' => __( 'A list of names and paths separated by pipe, use ~ for the WordPress install directory, example:<br><br>nginx Cache | /var/run/nginx-cache<br>All WP Content | ~/wp-content/', 'dashboard-directory-size' ),
+					)
+				);
+
+			// Add yes/no radio for database size.
+			add_settings_field(
+				'show-database-size',
+				__( 'Show Database Size', 'dashboard-directory-size' ),
+				'Dashboard_Directory_Size_Settings::settings_yes_no',
+				$key,
+				$section,
+				array(
+					'key'  => $key,
+					'name' => 'show-database-size',
+					)
+				);
+
+			// Add a numeric input for the transient time.
+			add_settings_field(
+				'transient-time-minutes',
+				__( 'Cache Size List (minutes)', 'dashboard-directory-size' ),
+				'Dashboard_Directory_Size_Settings::settings_input',
+				$key,
+				$section,
+				array(
+					'key'   => $key,
+					'name'  =>'transient-time-minutes',
+					'type'  => 'number',
+					'min'   => 0,
+					'max'   => 1440,
+					'step'  => 1,
+					'after' => __( 'Caches the directory sizes as a transient to reduce server load, 0 to disable', 'dashboard-directory-size' ),
+					)
+				);
+
+			// Add a yes/no radio for REST API support.
+			add_settings_field(
+				'rest-api-support',
+				__( 'REST API Support', 'dashboard-directory-size' ),
+				'Dashboard_Directory_Size_Settings::settings_yes_no',
+				$key,
+				$section,
+				array(
+					'key'   => $key,
+					'name'  => 'rest-api-support',
+					'after' => __( 'Exposes data via the dashboard-directory-size endpoint in the WP REST API', 'dashboard-directory-size' ),
+					)
+				);
+
+		}
+
+		/**
+		 * Returns a list of common directories in WordPress
+		 *
+		 * @return array
+		 */
+		static public function get_common_dirs() {
+			$common_directories = array();
+
 			foreach ( array( 'uploads', 'themes', 'plugins', 'mu-plugins' ) as $dir ) {
 				$common_directories[ $dir ] = $dir;
 			}
 
-			add_settings_field( 'common-directories', __( 'Common Directories', 'dashboard-directory-size' ), 'Dashboard_Directory_Size_Settings::settings_checkbox_list', $key, $section,
-				array( 'key' => $key, 'name' => 'common-directories', 'items' => $common_directories, 'legend' => __( 'Post Types', 'dashboard-directory-size' ) ) );
-
-			add_settings_field( 'custom-directories', __( 'Custom Directories', 'dashboard-directory-size' ), 'Dashboard_Directory_Size_Settings::settings_textarea', $key, $section,
-				array( 'key' => $key, 'name' => 'custom-directories', 'rows' => 8, 'cols' => 60, 'after' => __( 'A list of names and paths separated by pipe, use ~ for the WordPress install directory, example:<br><br>nginx Cache | /var/run/nginx-cache<br>All WP Content | ~/wp-content/', 'dashboard-directory-size' ) ) );
-
-			add_settings_field( 'show-database-size', __( 'Show Database Size', 'dashboard-directory-size' ), 'Dashboard_Directory_Size_Settings::settings_yes_no', $key, $section,
-				array( 'key' => $key, 'name' => 'show-database-size' ) );
-
-			add_settings_field( 'transient-time-minutes', __( 'Cache Size List (minutes)', 'dashboard-directory-size' ), 'Dashboard_Directory_Size_Settings::settings_input', $key, $section,
-				array( 'key' => $key, 'name' => 'transient-time-minutes', 'type' => 'number', 'min' => 0, 'max' => 1440,  'step' => 1, 'after' => __( 'Caches the directory sizes as a transient to reduce server load, 0 to disable', 'dashboard-directory-size' ) ) );
-
-			add_settings_field( 'rest-api-support', __( 'REST API Support', 'dashboard-directory-size' ), 'Dashboard_Directory_Size_Settings::settings_yes_no', $key, $section,
-				array( 'key' => $key, 'name' => 'rest-api-support', 'after' => __( 'Exposes data via the dashboard-directory-size endpoint in the WP REST API', 'dashboard-directory-size' ) ) );
+			return $common_directories;
 		}
-
 
 		static public function sanitize_general_settings( $settings ) {
 
