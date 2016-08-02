@@ -348,4 +348,22 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 
 	}
 
+	public function test_setting_is_enabled() {
+
+		// Return an actual setting
+		$this->mock_get_option( Dashboard_Directory_Size_Settings::$settings_key_general, array( 'show-database-size' => '1' ) );
+
+		$this->mock_wp_parse_args(
+			array( 'show-database-size' => '1'  ), // args
+			array( 'show-database-size' => '0'  ), // default
+			array( 'show-database-size' => '1'  )  // return
+			);
+
+
+		$enabled = Dashboard_Directory_Size_Settings::setting_is_enabled( null, Dashboard_Directory_Size_Settings::$settings_key_general, 'show-database-size' );
+
+		$this->assertTrue( $enabled );
+
+	}
+
 }
