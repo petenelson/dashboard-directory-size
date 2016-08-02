@@ -320,4 +320,32 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 		Dashboard_Directory_Size_Settings::admin_init();
 	}
 
+	public function test_sanitize_general_settings() {
+
+		// Create some unsanitized settings
+		$settings = array(
+			'transient-time-minutes' => 'sixty',
+			'custom-directories'     => 'path<script>',
+			);
+	
+		// Sanitize them
+		$settings = Dashboard_Directory_Size_Settings::sanitize_general_settings( $settings );
+
+		$this->assertEquals( 0,      $settings['transient-time-minutes'] );
+		$this->assertEquals( 'path', $settings['custom-directories'] );  // FILTER_SANITIZE_STRING
+
+		// Create some valid settings
+		$settings = array(
+			'transient-time-minutes' => '60',
+			'custom-directories'     => '/var/wordpress/wp-content|WP Content',
+			);
+
+		// Sanitize them
+		$settings = Dashboard_Directory_Size_Settings::sanitize_general_settings( $settings );
+
+		$this->assertEquals( 60,                                     $settings['transient-time-minutes'] );
+		$this->assertEquals( '/var/wordpress/wp-content|WP Content', $settings['custom-directories'] );  // FILTER_SANITIZE_STRING
+
+	}
+
 }
