@@ -236,10 +236,21 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				$min = intval( $args['min'] );
 				$max = intval( $args['max'] );
 				$step = intval( $args['step'] );
-				$min_max_step = " step='{$step}' min='{$min}' max='{$max}' ";
+				$min_max_step = sprintf( 'step="%d" min="%d" max="%d" ', $step, $min, $max );
 			}
 
-			echo "<div><input id='{$name}' name='{$key}[{$name}]'  type='{$type}' value='" . $value . "' size='{$size}' maxlength='{$maxlength}' {$min_max_step} /></div>";
+
+			?>
+				<div>
+					<input id="<?php echo esc_attr( $name ); ?>"
+					name="<?php echo esc_attr( "{$key}[{$name}]" ) ?>"
+					type="<?php echo esc_attr( $type ); ?>"
+					value="<?php echo esc_attr( $value ); ?>"
+					size="<?php echo esc_attr( $size ); ?>"
+					maxlength="<?php echo esc_attr( $maxlength ); ?>"
+					<?php echo $min_max_step; ?> />
+				</div>
+			<?php 
 
 			self::output_after( $after );
 

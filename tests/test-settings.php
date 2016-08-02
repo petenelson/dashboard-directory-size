@@ -366,4 +366,95 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 
 	}
 
+	public function test_settings_input() {
+
+		M::wpPassthruFunction( 'esc_attr' );
+		M::wpPassthruFunction( 'wp_kses_post' );
+
+		// Return an actual setting
+		$this->mock_get_option( Dashboard_Directory_Size_Settings::$settings_key_general, array( 'text-option' => 'text-value' ) );
+		$this->mock_get_option( Dashboard_Directory_Size_Settings::$settings_key_general, array( 'text-number-option' => '60' ) );
+
+		$args = array(
+			'name'      => 'text-option',
+			'key'       => Dashboard_Directory_Size_Settings::$settings_key_general,
+			'maxlength' => 20,
+			'size'      => 20,
+			'after'     => 'After text',
+			'type'      => 'text',
+			'min'       => 0,
+			'max'       => 0,
+			'step'      => 1,
+		);
+
+		$defaults = array(
+			'name'      => '',
+			'key'       => '',
+			'maxlength' => 50,
+			'size'      => 30,
+			'after'     => '',
+			'type'      => 'text',
+			'min'       => 0,
+			'max'       => 0,
+			'step'      => 1,
+		);
+
+		$return = $args;
+
+		$this->mock_wp_parse_args(
+			$args, // args
+			$defaults, // default
+			$return  // return
+			);
+
+
+		ob_start();
+		Dashboard_Directory_Size_Settings::settings_input( $args );
+		$input = ob_get_clean();
+
+		$this->assertContains( '<input id="text-option"', $input );
+		$this->assertContains( 'name="dashboard-directory-size-settings-general[text-option]"', $input );
+		$this->assertContains( 'type="text"', $input );
+		$this->assertContains( 'value="text-value"', $input );
+		$this->assertContains( 'size="20"', $input );
+		$this->assertContains( 'maxlength="20"', $input );
+
+
+		// update the output to a number field, check it again
+
+		$args = array(
+			'name'      => 'text-number-option',
+			'key'       => Dashboard_Directory_Size_Settings::$settings_key_general,
+			'maxlength' => 4,
+			'size'      => 4,
+			'after'     => 'After text',
+			'type'      => 'number',
+			'min'       => '1',
+			'max'       => '100',
+			'step'      => '2',
+		);
+
+		$return = $args;
+
+		$this->mock_wp_parse_args(
+			$args, // args
+			$defaults, // default
+			$return  // return
+			);
+
+		ob_start();
+		Dashboard_Directory_Size_Settings::settings_input( $args );
+		$input = ob_get_clean();
+
+		$this->assertContains( 'type="number"', $input );
+		$this->assertContains( 'value="60"', $input );
+		$this->assertContains( 'size="4"', $input );
+		$this->assertContains( 'maxlength="4"', $input );
+		$this->assertContains( 'min="1"', $input );
+		$this->assertContains( 'max="100"', $input );
+		$this->assertContains( 'step="2"', $input );
+
+
+	}
+
 }
