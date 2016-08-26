@@ -457,4 +457,91 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 
 	}
 
+	public function test_settings_checkbox_list() {
+
+		M::wpPassthruFunction( 'esc_attr' );
+		M::wpPassthruFunction( 'esc_html' );
+
+		// Return an actual setting
+		$this->mock_get_option( Dashboard_Directory_Size_Settings::$settings_key_general, array( 'checklist-option' => array( 'item2' ) ) );
+
+		// Mock empty setting
+		$this->mock_get_option( Dashboard_Directory_Size_Settings::$settings_key_general, array( 'checklist-option-empty' => false ) );
+
+		$args = array(
+			'name'      => 'checklist-option',
+			'key'       => Dashboard_Directory_Size_Settings::$settings_key_general,
+			'items'     => array( 'item1' => 'Item 1', 'item2' => 'Item 2' ),
+			'after'     => 'After text',
+			'legend'    => 'Legend',
+		);
+
+		$defaults = array(
+			'name'      => '',
+			'key'       => '',
+			'items'     => array(),
+			'after'     => '',
+			'legend'    => '',
+		);
+
+		$return = $args;
+
+		$this->mock_wp_parse_args(
+			$args, // args
+			$defaults, // default
+			$return  // return
+			);
+
+
+		// Mock the checked call, item1 is false
+		M::wpFunction( 'checked', array(
+			'times' => 3,
+			'args' => array(
+				false,
+				),
+			)
+		);
+
+		// item2 is true
+		M::wpFunction( 'checked', array(
+			'times' => 1,
+			'args' => array(
+				true,
+				),
+			'return' => 'checked="checked"',
+			)
+		);
+
+		ob_start();
+		Dashboard_Directory_Size_Settings::settings_checkbox_list( $args );
+		$input = ob_get_clean();
+
+		$this->assertContains( 'name="dashboard-directory-size-settings-general[checklist-option][]"', $input );
+		$this->assertContains( '<input type="checkbox"', $input );
+		$this->assertContains( 'value="item1"', $input );
+		$this->assertContains( 'value="item2"', $input );
+		$this->assertContains( 'Item 1', $input );
+		$this->assertContains( 'Item 2', $input );
+
+		// TODO figure out checked output
+
+		// Update the args for the empty options
+		$args['name'] = 'checklist-option-empty';
+
+		$this->mock_wp_parse_args(
+			$args, // args
+			$defaults, // default
+			$return  // return
+			);
+
+
+		ob_start();
+		Dashboard_Directory_Size_Settings::settings_checkbox_list( $args );
+		$input = ob_get_clean();
+
+
+
+
+	}
+
 }

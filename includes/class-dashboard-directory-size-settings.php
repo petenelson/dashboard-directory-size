@@ -12,6 +12,11 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 		static public $plugin_settings_tabs  = array();
 
 
+		/**
+		 * Hooks for the plugins_loaded action
+		 *
+		 * @return void
+		 */
 		static public function plugins_loaded() {
 			// admin menus
 			add_action( 'admin_init', 'Dashboard_Directory_Size_Settings::admin_init' );
@@ -256,9 +261,15 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 		}
 
-
+		/**
+		 * Outputs a checkbox list.
+		 *
+		 * @param  array $args
+		 * @return void
+		 */
 		static public function settings_checkbox_list( $args ) {
-			extract( wp_parse_args( $args,
+
+			$args = wp_parse_args( $args,
 				array(
 					'name' => '',
 					'key' => '',
@@ -266,10 +277,16 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 					'after' => '',
 					'legend' => '',
 				)
-			) );
+			);
+
+			$name    = $args['name'];
+			$key     = $args['key'];
+			$items   = $args['items'];
+			$after   = $args['after'];
+			$legend  = $args['legend'];
 
 			$option = get_option( $key );
-			$values = isset( $option[$name] ) ? $option[$name] : '';
+			$values = isset( $option[ $name ] ) ? $option[ $name 	] : '';
 			if ( ! is_array( $values ) ) {
 				$values = array();
 			}
