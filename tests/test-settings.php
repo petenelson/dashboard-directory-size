@@ -461,6 +461,7 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 
 		M::wpPassthruFunction( 'esc_attr' );
 		M::wpPassthruFunction( 'esc_html' );
+		M::wpPassthruFunction( 'wp_kses_post' );
 
 		// Return an actual setting
 		$this->mock_get_option( Dashboard_Directory_Size_Settings::$settings_key_general, array( 'checklist-option' => array( 'item2' ) ) );
@@ -522,6 +523,7 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 		$this->assertContains( 'value="item2"', $input );
 		$this->assertContains( 'Item 1', $input );
 		$this->assertContains( 'Item 2', $input );
+		$this->assertContains( 'After text', $input );
 
 		// TODO figure out checked output
 
@@ -538,10 +540,58 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 		ob_start();
 		Dashboard_Directory_Size_Settings::settings_checkbox_list( $args );
 		$input = ob_get_clean();
+	}
+
+	public function test_settings_textarea() {
+
+		M::wpPassthruFunction( 'esc_attr' );
+		M::wpPassthruFunction( 'esc_html' );
+		M::wpPassthruFunction( 'wp_kses_post' );
+
+		// Return an actual setting
+		$this->mock_get_option( Dashboard_Directory_Size_Settings::$settings_key_general, array( 'textarea-option' => 'Hello world' ) );
+
+		$args = array(
+			'name'      => 'textarea-option',
+			'key'       => Dashboard_Directory_Size_Settings::$settings_key_general,
+			'rows'      => 8,
+			'cols'      => 4,
+			'after'     => 'After text',
+		);
+
+		$defaults = array(
+			'name'      => '',
+			'key'       => '',
+			'rows'      => 10,
+			'cols'      => 40,
+			'after'     => '',
+		);
+
+		$return = $args;
+
+		$this->mock_wp_parse_args(
+			$args, // args
+			$defaults, // default
+			$return  // return
+			);
 
 
+		ob_start();
+		Dashboard_Directory_Size_Settings::settings_textarea( $args );
+		$input = ob_get_clean();
+
+		$this->assertContains( 'name="dashboard-directory-size-settings-general[textarea-option]"', $input );
+		$this->assertContains( 'id="textarea-option"', $input );
+		$this->assertContains( '<textarea ', $input );
+		$this->assertContains( 'rows="8"', $input );
+		$this->assertContains( 'cols="4"', $input );
+		$this->assertContains( '>Hello world</textarea>', $input );
+		$this->assertContains( 'After text', $input );
 
 
 	}
+
+
+
 
 }

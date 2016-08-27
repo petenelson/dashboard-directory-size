@@ -307,13 +307,14 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				</fieldset>
 			<?php
 
+			self::output_after( $after );
+
 		}
 
 
 		static public function settings_textarea( $args ) {
 
-			// TODO don't use extract
-			extract( wp_parse_args( $args,
+			$args = wp_parse_args( $args,
 				array(
 					'name' => '',
 					'key' => '',
@@ -321,13 +322,22 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 					'cols' => 40,
 					'after' => '',
 				)
-			) );
+			);
 
+			$name   = $args['name'];
+			$key    = $args['key'];
+			$rows   = $args['rows'];
+			$cols   = $args['cols'];
+			$after  = $args['after'];
 
 			$option = get_option( $key );
-			$value = isset( $option[$name] ) ? esc_attr( $option[$name] ) : '';
+			$value  = isset( $option[$name] ) ? esc_attr( $option[$name] ) : '';
 
-			echo "<div><textarea id='{$name}' name='{$key}[{$name}]' rows='{$rows}' cols='{$cols}'>" . $value . "</textarea></div>";
+			?>
+				<div>
+					<textarea id="<?php echo esc_attr( $name ); ?>" name="<?php echo esc_attr( $key . '[' . $name . ']' ); ?>" rows="<?php echo esc_attr( $rows ); ?>" cols="<?php echo esc_attr( $cols ); ?>"><?php echo esc_html( $value ); ?></textarea>
+				</div>
+			<?php
 
 			self::output_after( $after );
 
