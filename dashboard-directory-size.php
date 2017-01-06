@@ -24,8 +24,7 @@ add_action( 'plugins_loaded', 'Dashboard_Directory_Size_i18n::plugins_loaded' );
 add_action( 'plugins_loaded', 'Dashboard_Directory_Size_Common::plugins_loaded' );
 add_action( 'plugins_loaded', 'Dashboard_Directory_Size_Dashboard_Widget::plugins_loaded' );
 add_action( 'plugins_loaded', 'Dashboard_Directory_Size_Settings::plugins_loaded' );
-
-// add_action( 'plugins_loaded', 'Dashboard_Directory_Size_Common::plugins_loaded' );
+add_action( 'plugins_loaded', 'Dashboard_Directory_Size_REST_API::plugins_loaded' );
 
 // handler for activation
 if ( class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
