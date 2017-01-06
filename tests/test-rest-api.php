@@ -33,4 +33,29 @@ class Test_Dashboard_Directory_Size_Rest_API extends Test_Dashboard_Directory_Si
 		$this->assertEquals( 'test-namespace', $namespace );
 	}
 
+	public function test_rest_api_init() {
+
+		// Enable the REST API endpoint for the plugin
+		M::onFilter( 'dashboard-directory-size-setting-is-enabled' )
+			->with( false, 'dashboard-directory-size-settings-general', 'rest-api-support' )
+			->reply( true );
+
+		// Mock the register_rest_route() call
+		M::wpFunction( 'register_rest_route', array(
+			'times'  => 3,
+			'return' => true,
+			)
+		);
+
+		Dashboard_Directory_Size_REST_API::rest_api_init();
+	}
+
+}
+
+class WP_REST_Server {
+	const READABLE = 'GET';
+	const CREATABLE = 'POST';
+	const EDITABLE = 'POST, PUT, PATCH';
+	const DELETABLE = 'DELETE';
+	const ALLMETHODS = 'GET, POST, PUT, PATCH, DELETE';
 }
