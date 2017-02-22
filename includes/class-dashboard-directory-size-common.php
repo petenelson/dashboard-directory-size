@@ -248,6 +248,10 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
+		static public function get_decimal_places() {
+			return intval( apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get', 0, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'decimal-places' ) );
+		}
+
 		static public function flush_sizes_on_item_match( $item ) {
 			// hook for deleted plugins and deleted themes
 			$flushable_items = array( 'active_plugins', 'uninstall_plugins', 'update_themes' );
@@ -283,7 +287,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			if ( is_array( $results ) ) {
 				for( $i = 0; $i < count( $results ); $i++ ) {
 					if ( ! empty( $results[ $i ]['size'] ) ) {
-						$results[ $i ]['size_friendly'] = size_format( $results[ $i ]['size'] );
+						$results[ $i ]['size_friendly'] = size_format( $results[ $i ]['size'], self::get_decimal_places() );
 					} else {
 						$results[ $i ]['size_friendly'] = __( 'Empty', 'dashboard-directory-size' );
 					}

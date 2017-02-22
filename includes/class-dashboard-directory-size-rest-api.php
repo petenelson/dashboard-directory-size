@@ -69,7 +69,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
 			$response = new stdClass();
 			$response->path = $request['path'];
 			$response->size = Dashboard_Directory_Size_Common::get_directory_size( $request['path'], $refresh );
-			$response->size_friendly = size_format( $response->size );
+			$response->size_friendly = size_format( $response->size, Dashboard_Directory_Size_Common::get_decimal_places() );
 
 			return rest_ensure_response( $response );
 		}

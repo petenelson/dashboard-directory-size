@@ -26,6 +26,9 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 == Changelog ==
 
+= v1.6.0 ??, 2016 =
+* Added a setting for number of decimal places when displaying sizes.
+
 = v1.5.0 June 17, 2016 =
 * Viewing/refreshing directory sizes from the dahsboard widget is now done via an async REST API request
 
@@ -50,12 +53,11 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 == Upgrade Notice ==
 
+= v1.6.0 ??, 2016 =
+* Added a setting for number of decimal places when displaying sizes.
+
 = v1.5.0 June 17, 2016 =
 * Viewing/refreshing directory sizes from the dahsboard widget is now done via an async REST API request
-
-= v1.4.0 April 27, 2016 =
-* Added WP-CLI support: wp dashboard-directory-size
-* Added German translations (thanks Gahapati)
 
 
 == Frequently Asked Questions ==
