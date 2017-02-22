@@ -1,7 +1,5 @@
 module.exports = function( grunt ) {
 
-	require('phplint').gruntPlugin(grunt);
-
 	grunt.initConfig( {
 		pkg:    grunt.file.readJSON( 'package.json' ),
 
@@ -114,7 +112,8 @@ module.exports = function( grunt ) {
 		'grunt-wp-i18n',
 		'grunt-potomo',
 		'grunt-wp-readme-to-markdown',
-		'grunt-insert'
+		'grunt-insert',
+		'grunt-phplint'
 		];
 
 	for	( var i = 0; i < tasks.length; i++ ) {

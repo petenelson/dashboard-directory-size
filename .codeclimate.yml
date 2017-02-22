@@ -17,13 +17,19 @@ engines:
     checks:
       Controversial/CamelCaseClassName:
         enabled: false
-      CleanCode/ElseExpression:
-        enabled: false
       Controversial/CamelCaseParameterName:
+        enabled: false
+      Controversial/CamelCaseVariableName:
         enabled: false
       Controversial/CamelCaseMethodName:
         enabled: false
-      Controversial/CamelCaseVariableName:
+      Controversial/CamelCasePropertyName:
+        enabled: false
+      CleanCode/ElseExpression:
+        enabled: false
+      CleanCode/StaticAccess:
+        enabled: false
+      Naming/ShortVariable:
         enabled: false
 ratings:
   paths:

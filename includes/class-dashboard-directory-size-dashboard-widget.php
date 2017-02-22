@@ -7,29 +7,28 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 	class Dashboard_Directory_Size_Dashboard_Widget {
 
 
-		public function plugins_loaded( ) {
-
-			add_action( 'wp_dashboard_setup', array( $this, 'register_dashboard_widgets' ) );
-			add_action( 'admin_init', array( $this, 'check_refresh_size_list' ) );
-			add_action( 'admin_init', array( $this, 'register_scripts') );
+		static public function plugins_loaded( ) {
+			add_action( 'wp_dashboard_setup', 'Dashboard_Directory_Size_Dashboard_Widget::register_dashboard_widgets' );
+			add_action( 'admin_init', 'Dashboard_Directory_Size_Dashboard_Widget::check_refresh_size_list' );
+			add_action( 'admin_init', 'Dashboard_Directory_Size_Dashboard_Widget::register_scripts' );
 		}
 
 
-		public function register_dashboard_widgets() {
+		static public function register_dashboard_widgets() {
 
 			// filterable
-			$can_show_widget =  $this->can_show_widget();
+			$can_show_widget =  self::can_show_widget();
 
 			if ( $can_show_widget ) {
 				wp_add_dashboard_widget( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget',
 					__('Dashboard Directory Size', 'dashboard-directory-size' ),
-					array( $this, 'dashboard_widget' )
+					'Dashboard_Directory_Size_Dashboard_Widget::dashboard_widget'
 				);
 			}
 		}
 
 
-		public function register_scripts() {
+		static public function register_scripts() {
 
 			wp_register_script( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget', plugins_url( '/admin/js/dashboard-widget.js', dirname( __FILE__ ) ), array( 'jquery' ), Dashboard_Directory_Size_Common::VERSION, true );
 			wp_register_style( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget', plugins_url( '/admin/css/dashboard-widget.css', dirname( __FILE__ ) ), array( ), Dashboard_Directory_Size_Common::VERSION );
@@ -37,7 +36,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 		}
 
 
-		public function dashboard_widget() {
+		static public function dashboard_widget() {
 
 			wp_enqueue_script( 'jquery' );
 			wp_enqueue_script( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget' );
@@ -60,7 +59,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 			?>
 				<div class="inside">
-					<?php $this->display_sizes_table(); ?>
+					<?php self::display_sizes_table(); ?>
 					<p>
 						<a href="<?php echo admin_url( 'options-general.php?page=' . Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings' ); ?>"><?php esc_html_e( 'Settings' ); ?></a> | 
 						<a class="refresh" href="#refresh"><?php esc_html_e( 'Refresh', 'dashboard-directory-size' ); ?></a>
@@ -71,20 +70,20 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 		}
 
 
-		public function check_refresh_size_list() {
+		static public function check_refresh_size_list() {
 			$action = filter_input( INPUT_GET, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-action', FILTER_SANITIZE_STRING );
-			if ( $this->can_show_widget() && $action === 'refresh' && wp_verify_nonce( filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING ), 'refresh' ) ) {
+			if ( self::can_show_widget() && $action === 'refresh' && wp_verify_nonce( filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING ), 'refresh' ) ) {
 				do_action( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-flush-sizes-transient' );
 			}
 		}
 
 
-		private function can_show_widget() {
+		static public function can_show_widget() {
 			return apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-can-show-widget', current_user_can( 'manage_options' ) );
 		}
 
 
-		private function display_sizes_table() {
+		static public function display_sizes_table() {
 
 			$directories = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
 			$classes     = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes-table-classes', 'wp-list-table widefat striped dashboard-directory-size-table' );
@@ -99,7 +98,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 						</tr>
 					</thead>
 					<tbody>
-						<?php $this->display_size_rows( $directories ); ?>
+						<?php self::display_size_rows( $directories ); ?>
 					</tbody>
 				</table>
 
@@ -107,7 +106,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 		}
 
 
-		private function display_size_rows( $directories ) {
+		static public function display_size_rows( $directories ) {
 			foreach ( $directories as $directory ) {
 				$size = intval( $directory['size'] );
 
@@ -119,7 +118,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 				?>
 					<tr>
 						<td class="cell-name"><?php echo esc_html( $directory['name'] ) ?></td>
-						<td class="cell-path"><?php $this->output_trimmed_path( $directory['path'] ) ?></td>
+						<td class="cell-path"><?php self::output_trimmed_path( $directory['path'] ) ?></td>
 						<td class="<?php echo esc_attr( implode( ' ', $cell_size_class ) ); ?>" data-path="<?php echo esc_attr( $directory['path'] ); ?>">
 
 							<span class="spinner <?php echo ( -2 === $size ? 'is-active' : '' ); ?> hidden"></span>
@@ -145,7 +144,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 		}
 
 
-		private function output_trimmed_path( $path ) {
+		static public function output_trimmed_path( $path ) {
 
 			$trim_results = Dashboard_Directory_Size_Common::trim_path( $path );
 
