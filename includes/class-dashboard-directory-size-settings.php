@@ -36,6 +36,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				'common-directories'       => array( 'uploads', 'themes', 'plugins' ),
 				'show-database-size'       => '1',
 				'custom-directories'       => '',
+				'decimal-places'           => 0,
 			);
 		}
 
@@ -124,6 +125,25 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				array(
 					'key'  => $key,
 					'name' => 'show-database-size',
+					)
+				);
+
+			// Add a numeric input for the decimal places time.
+			add_settings_field(
+				'decimal-places',
+				__( 'Decimal Places', 'dashboard-directory-size' ),
+				'Dashboard_Directory_Size_Settings::settings_input',
+				$key,
+				$section,
+				array(
+					'key'   => $key,
+					'name'  =>'decimal-places',
+					'type'  => 'number',
+					'min'   => 0,
+					'max'   => 2,
+					'step'  => 1,
+					'after' => __( 'Number of decimal places used when displaying sizes.', 'dashboard-directory-size' ),
+					'default' => 0,
 					)
 				);
 
@@ -223,6 +243,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 					'min'       => 0,
 					'max'       => 0,
 					'step'      => 1,
+					'default'   => '',
 				)
 			);
 
@@ -232,9 +253,10 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 			$size        = $args['size'];
 			$after       = $args['after'];
 			$type        = $args['type'];
+			$default     = $args['default'];
 
 			$option      = get_option( $key );
-			$value       = isset( $option[ $name ] ) ? esc_attr( $option[ $name ] ) : '';
+			$value       = isset( $option[ $name ] ) ? esc_attr( $option[ $name ] ) : $default;
 
 			$min_max_step = '';
 			if ( $type === 'number' ) {
@@ -377,7 +399,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 		static public function output_after( $after ) {
 			if ( ! empty( $after ) ) {
-				echo '<div>' . wp_kses_post( $after ) . '</div>';
+				echo '<p class="description">' . wp_kses_post( $after ) . '</p>';
 			}
 		}
 
