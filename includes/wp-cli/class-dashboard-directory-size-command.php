@@ -45,7 +45,7 @@ class Dashboard_Directory_Size_Command extends Dashboard_Directory_Size_Base_Com
 
 			if ( -2 === $directory['size'] ) {
 				$directory['size'] = Dashboard_Directory_Size_Common::get_directory_size( $directory['path'] );
-				$directory['size_friendly'] = size_format( $directory['size'] );
+				$directory['size_friendly'] = size_format( $directory['size'], Dashboard_Directory_Size_Common::get_decimal_places() );
 			}
 
 			switch ( intval( $directory['size'] ) ) {

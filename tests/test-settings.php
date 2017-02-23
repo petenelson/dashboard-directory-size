@@ -31,6 +31,7 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 		$this->assertEquals( $settings['common-directories'], array( 'uploads', 'themes', 'plugins' ) );
 		$this->assertEquals( $settings['show-database-size'], '1' );
 		$this->assertEquals( $settings['custom-directories'], '' );
+		$this->assertEquals( $settings['decimal-places'], 0 );
 	}
 
 	public function test_activation_hook() {
@@ -252,6 +253,29 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 			)
 		);
 
+		// Mock the decimal-places numeric input field
+		M::wpFunction( 'add_settings_field', array(
+			'times' => 1,
+			'args' => array(
+				'decimal-places',
+				'Decimal Places',
+				'Dashboard_Directory_Size_Settings::settings_input',
+				Dashboard_Directory_Size_Settings::$settings_key_general,
+				'general',
+				array(
+					'key'   => Dashboard_Directory_Size_Settings::$settings_key_general,
+					'name'  =>'decimal-places',
+					'type'  => 'number',
+					'min'   => 0,
+					'max'   => 2,
+					'step'  => 1,
+					'after' => 'Number of decimal places used when displaying sizes.',
+					'default' => 0,
+					),
+				),
+			)
+		);
+
 		// Mock the transient-time-minutes numeric input field
 		M::wpFunction( 'add_settings_field', array(
 			'times' => 1,
@@ -385,6 +409,7 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 			'min'       => 0,
 			'max'       => 0,
 			'step'      => 1,
+			'default'   => 'test',
 		);
 
 		$defaults = array(
@@ -397,6 +422,7 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 			'min'       => 0,
 			'max'       => 0,
 			'step'      => 1,
+			'default'   => '',
 		);
 
 		$return = $args;
@@ -432,6 +458,7 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 			'min'       => '1',
 			'max'       => '100',
 			'step'      => '2',
+			'default'   => '60',
 		);
 
 		$return = $args;

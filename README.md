@@ -9,8 +9,6 @@
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
 [![Code Climate](https://codeclimate.com/github/petenelson/dashboard-directory-size/badges/gpa.svg)](https://codeclimate.com/github/petenelson/dashboard-directory-size)
-[![Test Coverage](https://codeclimate.com/github/petenelson/dashboard-directory-size/badges/coverage.svg)](https://codeclimate.com/github/petenelson/dashboard-directory-size/coverage)
-[![Travis CS](https://api.travis-ci.org/petenelson/dashboard-directory-size.svg)](https://travis-ci.org/petenelson/dashboard-directory-size)
 
 
 Dashboard widget to display directory sizes
@@ -30,6 +28,9 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 
 ## Changelog ##
+
+### v1.6.0 ??, 2016 ###
+* Added a setting for number of decimal places when displaying sizes.
 
 ### v1.5.0 June 17, 2016 ###
 * Viewing/refreshing directory sizes from the dahsboard widget is now done via an async REST API request
@@ -55,12 +56,11 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 ## Upgrade Notice ##
 
+### v1.6.0 ??, 2016 ###
+* Added a setting for number of decimal places when displaying sizes.
+
 ### v1.5.0 June 17, 2016 ###
 * Viewing/refreshing directory sizes from the dahsboard widget is now done via an async REST API request
-
-### v1.4.0 April 27, 2016 ###
-* Added WP-CLI support: wp dashboard-directory-size
-* Added German translations (thanks Gahapati)
 
 
 ## Frequently Asked Questions ##

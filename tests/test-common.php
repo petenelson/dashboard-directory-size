@@ -165,6 +165,17 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 		$this->assertEquals( 90, $time );
 	}
 
+	public function test_get_decimal_places() {
+
+		// Mock a decimal places
+		M::onFilter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get' )
+			->with( 0, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'decimal-places' )
+			->reply( 2 );
+
+		$time = Dashboard_Directory_Size_Common::get_decimal_places();
+		$this->assertEquals( 2, $time );
+	}
+
 	public function test_get_database_size() {
 		global $wpdb;
 
@@ -394,6 +405,12 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 	}
 
 	public function test_apply_friendly_sizes() {
+
+		// Mock decimal places
+		M::onFilter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get' )
+			->with( 0, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'decimal-places' )
+			->reply( 0 );
+
 		$dirs = array(
 				array( 'size' => 100 ),
 				array( 'size' => 200 ),
@@ -402,14 +419,14 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 
 		M::wpFunction( 'size_format', array(
 			'times' => 1,
-			'args' => 100,
+			'args' => array( 100, 0 ),
 			'return' => '100MB',
 			)
 		);
 
 		M::wpFunction( 'size_format', array(
 			'times' => 1,
-			'args' => 200,
+			'args' => array( 200, 0 ),
 			'return' => '200MB',
 			)
 		);
@@ -431,6 +448,11 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 	}
 
 	public function test_filter_get_directories() {
+
+		// Mock decimal places
+		M::onFilter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get' )
+			->with( 0, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'decimal-places' )
+			->reply( 0 );
 
 		// Mock some common dirs
 		M::onFilter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get' )
@@ -484,14 +506,14 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 
 		M::wpFunction( 'size_format', array(
 			'times' => 4,
-			'args' => -2,
+			'args' => array( -2, 0 ),
 			'return' => '',
 			)
 		);
 
 		M::wpFunction( 'size_format', array(
 			'times' => 1,
-			'args' => 100000,
+			'args' => array( 100000, 0 ),
 			'return' => '100MB',
 			)
 		);
