@@ -66,6 +66,23 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			// merge all the directories
 			$results = array_merge( $directories, $new_dirs );
 
+			// add total sum
+			if ( apply_filters( 'dashboard-directory-size-setting-is-enabled', false, 'dashboard-directory-size-settings-general', 'show-sum' ) ) {
+		
+				// Create the "Sum" directory.
+				$sum_dir = self::create_directory_info( __( 'Total Size', 'dashboard-directory-size' ), '.' );
+				$sum_dir['path'] = '';
+
+				// Sum up the sizes.
+				$sum_dir['size'] = array_reduce( $results, function( $carry, $dir ) {
+					$carry += $dir['size'];
+					return $carry;
+				} );
+
+				// Add the "Sum" directory.
+				$results[] = $sum_dir;
+			}
+
 			$results = self::apply_friendly_sizes( $results );
 
 			// allow filtering of the results
