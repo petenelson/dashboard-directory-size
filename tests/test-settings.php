@@ -458,6 +458,7 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 			'min'       => '1',
 			'max'       => '100',
 			'step'      => '2',
+			'default'   => '60',
 		);
 
 		$return = $args;
