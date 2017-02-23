@@ -35,6 +35,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				'transient-time-minutes'   => 360,
 				'common-directories'       => array( 'uploads', 'themes', 'plugins' ),
 				'show-database-size'       => '1',
+				'show-sum'                 => '0',
 				'custom-directories'       => '',
 				'decimal-places'           => 0,
 			);
@@ -125,6 +126,19 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 				array(
 					'key'  => $key,
 					'name' => 'show-database-size',
+					)
+				);
+
+			// Add yes/no radio for sum of all things.
+			add_settings_field(
+				'show-sum',
+				__( 'Show Total Sum of All Items', 'dashboard-directory-size' ),
+				'Dashboard_Directory_Size_Settings::settings_yes_no',
+				$key,
+				$section,
+				array(
+					'key'  => $key,
+					'name' => 'show-sum',
 					)
 				);
 
