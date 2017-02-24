@@ -67,6 +67,28 @@ class Dashboard_Directory_Size_Command extends Dashboard_Directory_Size_Base_Com
 			$rows[] = $row;
 		}
 
+		// add total sum
+		if ( apply_filters( 'dashboard-directory-size-setting-is-enabled', false, 'dashboard-directory-size-settings-general', 'show-sum' ) ) {
+	
+			// Create the "Sum" directory.
+			$row = array();
+
+			$row[ __( 'Name', 'dashboard-directory-size' ) ] = __( 'Total Size', 'dashboard-directory-size' );
+			$row[ __( 'Path', 'dashboard-directory-size' ) ] = '';
+
+			// Sum up the sizes.
+			$bytes = array_reduce( $rows, function( $carry, $r ) {
+				$carry += $r[ __( 'Bytes', 'dashboard-directory-size' ) ] > -1 ? $r[ __( 'Bytes', 'dashboard-directory-size' ) ] : 0;
+				return $carry;
+			}, 0 );
+
+			$row[ __( 'Bytes', 'dashboard-directory-size' ) ] = $bytes;
+			$row[ __( 'Size', 'dashboard-directory-size' ) ] = size_format( $bytes, Dashboard_Directory_Size_Common::get_decimal_places() );
+
+			// Add the "Sum" directory.
+			$rows[] = $row;
+		}
+
 		$args = array( 'format' => $format );
 
 		$formatter = new \WP_CLI\Formatter(

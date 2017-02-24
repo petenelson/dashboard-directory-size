@@ -42,7 +42,7 @@ class Test_Dashboard_Directory_Size_Rest_API extends Test_Dashboard_Directory_Si
 
 		// Mock the register_rest_route() call
 		M::wpFunction( 'register_rest_route', array(
-			'times'  => 3,
+			'times'  => 4,
 			'return' => true,
 			)
 		);

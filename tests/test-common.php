@@ -480,6 +480,11 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 			->reply( true );
 
 
+		// Mock the total sum
+		M::onFilter( 'dashboard-directory-size-setting-is-enabled' )
+			->with( false, 'dashboard-directory-size-settings-general', 'show-sum' )
+			->reply( true );
+
 		global $wpdb;
 
 		$wpdb = Mockery::mock( '\WPDB' );
@@ -503,9 +508,14 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 			)
 		);
 
+		M::wpFunction( '__', array(
+			'times'  => 1,
+			'return' => 'Total Size',
+			)
+		);
 
 		M::wpFunction( 'size_format', array(
-			'times' => 4,
+			'times' => 5,
 			'args' => array( -2, 0 ),
 			'return' => '',
 			)
@@ -518,16 +528,18 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 			)
 		);
 
+
 		// Get the directories above
 		$dirs = Dashboard_Directory_Size_Common::filter_get_directories( array() );
 
-		$this->assertCount( 5, $dirs );
+		$this->assertCount( 6, $dirs );
 
 		$this->assertEquals( 'uploads', $dirs[0]['name'] );
 		$this->assertEquals( 'plugins', $dirs[1]['name'] );
 		$this->assertEquals( 'dir-1',   $dirs[2]['name'] );
 		$this->assertEquals( 'dir-2',   $dirs[3]['name'] );
 		$this->assertEquals( 'WP Database',   $dirs[4]['name'] );
+		$this->assertEquals( 'Total Size',    $dirs[5]['name'] );
 
 	}
 

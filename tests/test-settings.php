@@ -30,6 +30,7 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 		$this->assertEquals( $settings['transient-time-minutes'], 360 );
 		$this->assertEquals( $settings['common-directories'], array( 'uploads', 'themes', 'plugins' ) );
 		$this->assertEquals( $settings['show-database-size'], '1' );
+		$this->assertEquals( $settings['show-sum'], '0' );
 		$this->assertEquals( $settings['custom-directories'], '' );
 		$this->assertEquals( $settings['decimal-places'], 0 );
 	}
@@ -248,6 +249,23 @@ class Test_Dashboard_Directory_Size_Settings extends Test_Dashboard_Directory_Si
 				array(
 					'key' => Dashboard_Directory_Size_Settings::$settings_key_general,
 					'name' => 'show-database-size',
+					),
+				),
+			)
+		);
+
+		// Mock the show-sum checkbox list
+		M::wpFunction( 'add_settings_field', array(
+			'times' => 1,
+			'args' => array(
+				'show-sum',
+				'Show Total Sum of All Items',
+				'Dashboard_Directory_Size_Settings::settings_yes_no',
+				Dashboard_Directory_Size_Settings::$settings_key_general,
+				'general',
+				array(
+					'key' => Dashboard_Directory_Size_Settings::$settings_key_general,
+					'name' => 'show-sum',
 					),
 				),
 			)

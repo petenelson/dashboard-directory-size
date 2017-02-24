@@ -6,7 +6,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 	class Dashboard_Directory_Size_Common {
 
-		const VERSION         = '2016-06-16-03';
+		const VERSION         = '2017-02-23-01';
 		const PLUGIN_NAME     = 'dashboard-directory-size';
 
 
@@ -44,6 +44,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 		static public function filter_get_directories( $directories ) {
 
+			$cli = defined( 'WP_CLI' ) && WP_CLI;
+
 			$new_dirs = array();
 
 			// add common directories
@@ -65,6 +67,18 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 			// merge all the directories
 			$results = array_merge( $directories, $new_dirs );
+
+			// add total sum
+			if ( ! $cli && apply_filters( 'dashboard-directory-size-setting-is-enabled', false, 'dashboard-directory-size-settings-general', 'show-sum' ) ) {
+
+				// Create the "Sum" directory.
+				$sum_dir = self::create_directory_info( __( 'Total Size', 'dashboard-directory-size' ), '.' );
+				$sum_dir['sum'] = true;
+				$sum_dir['path'] = '';
+
+				// Add the "Sum" directory.
+				$results[] = $sum_dir;
+			}
 
 			$results = self::apply_friendly_sizes( $results );
 
@@ -159,6 +173,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			$database['name'] = 'WP ' . __( 'Database' );
 			$database['path'] = DB_NAME;
 			$database['size'] = $wpdb->get_var( $wpdb->prepare( "SELECT SUM(data_length + index_length) FROM information_schema.TABLES where table_schema = '%s' GROUP BY table_schema;", DB_NAME ) );
+			$database['database'] = true;
 
 			return array( $database );
 

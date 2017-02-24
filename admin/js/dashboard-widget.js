@@ -44,10 +44,16 @@
 
 		populateSizes: function( refresh ) {
 			var self = this;
-			self.table.find( '.cell-size-needed' ).each( function() {
+
+			var cellSum = this.table.find( '.cell-sum' );
+			cellSum.find( '.spinner' ).addClass( 'is-active' ).removeClass( 'hidden' );
+			cellSum.find( '.size' ).text( '' );
+
+			self.table.find( '.cell-size-data' ).each( function() {
 				var el = $( this );
 				el.find( '.spinner' ).addClass( 'is-active' ).removeClass( 'hidden' );
-				el.find( '.size' ).html( '' );
+				el.find( '.size' ).text( '' );
+				el.removeClass( 'cell-has-size' ).addClass( 'cell-size-needed' );
 				self.getSize( el, refresh );
 			} );
 
@@ -76,9 +82,38 @@
 
 		populateSize: function( el, response ) {
 			if ( response ) {
-				el.find( '.spinner' ).removeClass( 'is-active' ).addClass( 'hidden' )
-				el.find( '.size' ).html( response.size_friendly );
+				el.find( '.spinner' ).removeClass( 'is-active' ).addClass( 'hidden' );
+				el.find( '.size' ).text( response.size_friendly ).data( 'size', response.size );
+				el.addClass( 'cell-has-size' ).removeClass( 'cell-size-needed' );
+				Dashboard_Directory_Size.updateTotalSize();
 			}
+		},
+
+		updateTotalSize: function() {
+
+			if ( this.table.find( '.cell-size-needed' ).length > 0 )  {
+				return;
+			}
+
+			var totalSize = 0;
+			this.table.find( '.cell-has-size' ).each( function() {
+				totalSize += parseInt( $(this).find( '.size' ).data( 'size' ) );
+			} );
+
+			var self = this;
+
+			$.ajax( {
+				url: Dashboard_Directory_Size_Settings.endpoints.size_format,
+				method: 'GET',
+				data: { "size":totalSize },
+				beforeSend: function ( xhr ) {
+					xhr.setRequestHeader( 'X-WP-Nonce', Dashboard_Directory_Size_Settings.nonce );
+				}
+			} ).done( function( response ) {
+				var cellSum = self.table.find( '.cell-sum' );
+				cellSum.find( '.spinner' ).removeClass( 'is-active' ).addClass( 'hidden' );
+				cellSum.find( '.size' ).text( response.size_friendly );
+			} );
 		}
 
 	};

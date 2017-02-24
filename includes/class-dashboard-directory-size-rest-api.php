@@ -38,6 +38,20 @@ if ( ! class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
 					)
 				);
 
+			register_rest_route( self::api_namespace(), '/v1/size-format',
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => 'Dashboard_Directory_Size_REST_API::get_size_format',
+					'permission_callback' => 'is_user_logged_in',
+					'args'                => array(
+						'size' => array(
+							'required' => true,
+							'sanitize_callback' => 'absint',
+							),
+						),
+					)
+				);
+
 			register_rest_route( self::api_namespace(), '/v1/directories',
 				array(
 					'methods'             => WP_REST_Server::READABLE,
@@ -74,6 +88,13 @@ if ( ! class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
 			return rest_ensure_response( $response );
 		}
 
+		static public function get_size_format( WP_REST_Request $request ) {
+
+			$response = new stdClass();
+			$response->size_friendly = size_format( $request['size'], Dashboard_Directory_Size_Common::get_decimal_places() );
+
+			return rest_ensure_response( $response );
+		}
 
 		static public function get_directories( WP_REST_Request $request ) {
 
