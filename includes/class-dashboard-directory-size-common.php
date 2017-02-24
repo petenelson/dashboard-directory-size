@@ -6,68 +6,81 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 	class Dashboard_Directory_Size_Common {
 
-		const VERSION         = '2016-06-16-03';
+		const VERSION         = '2017-02-24-01';
 		const PLUGIN_NAME     = 'dashboard-directory-size';
-		const TEXT_DOMAIN     = 'dashboard-directory-size';
 
 
-		public function plugins_loaded() {
+		static public function plugins_loaded() {
 
-			add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get', array( $this, 'filter_get_directory_size' ), 10, 2 );
-			add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array( $this, 'filter_get_directories' ), 10, 1 );
+			add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get', 'Dashboard_Directory_Size_Common::filter_get_directory_size', 10, 2 );
+			add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', 'Dashboard_Directory_Size_Common::filter_get_directories', 10, 1 );
 
 			// hook to allow purging of the transient
-			add_action( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-flush-sizes-transient', array( $this, 'flush_sizes_transient' ) );
+			add_action( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-flush-sizes-transient', 'Dashboard_Directory_Size_Common::flush_sizes_transient' );
 
-			$this->add_transient_flushers();
+			self::add_transient_flushers();
 
 		}
 
 
-		public function add_transient_flushers() {
+		static public function add_transient_flushers() {
 
 			// hooks and filters to allow us to purge the transient
 			foreach ( array( 'add_attachment', 'edit_attachment', 'upgrader_process_complete', 'deleted_plugin' ) as $action ) {
-				add_action( $action, array( $this, 'flush_sizes_transient' ) );
+				add_action( $action, 'Dashboard_Directory_Size_Common::flush_sizes_transient' );
 			}
 
 			foreach( array( 'wp_update_attachment_metadata', 'wp_handle_upload' ) as $filter ) {
-				add_filter( $filter, array( $this, 'flush_sizes_transient' ) );
+				add_filter( $filter, 'Dashboard_Directory_Size_Common::flush_sizes_transient' );
 			}
 
 			// this passes the specific option or transient affected
 			foreach ( array( 'update_option', 'deleted_site_transient' ) as $action ) {
-				add_action( $action, array( $this, 'flush_sizes_on_item_match' ) );
+				add_action( $action, 'Dashboard_Directory_Size_Common::flush_sizes_on_item_match' );
 			}
 
 		}
 
 
-		public function filter_get_directories( $directories ) {
+		static public function filter_get_directories( $directories ) {
+
+			$cli = defined( 'WP_CLI' ) && WP_CLI;
 
 			$new_dirs = array();
 
 			// add common directories
-			$common_dirs = $this->get_common_dirs();
+			$common_dirs = self::get_common_dirs();
 			if ( ! empty( $common_dirs) ) {
 				$new_dirs = array_merge( $new_dirs, $common_dirs );
 			}
 
 			// add custom directories
-			$custom_dirs = $this->get_custom_dirs();
+			$custom_dirs = self::get_custom_dirs();
 			if ( ! empty( $custom_dirs) ) {
 				$new_dirs = array_merge( $new_dirs, $custom_dirs );
 			}
 
 			// add database size
 			if ( apply_filters( 'dashboard-directory-size-setting-is-enabled', false, 'dashboard-directory-size-settings-general', 'show-database-size' ) ) {
-				$new_dirs = array_merge( $new_dirs, $this->get_database_size() );
+				$new_dirs = array_merge( $new_dirs, self::get_database_size() );
 			}
 
 			// merge all the directories
 			$results = array_merge( $directories, $new_dirs );
 
-			$results = $this->apply_friendly_sizes( $results );
+			// add total sum
+			if ( ! $cli && apply_filters( 'dashboard-directory-size-setting-is-enabled', false, 'dashboard-directory-size-settings-general', 'show-sum' ) ) {
+
+				// Create the "Sum" directory.
+				$sum_dir = self::create_directory_info( __( 'Total Size', 'dashboard-directory-size' ), '.' );
+				$sum_dir['sum'] = true;
+				$sum_dir['path'] = '';
+
+				// Add the "Sum" directory.
+				$results[] = $sum_dir;
+			}
+
+			$results = self::apply_friendly_sizes( $results );
 
 			// allow filtering of the results
 			$results = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes-generated', $results );
@@ -77,7 +90,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function get_common_dirs() {
+		static public function get_common_dirs() {
 
 			$dir_list = array();
 
@@ -87,8 +100,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 				foreach ( $common as $common_dir ) {
 
-					$path = $this->get_path_for_common_dir( $common_dir );
-					$new_dir = $this->create_directory_info( $common_dir, $path );
+					$path = self::get_path_for_common_dir( $common_dir );
+					$new_dir = self::create_directory_info( $common_dir, $path );
 
 					if ( ! empty( $new_dir ) ) {
 						$dir_list[] = $new_dir;
@@ -102,7 +115,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function get_custom_dirs() {
+		static public function get_custom_dirs() {
 
 			$dir_list = array();
 
@@ -113,7 +126,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 				if ( ! empty( $custom_dir_list ) ) {
 
 					foreach ( $custom_dir_list as $row ) {
-						$custom_dir = $this->get_custom_dir( $row );
+						$custom_dir = self::get_custom_dir( $row );
 						if ( ! empty( $custom_dir ) ) {
 							$dir_list[] = $custom_dir;
 						}
@@ -127,7 +140,14 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function get_custom_dir( $row ) {
+		/**
+		 * Converts a custom row entry from settings into a directory
+		 * info array.
+		 *
+		 * @param  string $row Entry from settings ( name | path )
+		 * @return array       Results from create_directory_info()
+		 */
+		static public function get_custom_dir( $row ) {
 
 			$parts = explode( '|', $row );
 			if ( ! empty( $parts ) && count( $parts ) == 2) {
@@ -136,7 +156,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 					$path = ABSPATH . substr( $path, 2 );
 				}
 
-				return $this->create_directory_info( trim( $parts[0] ), $path );
+				return self::create_directory_info( trim( $parts[0] ), $path );
 
 			}
 
@@ -145,21 +165,22 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function get_database_size() {
+		static public function get_database_size() {
+
+			global $wpdb;
 
 			$database = array();
 			$database['name'] = 'WP ' . __( 'Database' );
 			$database['path'] = DB_NAME;
-
-			global $wpdb;
 			$database['size'] = $wpdb->get_var( $wpdb->prepare( "SELECT SUM(data_length + index_length) FROM information_schema.TABLES where table_schema = '%s' GROUP BY table_schema;", DB_NAME ) );
+			$database['database'] = true;
 
 			return array( $database );
 
 		}
 
 
-		public function create_directory_info( $name, $path ) {
+		static public function create_directory_info( $name, $path ) {
 
 			if ( ! empty( $path ) ) {
 				$new_dir['path'] = $path;
@@ -173,7 +194,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function get_path_for_common_dir( $common_dir ) {
+		static public function get_path_for_common_dir( $common_dir ) {
 
 			switch ( $common_dir ) {
 				case 'uploads':
@@ -183,7 +204,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 					}
 
 				case 'themes':
-					return get_theme_root( );
+					return get_theme_root();
 
 				case 'plugins':
 					return WP_PLUGIN_DIR;
@@ -198,10 +219,11 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function filter_get_directory_size( $size, $path ) {
+		static public function filter_get_directory_size( $size, $path ) {
 			$size = self::get_directory_size( $path );
 			return $size;
 		}
+
 
 		static public function get_directory_size( $path, $refresh = false ) {
 
@@ -218,7 +240,9 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 				}
 			}
 
-			require_once ABSPATH . 'wp-includes/ms-functions.php';
+			if ( file_exists( ABSPATH . 'wp-includes/ms-functions.php' ) ) {
+				require_once ABSPATH . 'wp-includes/ms-functions.php';
+			}
 
 			if ( ! is_dir( $path ) ) {
 				$size = -1;
@@ -233,21 +257,26 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			return $size;
 		}
 
+
 		static public function get_transient_time() {
 			return intval( apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get', 60, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'transient-time-minutes' ) );
 		}
 
 
-		public function flush_sizes_on_item_match( $item ) {
+		static public function get_decimal_places() {
+			return intval( apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-setting-get', 0, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings-general', 'decimal-places' ) );
+		}
+
+		static public function flush_sizes_on_item_match( $item ) {
 			// hook for deleted plugins and deleted themes
 			$flushable_items = array( 'active_plugins', 'uninstall_plugins', 'update_themes' );
 			if ( in_array( $item, $flushable_items ) ) {
-				$this->flush_sizes_transient();
+				self::flush_sizes_transient();
 			}
 		}
 
 
-		public function flush_sizes_transient( $data = null ) {
+		static public function flush_sizes_transient( $data = null ) {
 
 			$directories = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
 			foreach( $directories as $directory ) {
@@ -264,21 +293,16 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 
-		public function sizes_transient_name() {
-			return Dashboard_Directory_Size_Common::PLUGIN_NAME . '-sizes';
-		}
-
-
 		static public function transient_path_key( $path ) {
 			return 'DD-Path-Size-' . md5( $path );
 		}
 
 
-		public function apply_friendly_sizes( $results ) {
+		static public function apply_friendly_sizes( $results ) {
 			if ( is_array( $results ) ) {
 				for( $i = 0; $i < count( $results ); $i++ ) {
 					if ( ! empty( $results[ $i ]['size'] ) ) {
-						$results[ $i ]['size_friendly'] = size_format( $results[ $i ]['size'] );
+						$results[ $i ]['size_friendly'] = size_format( $results[ $i ]['size'], self::get_decimal_places() );
 					} else {
 						$results[ $i ]['size_friendly'] = __( 'Empty', 'dashboard-directory-size' );
 					}

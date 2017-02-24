@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Mamane Dashboard Directory Size plugin
+ * Manage Dashboard Directory Size plugin
  */
 class Dashboard_Directory_Size_Command extends Dashboard_Directory_Size_Base_Command  {
 
@@ -43,8 +43,10 @@ class Dashboard_Directory_Size_Command extends Dashboard_Directory_Size_Base_Com
 
 			$bytes = '';
 
-			$directory['size'] = Dashboard_Directory_Size_Common::get_directory_size( $directory['path'] );
-			$directory['size_friendly'] = size_format( $directory['size'] );
+			if ( -2 === $directory['size'] ) {
+				$directory['size'] = Dashboard_Directory_Size_Common::get_directory_size( $directory['path'] );
+				$directory['size_friendly'] = size_format( $directory['size'], Dashboard_Directory_Size_Common::get_decimal_places() );
+			}
 
 			switch ( intval( $directory['size'] ) ) {
 				case -1:
@@ -62,6 +64,28 @@ class Dashboard_Directory_Size_Command extends Dashboard_Directory_Size_Base_Com
 			$row[ __( 'Size', 'dashboard-directory-size' ) ] = $size;
 			$row[ __( 'Bytes', 'dashboard-directory-size' ) ] = $bytes;
 
+			$rows[] = $row;
+		}
+
+		// add total sum
+		if ( apply_filters( 'dashboard-directory-size-setting-is-enabled', false, 'dashboard-directory-size-settings-general', 'show-sum' ) ) {
+	
+			// Create the "Sum" directory.
+			$row = array();
+
+			$row[ __( 'Name', 'dashboard-directory-size' ) ] = __( 'Total Size', 'dashboard-directory-size' );
+			$row[ __( 'Path', 'dashboard-directory-size' ) ] = '';
+
+			// Sum up the sizes.
+			$bytes = array_reduce( $rows, function( $carry, $r ) {
+				$carry += $r[ __( 'Bytes', 'dashboard-directory-size' ) ] > -1 ? $r[ __( 'Bytes', 'dashboard-directory-size' ) ] : 0;
+				return $carry;
+			}, 0 );
+
+			$row[ __( 'Bytes', 'dashboard-directory-size' ) ] = $bytes;
+			$row[ __( 'Size', 'dashboard-directory-size' ) ] = size_format( $bytes, Dashboard_Directory_Size_Common::get_decimal_places() );
+
+			// Add the "Sum" directory.
 			$rows[] = $row;
 		}
 
