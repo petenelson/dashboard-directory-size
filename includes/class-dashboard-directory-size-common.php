@@ -44,6 +44,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 		static public function filter_get_directories( $directories ) {
 
+			$cli = defined( 'WP_CLI' ) && WP_CLI;
+
 			$new_dirs = array();
 
 			// add common directories
@@ -67,8 +69,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			$results = array_merge( $directories, $new_dirs );
 
 			// add total sum
-			if ( apply_filters( 'dashboard-directory-size-setting-is-enabled', false, 'dashboard-directory-size-settings-general', 'show-sum' ) ) {
-		
+			if ( ! $cli && apply_filters( 'dashboard-directory-size-setting-is-enabled', false, 'dashboard-directory-size-settings-general', 'show-sum' ) ) {
+
 				// Create the "Sum" directory.
 				$sum_dir = self::create_directory_info( __( 'Total Size', 'dashboard-directory-size' ), '.' );
 				$sum_dir['path'] = '';
@@ -77,7 +79,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 				$sum_dir['size'] = array_reduce( $results, function( $carry, $dir ) {
 					$carry += $dir['size'];
 					return $carry;
-				} );
+				}, 0 );
 
 				// Add the "Sum" directory.
 				$results[] = $sum_dir;
