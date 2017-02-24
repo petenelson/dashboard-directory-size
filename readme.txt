@@ -28,7 +28,7 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 = v1.6.0 February 24, 2017 =
 * Added a setting for number of decimal places when displaying sizes.
-* Added ability to show a sum of all selected items.
+* Added ability to show a sum of all items.
 
 = v1.5.0 June 17, 2016 =
 * Viewing/refreshing directory sizes from the dahsboard widget is now done via an async REST API request
@@ -56,7 +56,7 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 = v1.6.0 February 24, 2017 =
 * Added a setting for number of decimal places when displaying sizes.
-* Added ability to show a sum of all selected items.
+* Added ability to show a sum of all items.
 
 = v1.5.0 June 17, 2016 =
 * Viewing/refreshing directory sizes from the dahsboard widget is now done via an async REST API request
