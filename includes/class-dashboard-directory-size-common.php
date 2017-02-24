@@ -6,7 +6,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 	class Dashboard_Directory_Size_Common {
 
-		const VERSION         = '2017-02-23-01';
+		const VERSION         = '2017-02-24-01';
 		const PLUGIN_NAME     = 'dashboard-directory-size';
 
 
