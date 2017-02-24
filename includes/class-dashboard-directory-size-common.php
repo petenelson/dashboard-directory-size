@@ -6,7 +6,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 	class Dashboard_Directory_Size_Common {
 
-		const VERSION         = '2016-06-16-03';
+		const VERSION         = '2017-02-23-01';
 		const PLUGIN_NAME     = 'dashboard-directory-size';
 
 
@@ -73,13 +73,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 				// Create the "Sum" directory.
 				$sum_dir = self::create_directory_info( __( 'Total Size', 'dashboard-directory-size' ), '.' );
+				$sum_dir['sum'] = true;
 				$sum_dir['path'] = '';
-
-				// Sum up the sizes.
-				$sum_dir['size'] = array_reduce( $results, function( $carry, $dir ) {
-					$carry += $dir['size'];
-					return $carry;
-				}, 0 );
 
 				// Add the "Sum" directory.
 				$results[] = $sum_dir;
@@ -178,6 +173,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			$database['name'] = 'WP ' . __( 'Database' );
 			$database['path'] = DB_NAME;
 			$database['size'] = $wpdb->get_var( $wpdb->prepare( "SELECT SUM(data_length + index_length) FROM information_schema.TABLES where table_schema = '%s' GROUP BY table_schema;", DB_NAME ) );
+			$database['database'] = true;
 
 			return array( $database );
 

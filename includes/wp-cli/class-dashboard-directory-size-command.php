@@ -78,7 +78,7 @@ class Dashboard_Directory_Size_Command extends Dashboard_Directory_Size_Base_Com
 
 			// Sum up the sizes.
 			$bytes = array_reduce( $rows, function( $carry, $r ) {
-				$carry += $r[ __( 'Bytes', 'dashboard-directory-size' ) ];
+				$carry += $r[ __( 'Bytes', 'dashboard-directory-size' ) ] > -1 ? $r[ __( 'Bytes', 'dashboard-directory-size' ) ] : 0;
 				return $carry;
 			}, 0 );
 

@@ -42,15 +42,18 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 			wp_enqueue_script( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget' );
 			wp_enqueue_style( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget' );
 
-			$size_endpont = rest_url( 'dashboard-directory-size/v1/size' );
+			$size_endpont =  rest_url( 'dashboard-directory-size/v1/size' );
+			$size_format_endpont =  rest_url( 'dashboard-directory-size/v1/size-format' );
 			if ( is_ssl() ) {
-				$size_endpont = str_replace( 'http://', 'https://', $size_endpont );
+				$size_endpont = set_url_scheme( $size_endpont, 'https' );
+				$size_format_endpont = set_url_scheme( $size_format_endpont, 'https' );
 			}
 
 			$settings = array(
 				'nonce'           => wp_create_nonce( 'wp_rest' ),
 				'endpoints'       => array(
-					'size'   => $size_endpont,
+					'size'           => $size_endpont,
+					'size_format'    => $size_format_endpont,
 					),
 				);
 
@@ -111,10 +114,23 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 				$size = intval( $directory['size'] );
 
 				$cell_size_class = array( 'cell-size' );
-				// a size of -2 means we need to load it via the REST API
-				if ( -2 === $size ) {
+				$data_size = '';
+
+				if ( ! empty( $directory['sum'] ) ) {
+					$cell_size_class[] = 'cell-sum';
+				} else if ( ! empty( $directory['database'] ) ) {
+					$cell_size_class[] = 'cell-database';
+					$cell_size_class[] = 'cell-has-size';
+					$data_size = ' data-size="' . esc_attr( $directory['size'] ) . '"';
+				} else if ( -2 === $size ) {
+					// a size of -2 means we need to load it via the REST API
+					$cell_size_class[] = 'cell-size-data';
 					$cell_size_class[] = 'cell-size-needed';
+				} else if ( $size > -1 ) {
+					$cell_size_class[] = 'cell-size-data';
+					$cell_size_class[] = 'cell-has-size';
 				}
+
 				?>
 					<tr>
 						<td class="cell-name"><?php echo esc_html( $directory['name'] ) ?></td>
@@ -122,7 +138,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 						<td class="<?php echo esc_attr( implode( ' ', $cell_size_class ) ); ?>" data-path="<?php echo esc_attr( $directory['path'] ); ?>">
 
 							<span class="spinner <?php echo ( -2 === $size ? 'is-active' : '' ); ?> hidden"></span>
-							<span class="size"><?php
+							<span class="size" <?php echo $data_size; ?>>
+							<?php
 
 								switch ( $size ) {
 									case -1:
