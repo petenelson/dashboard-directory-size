@@ -515,7 +515,7 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 		);
 
 		M::wpFunction( 'size_format', array(
-			'times' => 4,
+			'times' => 5,
 			'args' => array( -2, 0 ),
 			'return' => '',
 			)
@@ -528,13 +528,6 @@ class Test_Dashboard_Directory_Size_Common extends Test_Dashboard_Directory_Size
 			)
 		);
 
-		// This is the sum function.
-		M::wpFunction( 'size_format', array(
-			'times' => 1,
-			'args' => array( 99992, 0 ),
-			'return' => '99.2MB',
-			)
-		);
 
 		// Get the directories above
 		$dirs = Dashboard_Directory_Size_Common::filter_get_directories( array() );
