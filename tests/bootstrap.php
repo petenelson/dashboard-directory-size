@@ -45,3 +45,4 @@ require_once PROJECT . '/includes/class-dashboard-directory-size-dashboard-widge
 require_once PROJECT . '/includes/class-dashboard-directory-size-i18n.php';
 require_once PROJECT . '/includes/class-dashboard-directory-size-rest-api.php';
 require_once PROJECT . '/includes/class-dashboard-directory-size-settings.php';
+require_once PROJECT . '/includes/class-dashboard-directory-size-roles.php';

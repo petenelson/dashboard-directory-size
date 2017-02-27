@@ -82,7 +82,11 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 
 		static public function can_show_widget() {
-			return apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-can-show-widget', current_user_can( 'manage_options' ) );
+			return apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-can-show-widget', current_user_can( self::get_view_cap() ) );
+		}
+
+		static public function get_view_cap() {
+			return apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-view-widget-cap', 'view_dashboard_directory_size_widget' );
 		}
 
 

@@ -28,6 +28,7 @@ require_once DASHBOARD_DIRECTORY_SIZE_ROOT . 'includes/class-dashboard-directory
 require_once DASHBOARD_DIRECTORY_SIZE_ROOT . 'includes/class-dashboard-directory-size-settings.php';
 require_once DASHBOARD_DIRECTORY_SIZE_ROOT . 'includes/class-dashboard-directory-size-dashboard-widget.php';
 require_once DASHBOARD_DIRECTORY_SIZE_ROOT . 'includes/class-dashboard-directory-size-rest-api.php';
+require_once DASHBOARD_DIRECTORY_SIZE_ROOT . 'includes/class-dashboard-directory-size-roles.php';
 
 add_action( 'plugins_loaded', 'Dashboard_Directory_Size_i18n::plugins_loaded' );
 add_action( 'plugins_loaded', 'Dashboard_Directory_Size_Common::plugins_loaded' );
@@ -35,6 +36,7 @@ add_action( 'plugins_loaded', 'Dashboard_Directory_Size_Plugin::plugins_loaded' 
 add_action( 'plugins_loaded', 'Dashboard_Directory_Size_Dashboard_Widget::plugins_loaded' );
 add_action( 'plugins_loaded', 'Dashboard_Directory_Size_Settings::plugins_loaded' );
 add_action( 'plugins_loaded', 'Dashboard_Directory_Size_REST_API::plugins_loaded' );
+add_action( 'plugins_loaded', 'Dashboard_Directory_Size_Roles::plugins_loaded' );
 
 // handler for activation
 if ( class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
