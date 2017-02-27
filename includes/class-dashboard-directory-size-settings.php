@@ -469,7 +469,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 			switch ( $args['id'] ) {
 				case 'help';
-					include_once DASHBOARD_DIRECOTRY_SIZE_ROOT . 'admin/partials/admin-help.php';
+					include_once DASHBOARD_DIRECTORY_SIZE_ROOT . 'admin/partials/admin-help.php';
 					break;
 			}
 

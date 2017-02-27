@@ -7,5 +7,5 @@ $includes = array(
 	);
 
 foreach ( $includes as $include ) {
-	require_once DASHBOARD_DIRECOTRY_SIZE_ROOT . 'includes/wp-cli/' . $include;
+	require_once DASHBOARD_DIRECTORY_SIZE_ROOT . 'includes/wp-cli/' . $include;
 }
