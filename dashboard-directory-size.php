@@ -2,8 +2,8 @@
 /*
 Plugin Name: Dashboard Directory Size
 Description: Dashboard widget to display directory sizes
-Author: Pete Nelson <a href="https://twitter.com/GunGeekATX">(@GunGeekATX)</a>
-Version: 1.6.0
+Author: Pete Nelson <a href="https://twitter.com/CodeGeekATX">(@CodeGeekATX)</a>
+Version: 1.6.1
 Text Domain: dashboard-directory-size
 Domain Path: /languages
 */
@@ -14,11 +14,23 @@ if ( ! defined( 'DASHBOARD_DIRECOTRY_SIZE_ROOT' ) ) {
 	define( 'DASHBOARD_DIRECOTRY_SIZE_ROOT', trailingslashit( dirname( __FILE__ ) ) );
 }
 
-require_once DASHBOARD_DIRECOTRY_SIZE_ROOT . 'includes/class-dashboard-directory-size-common.php';
-require_once DASHBOARD_DIRECOTRY_SIZE_ROOT . 'includes/class-dashboard-directory-size-i18n.php';
-require_once DASHBOARD_DIRECOTRY_SIZE_ROOT . 'includes/class-dashboard-directory-size-settings.php';
-require_once DASHBOARD_DIRECOTRY_SIZE_ROOT . 'includes/class-dashboard-directory-size-dashboard-widget.php';
-require_once DASHBOARD_DIRECOTRY_SIZE_ROOT . 'includes/class-dashboard-directory-size-rest-api.php';
+if ( ! defined( 'DASHBOARD_DIRECOTRY_SIZE_INC' ) ) {
+	define( 'DASHBOARD_DIRECOTRY_SIZE_INC', DASHBOARD_DIRECOTRY_SIZE_ROOT . 'includes/' );
+}
+
+$files = [
+	'class-dashboard-directory-size-common.php',
+	'class-dashboard-directory-size-i18n.php',
+	'class-dashboard-directory-size-settings.php',
+	'class-dashboard-directory-size-dashboard-widget.php',
+	'class-dashboard-directory-size-rest-api.php',
+	'class-dashboard-directory-size-rest-api.php',
+	'sanitizers.php',
+];
+
+foreach( $files as $file ) {
+	require_once DASHBOARD_DIRECOTRY_SIZE_INC . $file;
+}
 
 add_action( 'plugins_loaded', 'Dashboard_Directory_Size_i18n::plugins_loaded' );
 add_action( 'plugins_loaded', 'Dashboard_Directory_Size_Common::plugins_loaded' );
