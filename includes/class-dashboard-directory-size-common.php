@@ -6,10 +6,14 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 	class Dashboard_Directory_Size_Common {
 
-		const VERSION         = '2017-02-24-01';
+		const VERSION         = '2024-02-18';
 		const PLUGIN_NAME     = 'dashboard-directory-size';
 
-
+		/**
+		 * Setup WordPress hooks and filters.
+		 *
+		 * @return void
+		 */
 		static public function plugins_loaded() {
 
 			add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get', 'Dashboard_Directory_Size_Common::filter_get_directory_size', 10, 2 );
@@ -19,9 +23,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			add_action( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-flush-sizes-transient', 'Dashboard_Directory_Size_Common::flush_sizes_transient' );
 
 			self::add_transient_flushers();
-
 		}
-
 
 		static public function add_transient_flushers() {
 
@@ -38,7 +40,6 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			foreach ( array( 'update_option', 'deleted_site_transient' ) as $action ) {
 				add_action( $action, 'Dashboard_Directory_Size_Common::flush_sizes_on_item_match' );
 			}
-
 		}
 
 
