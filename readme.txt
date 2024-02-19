@@ -1,10 +1,10 @@
 === Dashboard Directory Size ===
 Contributors: gungeekatx
 Tags: dashboard, dashboard widget, directory size, folder size
-Donate link: https://petenelson.com/
+Donate link: https://petenelson.io/
 Requires at least: 4.4
-Tested up to: 4.9
-Stable tag: 1.6.0
+Tested up to: 6.4.3
+Stable tag: 1.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,9 @@ Find us on [GitHub](https://github.com/petenelson/dashboard-directory-size)
 
 
 == Changelog ==
+
+= v1.6.1 February 17, 2024 =
+* Fixed deprecated notices for PHP 8.
 
 = v1.6.0 February 24, 2017 =
 * Added a setting for number of decimal places when displaying sizes.

@@ -1,5 +1,7 @@
 <?php
 
+use function \DashboardDirectorySize\Sanitizers\sanitized_get_field;
+
 if ( ! defined( 'ABSPATH' ) ) die( 'restricted access' );
 
 if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
@@ -59,12 +61,11 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 			wp_localize_script( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-dashboard-widget', 'Dashboard_Directory_Size_Settings', $settings );
 
-
 			?>
 				<div class="inside">
 					<?php self::display_sizes_table(); ?>
 					<p>
-						<a href="<?php echo admin_url( 'options-general.php?page=' . Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings' ); ?>"><?php esc_html_e( 'Settings' ); ?></a> | 
+						<a href="<?php echo esc_url( admin_url( 'options-general.php?page=' . Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings' ) ); ?>"><?php esc_html_e( 'Settings' ); ?></a> | 
 						<a class="refresh" href="#refresh"><?php esc_html_e( 'Refresh', 'dashboard-directory-size' ); ?></a>
 					</p>
 				</div>
@@ -74,8 +75,8 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 
 
 		static public function check_refresh_size_list() {
-			$action = filter_input( INPUT_GET, Dashboard_Directory_Size_Common::PLUGIN_NAME . '-action', FILTER_SANITIZE_STRING );
-			if ( self::can_show_widget() && $action === 'refresh' && wp_verify_nonce( filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING ), 'refresh' ) ) {
+			$action = sanitized_get_field( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-action' );
+			if ( self::can_show_widget() && $action === 'refresh' && wp_verify_nonce( sanitized_get_field( '_wpnonce' ), 'refresh' ) ) {
 				do_action( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-flush-sizes-transient' );
 			}
 		}
@@ -95,9 +96,9 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 				<table class="<?php echo esc_attr( $classes ); ?>">
 					<thead>
 						<tr>
-							<th><?php _e( 'Name', 'dashboard-directory-size' ); ?></th>
-							<th><?php _e( 'Path', 'dashboard-directory-size' ); ?></th>
-							<th><?php _e( 'Size', 'dashboard-directory-size' ); ?></th>
+							<th><?php esc_html_e( 'Name', 'dashboard-directory-size' ); ?></th>
+							<th><?php esc_html_e( 'Path', 'dashboard-directory-size' ); ?></th>
+							<th><?php esc_html_e( 'Size', 'dashboard-directory-size' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>

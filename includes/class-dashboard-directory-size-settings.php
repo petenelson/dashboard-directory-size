@@ -1,5 +1,7 @@
 <?php
 
+use function \DashboardDirectorySize\Sanitizers\sanitized_get_field;
+
 if ( ! defined( 'ABSPATH' ) ) die( 'restricted access' );
 
 if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
@@ -213,7 +215,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 		static public function sanitize_general_settings( $settings ) {
 
 			$settings['transient-time-minutes'] = intval( $settings['transient-time-minutes'] );
-			$settings['custom-directories'] = filter_var( $settings['custom-directories'], FILTER_SANITIZE_STRING );
+			$settings['custom-directories'] = wp_strip_all_tags( $settings['custom-directories'] );
 			return $settings;
 		}
 
@@ -440,7 +442,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 			</div>
 			<?php
 
-			$settings_updated = filter_input( INPUT_GET, 'settings-updated', FILTER_SANITIZE_STRING );
+			$settings_updated = sanitized_get_field( 'settings-updated' );
 			if ( ! empty( $settings_updated ) ) {
 				do_action( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-flush-sizes-transient' );
 			}
@@ -449,7 +451,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 
 		static public function current_tab() {
-			$current_tab = filter_input( INPUT_GET, 'tab', FILTER_SANITIZE_STRING );
+			$current_tab = sanitized_get_field( 'tab' );
 			return empty( $current_tab ) ? self::$settings_key_general : $current_tab;
 		}
 
