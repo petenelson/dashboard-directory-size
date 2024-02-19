@@ -65,7 +65,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 				<div class="inside">
 					<?php self::display_sizes_table(); ?>
 					<p>
-						<a href="<?php echo admin_url( 'options-general.php?page=' . Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings' ); ?>"><?php esc_html_e( 'Settings' ); ?></a> | 
+						<a href="<?php echo esc_url( admin_url( 'options-general.php?page=' . Dashboard_Directory_Size_Common::PLUGIN_NAME . '-settings' ) ); ?>"><?php esc_html_e( 'Settings' ); ?></a> | 
 						<a class="refresh" href="#refresh"><?php esc_html_e( 'Refresh', 'dashboard-directory-size' ); ?></a>
 					</p>
 				</div>
@@ -96,9 +96,9 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 				<table class="<?php echo esc_attr( $classes ); ?>">
 					<thead>
 						<tr>
-							<th><?php _e( 'Name', 'dashboard-directory-size' ); ?></th>
-							<th><?php _e( 'Path', 'dashboard-directory-size' ); ?></th>
-							<th><?php _e( 'Size', 'dashboard-directory-size' ); ?></th>
+							<th><?php esc_html_e( 'Name', 'dashboard-directory-size' ); ?></th>
+							<th><?php esc_html_e( 'Path', 'dashboard-directory-size' ); ?></th>
+							<th><?php esc_html_e( 'Size', 'dashboard-directory-size' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
