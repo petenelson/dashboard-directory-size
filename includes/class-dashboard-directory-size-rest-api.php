@@ -73,6 +73,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
 				$sizes[ $i ]['size'] = Dashboard_Directory_Size_Common::get_directory_size( $sizes[ $i ]['path'] );
 				$sizes[ $i ]['size_friendly'] = size_format( $sizes[ $i ]['size'] );
 			}
+
 			return rest_ensure_response( $sizes );
 		}
 
@@ -108,8 +109,5 @@ if ( ! class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
 			$directories = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
 			return in_array( $directory, wp_list_pluck( $directories, 'path' ) );
 		}
-
-
 	}
-
 }

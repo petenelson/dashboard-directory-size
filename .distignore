@@ -1,0 +1,23 @@
+# Directories
+/.claude
+/.git
+/.github
+/.wordpress-org
+/node_modules
+/vendor
+/features
+/tests
+/bin
+/ci
+
+# Files
+.*
+build-release.sh
+composer.json
+composer.lock
+package.json
+package-lock.json
+README.md
+badges.md
+Gruntfile.js
+phpunit.xml.dist
