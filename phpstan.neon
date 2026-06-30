@@ -1,0 +1,19 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+    - phpstan-baseline.neon
+
+parameters:
+    level: 5
+    paths:
+        - dashboard-directory-size.php
+        - includes
+    excludePaths:
+        - vendor
+        - node_modules (?)
+        - tests
+    bootstrapFiles:
+        - vendor/php-stubs/wp-cli-stubs/wp-cli-stubs.php
+        - vendor/php-stubs/wp-cli-stubs/wp-cli-i18n-stubs.php
+    dynamicConstantNames:
+        - DASHBOARD_DIRECOTRY_SIZE_ROOT
+        - DASHBOARD_DIRECOTRY_SIZE_INC
