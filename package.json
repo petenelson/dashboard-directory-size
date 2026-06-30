@@ -20,14 +20,5 @@
   "bugs": {
     "url": "https://github.com/petenelson/dashboard-directory-size/issues"
   },
-  "homepage": "https://github.com/petenelson/dashboard-directory-size",
-  "devDependencies": {
-    "grunt": "^1.6.1",
-    "grunt-contrib-clean": "^2.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-potomo": "^3.5.0",
-    "grunt-wp-i18n": "^1.0.3",
-    "grunt-wp-readme-to-markdown": "^2.1.0",
-    "phplint": "^1.7.1"
-  }
+  "homepage": "https://github.com/petenelson/dashboard-directory-size"
 }
