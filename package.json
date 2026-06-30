@@ -1,24 +1,20 @@
 {
-  "name": "dashboard-directory-size",
-  "version": "1.4.0",
-  "description": "WordPress dashboard widget to display directory and database sizes",
-  "license": "GPLv2 or later",
-  "main": "Gruntfile.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/petenelson/dashboard-directory-size.git"
-  },
-  "keywords": [
-    "wordpress",
-    "dashboard",
-    "widget"
-  ],
-  "author": "Pete Nelson",
-  "bugs": {
-    "url": "https://github.com/petenelson/dashboard-directory-size/issues"
-  },
-  "homepage": "https://github.com/petenelson/dashboard-directory-size"
+	"name": "dashboard-directory-size",
+	"version": "1.4.0",
+	"description": "WordPress dashboard widget to display directory and database sizes",
+	"license": "GPLv2 or later",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/petenelson/dashboard-directory-size.git"
+	},
+	"keywords": [
+		"wordpress",
+		"dashboard",
+		"widget"
+	],
+	"author": "Pete Nelson",
+	"bugs": {
+		"url": "https://github.com/petenelson/dashboard-directory-size/issues"
+	},
+	"homepage": "https://github.com/petenelson/dashboard-directory-size"
 }
