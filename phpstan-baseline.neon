@@ -1,0 +1,44 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Constant DASHBOARD_DIRECOTRY_SIZE_ROOT not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: includes/class-dashboard-directory-size-settings.php
+
+		-
+			message: '#^Parameter \#3 \$args of function register_setting expects array\{type\?\: string, label\?\: string, description\?\: string, sanitize_callback\?\: callable\(\)\: mixed, show_in_rest\?\: array\|bool, default\?\: mixed\}, ''Dashboard_Directory…'' given\.$#'
+			identifier: argument.type
+			count: 1
+			path: includes/class-dashboard-directory-size-settings.php
+
+		-
+			message: '#^Parameter \#4 \$autoload of function add_option expects bool\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: includes/class-dashboard-directory-size-settings.php
+
+		-
+			message: '#^Call to function is_array\(\) with string will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 1
+			path: includes/sanitizers.php
+
+		-
+			message: '#^Function DashboardDirectorySize\\Sanitizers\\sanitized_post_array\(\) should return string but returns array\.$#'
+			identifier: return.type
+			count: 1
+			path: includes/sanitizers.php
+
+		-
+			message: '#^Static method WP_CLI\:\:line\(\) invoked with 2 parameters, 0\-1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: includes/wp-cli/class-dashboard-directory-size-command.php
+
+		-
+			message: '#^Static method WP_CLI\:\:success\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: includes/wp-cli/class-dashboard-directory-size-command.php
+

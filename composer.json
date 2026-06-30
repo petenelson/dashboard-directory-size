@@ -1,10 +1,24 @@
 {
-    "require-dev": {
-        "squizlabs/php_codesniffer": "^2.5",
-        "wp-coding-standards/wpcs": "dev-master",
-        "phpunit/phpunit": "^4.8",
-        "codeclimate/php-test-reporter": "^0.3.0",
-        "behat/behat": "~2.5",
-        "10up/wp_mock": "dev-master"
+	"require-dev": {
+		"squizlabs/php_codesniffer": "*",
+		"wp-coding-standards/wpcs": "*",
+		"phpcsstandards/phpcsutils": "*",
+		"dealerdirect/phpcodesniffer-composer-installer": "*",
+		"phpstan/phpstan": "*",
+		"szepeviktor/phpstan-wordpress": "*",
+		"php-stubs/wp-cli-stubs": "^2.12"
+	},
+	"scripts": {
+		"phpcs": "phpcs",
+		"phpstan": "phpstan analyse --memory-limit=1G",
+		"lint": [
+			"@phpcs",
+			"@phpstan"
+		]
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
 	}
 }

@@ -1,33 +1,20 @@
 {
-  "name": "dashboard-directory-size",
-  "version": "1.4.0",
-  "description": "WordPress dashboard widget to display directory and database sizes",
-  "license": "GPLv2 or later",
-  "main": "Gruntfile.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/petenelson/dashboard-directory-size.git"
-  },
-  "keywords": [
-    "wordpress",
-    "dashboard",
-    "widget"
-  ],
-  "author": "Pete Nelson",
-  "bugs": {
-    "url": "https://github.com/petenelson/dashboard-directory-size/issues"
-  },
-  "homepage": "https://github.com/petenelson/dashboard-directory-size",
-  "devDependencies": {
-    "grunt": "^1.6.1",
-    "grunt-contrib-clean": "^2.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-potomo": "^3.5.0",
-    "grunt-wp-i18n": "^1.0.3",
-    "grunt-wp-readme-to-markdown": "^2.1.0",
-    "phplint": "^1.7.1"
-  }
+	"name": "dashboard-directory-size",
+	"version": "1.4.0",
+	"description": "WordPress dashboard widget to display directory and database sizes",
+	"license": "GPLv2 or later",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/petenelson/dashboard-directory-size.git"
+	},
+	"keywords": [
+		"wordpress",
+		"dashboard",
+		"widget"
+	],
+	"author": "Pete Nelson",
+	"bugs": {
+		"url": "https://github.com/petenelson/dashboard-directory-size/issues"
+	},
+	"homepage": "https://github.com/petenelson/dashboard-directory-size"
 }
