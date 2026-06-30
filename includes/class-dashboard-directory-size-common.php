@@ -1,6 +1,13 @@
 <?php
+/**
+ * Common class
+ *
+ * @package Dashboard_Directory_Size
+ */
 
-if ( ! defined( 'ABSPATH' ) ) die( 'restricted access' );
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'restricted access' );
+}
 
 if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
@@ -19,7 +26,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get', 'Dashboard_Directory_Size_Common::filter_get_directory_size', 10, 2 );
 			add_filter( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', 'Dashboard_Directory_Size_Common::filter_get_directories', 10, 1 );
 
-			// hook to allow purging of the transient
+			// Hook to allow purging of the transient.
 			add_action( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-flush-sizes-transient', 'Dashboard_Directory_Size_Common::flush_sizes_transient' );
 
 			self::add_transient_flushers();
@@ -38,7 +45,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			}
 
 			foreach( array( 'wp_update_attachment_metadata', 'wp_handle_upload' ) as $filter ) {
-				add_filter( $filter, 'Dashboard_Directory_Size_Common::flush_sizes_transient' );
+				add_filter( $filter, 'Dashboard_Directory_Size_Common::flush_sizes_transient_filter' );
 			}
 
 			// this passes the specific option or transient affected
@@ -140,15 +147,11 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 
 			if ( ! empty( $custom ) ) {
 				$custom_dir_list = explode( "\n", $custom );
-				if ( ! empty( $custom_dir_list ) ) {
-
-					foreach ( $custom_dir_list as $row ) {
-						$custom_dir = self::get_custom_dir( $row );
-						if ( ! empty( $custom_dir ) ) {
-							$dir_list[] = $custom_dir;
-						}
+				foreach ( $custom_dir_list as $row ) {
+					$custom_dir = self::get_custom_dir( $row );
+					if ( ! empty( $custom_dir ) ) {
+						$dir_list[] = $custom_dir;
 					}
-
 				}
 			}
 
@@ -160,12 +163,12 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		 * info array.
 		 *
 		 * @param  string $row Entry from settings ( name | path )
-		 * @return array       Results from create_directory_info()
+		 * @return array|null  Results from create_directory_info()
 		 */
 		static public function get_custom_dir( $row ) {
 
 			$parts = explode( '|', $row );
-			if ( ! empty( $parts ) && count( $parts ) == 2) {
+			if ( count( $parts ) === 2 ) {
 				$path = trim( $parts[1] );
 				if ( stripos( $path, '~' ) === 0 ) {
 					$path = ABSPATH . substr( $path, 2 );
@@ -226,9 +229,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 			switch ( $common_dir ) {
 				case 'uploads':
 					$upload_dir = wp_upload_dir();
-					if ( ! empty( $upload_dir ) ) {
-						return $upload_dir['basedir'];
-					}
+					return $upload_dir['basedir'];
 
 				case 'themes':
 					return get_theme_root();
@@ -247,9 +248,9 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		/**
 		 * Filter hook to get the directory size.
 		 *
-		 * @param int $size    The size of the directory.
+		 * @param int    $size The size of the directory.
 		 * @param string $path The path of the directory.
-		 * @return void
+		 * @return int
 		 */
 		static public function filter_get_directory_size( $size, $path ) {
 			$size = self::get_directory_size( $path );
@@ -328,20 +329,27 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		}
 
 		/**
+		 * Filter hook to flush the sizes transient.
+		 *
+		 * @param mixed $data The data passed through the filter.
+		 * @return mixed The data passed through the filter.
+		 */
+		static public function flush_sizes_transient_filter( $data ) {
+			self::flush_sizes_transient();
+			return $data;
+		}
+
+		/**
 		 * Flushes the sizes transient.
 		 *
-		 * @param mixed $data The original data. Does not get modified.
-		 * @return mixed
+		 * @return void
 		 */
-		static public function flush_sizes_transient( $data = null ) {
+		static public function flush_sizes_transient() {
 
 			$directories = apply_filters( Dashboard_Directory_Size_Common::PLUGIN_NAME . '-get-directories', array() );
 			foreach( $directories as $directory ) {
 				self::flush_size_transient( $directory['path'] );
 			}
-
-			// catch-all for actions and filters, we're not modifying anything, so return whatever was passed to us
-			return $data;
 		}
 
 		/**
@@ -370,16 +378,15 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Common' ) ) {
 		 * @param array $results The results.
 		 * @return array
 		 */
-		static public function apply_friendly_sizes( $results ) {
-			if ( is_array( $results ) ) {
-				for( $i = 0; $i < count( $results ); $i++ ) {
-					if ( ! empty( $results[ $i ]['size'] ) ) {
-						$results[ $i ]['size_friendly'] = size_format( $results[ $i ]['size'], self::get_decimal_places() );
-					} else {
-						$results[ $i ]['size_friendly'] = __( 'Empty', 'dashboard-directory-size' );
-					}
+		static public function apply_friendly_sizes( array $results ) {
+			for ( $i = 0; $i < count( $results ); $i++ ) {
+				if ( ! empty( $results[ $i ]['size'] ) ) {
+					$results[ $i ]['size_friendly'] = size_format( $results[ $i ]['size'], self::get_decimal_places() );
+				} else {
+					$results[ $i ]['size_friendly'] = __( 'Empty', 'dashboard-directory-size' );
 				}
 			}
+
 			return $results;
 		}
 

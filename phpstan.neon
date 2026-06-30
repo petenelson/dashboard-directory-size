@@ -13,8 +13,12 @@ parameters:
         - tests
         - features
     bootstrapFiles:
+        - phpstan-bootstrap.php
         - vendor/php-stubs/wp-cli-stubs/wp-cli-stubs.php
         - vendor/php-stubs/wp-cli-stubs/wp-cli-i18n-stubs.php
     dynamicConstantNames:
         - DASHBOARD_DIRECOTRY_SIZE_ROOT
         - DASHBOARD_DIRECOTRY_SIZE_INC
+        - DB_NAME
+    tips:
+        treatPhpDocTypesAsCertain: false
