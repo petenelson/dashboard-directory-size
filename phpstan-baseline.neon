@@ -96,8 +96,3 @@ parameters:
 			count: 1
 			path: includes/wp-cli/class-dashboard-directory-size-command.php
 
-		-
-			message: '#^Constant DASHBOARD_DIRECOTRY_SIZE_ROOT not found\.$#'
-			identifier: constant.notFound
-			count: 1
-			path: includes/wp-cli/setup.php
