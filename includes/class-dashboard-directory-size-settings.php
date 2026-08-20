@@ -272,7 +272,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 			$default     = $args['default'];
 
 			$option      = get_option( $key );
-			$value       = isset( $option[ $name ] ) ? esc_attr( $option[ $name ] ) : $default;
+			$value       = isset( $option[ $name ] ) ? $option[ $name ] : $default;
 
 			$min_max_step = '';
 			if ( $type === 'number' ) {
@@ -291,7 +291,10 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 					value="<?php echo esc_attr( $value ); ?>"
 					size="<?php echo esc_attr( $size ); ?>"
 					maxlength="<?php echo esc_attr( $maxlength ); ?>"
-					<?php echo $min_max_step; ?> />
+					<?php
+					// Built by sprintf() from integers only, so it is safe markup.
+					echo $min_max_step; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					?> />
 				</div>
 			<?php 
 
@@ -337,7 +340,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 					<?php foreach ( $items as $value => $value_dispay ) : ?>
 						<label>
-							<input type="checkbox" name="<?php echo $key ?>[<?php echo $name ?>][]" value="<?php echo $value ?>" <?php checked( in_array( $value, $values) ); ?> />
+							<input type="checkbox" name="<?php echo esc_attr( $key . '[' . $name . '][]' ); ?>" value="<?php echo esc_attr( $value ); ?>" <?php checked( in_array( $value, $values) ); ?> />
 							<?php echo esc_html( $value_dispay ); ?>
 						</label>
 						<br/>
@@ -369,7 +372,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 			$after  = $args['after'];
 
 			$option = get_option( $key );
-			$value  = isset( $option[$name] ) ? esc_attr( $option[$name] ) : '';
+			$value  = isset( $option[$name] ) ? $option[$name] : '';
 
 			?>
 				<div>
@@ -404,8 +407,13 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 			}
 
 			echo '<div>';
-			echo "<label><input id='{$name}_1' name='{$key}[{$name}]'  type='radio' value='1' " . ( '1' === $value ? " checked=\"checked\"" : "" ) . "/>" . esc_html__( 'Yes' ) . "</label> ";
-			echo "<label><input id='{$name}_0' name='{$key}[{$name}]'  type='radio' value='0' " . ( '0' === $value ? " checked=\"checked\"" : "" ) . "/>" . esc_html__( 'No' ) . "</label> ";
+			$id_yes = esc_attr( $name . '_1' );
+			$id_no  = esc_attr( $name . '_0' );
+			$field  = esc_attr( $key . '[' . $name . ']' );
+
+			// $id_yes, $id_no and $field are escaped above; the rest is literal markup.
+			echo "<label><input id='{$id_yes}' name='{$field}'  type='radio' value='1' " . ( '1' === $value ? " checked=\"checked\"" : "" ) . "/>" . esc_html__( 'Yes' ) . "</label> "; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo "<label><input id='{$id_no}' name='{$field}'  type='radio' value='0' " . ( '0' === $value ? " checked=\"checked\"" : "" ) . "/>" . esc_html__( 'No' ) . "</label> "; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo '</div>';
 
 			self::output_after( $after );
@@ -458,10 +466,10 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Settings' ) ) {
 
 		static public function plugin_options_tabs() {
 			$current_tab = self::current_tab();
-			echo '<h2>' . __( 'Settings' ) . ' &rsaquo; Dashboard Directory Size</h2><h2 class="nav-tab-wrapper">';
+			echo '<h2>' . esc_html__( 'Settings' ) . ' &rsaquo; Dashboard Directory Size</h2><h2 class="nav-tab-wrapper">';
 			foreach ( self::$plugin_settings_tabs as $tab_key => $tab_caption ) {
 				$active = $current_tab == $tab_key ? 'nav-tab-active' : '';
-				echo '<a class="nav-tab ' . $active . '" href="?page=' . urlencode( self::$settings_page ) . '&tab=' . urlencode( $tab_key ) . '">' . esc_html( $tab_caption ) . '</a>';
+				echo '<a class="nav-tab ' . esc_attr( $active ) . '" href="?page=' . urlencode( self::$settings_page ) . '&tab=' . urlencode( $tab_key ) . '">' . esc_html( $tab_caption ) . '</a>';
 			}
 			echo '</h2>';
 		}

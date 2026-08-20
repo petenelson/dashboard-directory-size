@@ -139,7 +139,10 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 						<td class="<?php echo esc_attr( implode( ' ', $cell_size_class ) ); ?>" data-path="<?php echo esc_attr( $directory['path'] ); ?>">
 
 							<span class="spinner <?php echo ( -2 === $size ? 'is-active' : '' ); ?> hidden"></span>
-							<span class="size" <?php echo $data_size; ?>>
+							<span class="size" <?php
+								// Holds a full attribute; its value is passed through esc_attr() above.
+								echo $data_size; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							?>>
 							<?php
 
 								switch ( $size ) {

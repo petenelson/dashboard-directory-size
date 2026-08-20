@@ -1,0 +1,20 @@
+includes:
+	- vendor/szepeviktor/phpstan-wordpress/extension.neon
+	# Pre-existing findings, so the hook only gates newly written code.
+	# Regenerate with: phpstan analyse --generate-baseline=phpstan-baseline.neon
+	- phpstan-baseline.neon
+
+parameters:
+	level: 3
+
+	paths:
+		- dashboard-directory-size.php
+		- uninstall.php
+		- includes
+		- admin
+
+	bootstrapFiles:
+		- vendor/php-stubs/wp-cli-stubs/wp-cli-stubs.php
+
+	scanFiles:
+		- vendor/php-stubs/wp-cli-stubs/wp-cli-commands-stubs.php

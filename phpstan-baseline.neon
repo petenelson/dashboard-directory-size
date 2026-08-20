@@ -1,0 +1,79 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Action callback returns mixed but should not return anything\.$#'
+			identifier: return.void
+			count: 2
+			path: includes/class-dashboard-directory-size-common.php
+
+		-
+			message: '#^Constant DB_NAME not found\.$#'
+			identifier: constant.notFound
+			count: 2
+			path: includes/class-dashboard-directory-size-common.php
+
+		-
+			message: '#^Filter callback return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: includes/class-dashboard-directory-size-common.php
+
+		-
+			message: '#^Method Dashboard_Directory_Size_Common\:\:filter_get_directory_size\(\) with return type void returns int but should not return anything\.$#'
+			identifier: return.void
+			count: 1
+			path: includes/class-dashboard-directory-size-common.php
+
+		-
+			message: '#^Method Dashboard_Directory_Size_Common\:\:get_custom_dir\(\) should return array but returns null\.$#'
+			identifier: return.type
+			count: 1
+			path: includes/class-dashboard-directory-size-common.php
+
+		-
+			message: '#^Variable \$custom_dir_list in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: includes/class-dashboard-directory-size-common.php
+
+		-
+			message: '#^Variable \$parts in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: includes/class-dashboard-directory-size-common.php
+
+		-
+			message: '#^Variable \$upload_dir in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: includes/class-dashboard-directory-size-common.php
+
+		-
+			message: '#^Constant DASHBOARD_DIRECOTRY_SIZE_ROOT not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: includes/class-dashboard-directory-size-settings.php
+
+		-
+			message: '#^Function DashboardDirectorySize\\Sanitizers\\sanitized_post_array\(\) should return string but returns array\.$#'
+			identifier: return.type
+			count: 1
+			path: includes/sanitizers.php
+
+		-
+			message: '#^Static method WP_CLI\:\:line\(\) invoked with 2 parameters, 0\-1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: includes/wp-cli/class-dashboard-directory-size-command.php
+
+		-
+			message: '#^Static method WP_CLI\:\:success\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: includes/wp-cli/class-dashboard-directory-size-command.php
+
+		-
+			message: '#^Constant DASHBOARD_DIRECOTRY_SIZE_ROOT not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: includes/wp-cli/setup.php
