@@ -122,7 +122,7 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 				} else if ( ! empty( $directory['database'] ) ) {
 					$cell_size_class[] = 'cell-database';
 					$cell_size_class[] = 'cell-has-size';
-					$data_size = ' data-size="' . esc_attr( $directory['size'] ) . '"';
+					$data_size = $directory['size'];
 				} else if ( -2 === $size ) {
 					// a size of -2 means we need to load it via the REST API
 					$cell_size_class[] = 'cell-size-data';
@@ -139,9 +139,10 @@ if ( ! class_exists( 'Dashboard_Directory_Size_Dashboard_Widget' ) ) {
 						<td class="<?php echo esc_attr( implode( ' ', $cell_size_class ) ); ?>" data-path="<?php echo esc_attr( $directory['path'] ); ?>">
 
 							<span class="spinner <?php echo ( -2 === $size ? 'is-active' : '' ); ?> hidden"></span>
-							<span class="size" <?php
-								// Holds a full attribute; its value is passed through esc_attr() above.
-								echo $data_size; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							<span class="size"<?php
+								if ( '' !== $data_size ) {
+									echo ' data-size="' . esc_attr( $data_size ) . '"';
+								}
 							?>>
 							<?php
 
