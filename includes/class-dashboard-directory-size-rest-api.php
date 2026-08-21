@@ -14,8 +14,9 @@ if ( ! class_exists( 'Dashboard_Directory_Size_REST_API' ) ) {
 			if ( $enabled ) {
 				register_rest_route( self::api_namespace(), '/v1/sizes',
 					array(
-						'methods'    => WP_REST_Server::READABLE,
-						'callback'   => 'Dashboard_Directory_Size_REST_API::get_sizes',
+						'methods'             => WP_REST_Server::READABLE,
+						'callback'            => 'Dashboard_Directory_Size_REST_API::get_sizes',
+						'permission_callback' => 'is_user_logged_in',
 						)
 					);
 			}
